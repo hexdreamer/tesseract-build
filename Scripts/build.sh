@@ -15,11 +15,19 @@ export PATH=$Root/bin:$PATH
 # echo ${PATH//:/\\n}  # | grep $Root
 
 
-func download_extract() {
+func download_extract_install() {
     _url=$1
     _name=$2
     _targz=$3
     _flags=$4
+    _ver_pattern=$5
+    _ver_command=$6
+
+    s=$(eval $_ver_command)
+    if [[ $s == *${_ver_pattern}* ]]; then
+        print "Skipped $_name, already installed"
+        return
+    fi
 
     if [[ -a $Downloads/$_targz ]]; then
         print "Skipped download for $_targz, found cached in Downloads."
@@ -30,16 +38,12 @@ func download_extract() {
         print " done."
     fi
 
-    # if [[ -d $Sources/$_name ]]; then
-    #     print "Skipped config/make/install for $_name, found cached in Sources"
-    # else
     print -n "Configuring, making, installing $_name..."
     cd $Sources/$_name
     ./configure --prefix=$Root $_flags > _build.log 2>_error.log
     make >> _build.log 2>>_error.log
     make install >> _build.log 2>>_error.log
     print " done."
-    # fi
 }
 
 
@@ -47,47 +51,70 @@ func download_extract() {
 # AUTOCONF -- https://www.gnu.org/software/autoconf/
 name=autoconf-2.69
 targz=$name.tar.gz
+flags=" "
+ver_pattern=2.69
+ver_command="$Root/bin/autoconf --version"
 args=(
     http://ftp.gnu.org/gnu/autoconf/$targz
     $name
     $targz
+    $flags
+    $ver_pattern
+    $ver_command
 )
 
-download_extract $args
+download_extract_install $args
 
 # AUTOMAKE -- https://www.gnu.org/software/automake/
 name=automake-1.16
 targz=$name.tar.gz
+flags=" "
+ver_pattern=1.16
+ver_command="$Root/bin/automake --version"
 args=(
     http://ftp.gnu.org/gnu/automake/$targz
     $name
     $targz
+    $flags
+    $ver_pattern
+    $ver_command
 )
 
-download_extract $args
+download_extract_install $args
 
 # LIBTOOL -- https://www.gnu.org/software/libtool/
 name=libtool-2.4.6
 targz=$name.tar.gz
+flags=" "
+ver_pattern=2.4.6
+ver_command="$Root/bin/libtool --version"
 args=(
     http://ftp.gnu.org/gnu/libtool/$targz
     $name
     $targz
+    $flags
+    $ver_pattern
+    $ver_command
 )
 
-download_extract $args
+download_extract_install $args
 
 # PKG-CONFIG -- https://www.freedesktop.org/wiki/Software/pkg-config/
 name=pkg-config-0.29.2
 targz=$name.tar.gz
+flags="--with-internal-glib"
+ver_pattern=0.29.2
+ver_command="$Root/bin/pkg-config --version"
 args=(
     https://pkg-config.freedesktop.org/releases/$targz
     $name
     $targz
-    "--with-internal-glib"
+    $flags
+    $ver_pattern
+    $ver_command
 )
 
-download_extract $args
+download_extract_install $args
 exit 1
 # ./configure --prefix /Users/kenny/Projects/Tesseract/Root --with-internal-glib
 
