@@ -14,8 +14,7 @@ export PATH=$Root/bin:$PATH
 # Handy little substitution for splitting PATH into lines
 # echo ${PATH//:/\\n}  # | grep $Root
 
-
-func download_extract_install() {
+function download_extract_install() {
     _url=$1
     _name=$2
     _targz=$3
@@ -23,30 +22,28 @@ func download_extract_install() {
     _ver_pattern=$5
     _ver_command=$6
 
-    s=$(eval $_ver_command)
+    s=$(eval "$_ver_command")
     if [[ $s == *${_ver_pattern}* ]]; then
         print "Skipped $_name, already installed"
         return
     fi
 
-    if [[ -a $Downloads/$_targz ]]; then
+    if [[ -e $Downloads/$_targz ]]; then
         print "Skipped download for $_targz, found cached in Downloads."
-    else 
+    else
         print -n "Downloading and extracting $_url..."
-        curl -L -s $_url --output $Downloads/$_targz
-        tar -zxf $Downloads/$_targz --directory $Sources
+        curl -L -s "$_url" --output "$Downloads/$_targz"
+        tar -zxf "$Downloads/$_targz" --directory "$Sources"
         print " done."
     fi
 
     print -n "Configuring, making, installing $_name..."
-    cd $Sources/$_name
-    ./configure --prefix=$Root $_flags > _build.log 2>_error.log
-    make >> _build.log 2>>_error.log
-    make install >> _build.log 2>>_error.log
+    cd "$Sources/$_name" || { echo " Failed to cd to $Sources/$_name"; exit 1; }
+    ./configure --prefix="$Root" "$_flags" >_build.log 2>_error.log
+    make >>_build.log 2>>_error.log
+    make install >>_build.log 2>>_error.log
     print " done."
 }
-
-
 
 # AUTOCONF -- https://www.gnu.org/software/autoconf/
 name=autoconf-2.69
@@ -54,33 +51,33 @@ targz=$name.tar.gz
 flags=" "
 ver_pattern=2.69
 ver_command="$Root/bin/autoconf --version"
-args=(
-    http://ftp.gnu.org/gnu/autoconf/$targz
-    $name
-    $targz
-    $flags
-    $ver_pattern
-    $ver_command
-)
+url="http://ftp.gnu.org/gnu/autoconf/$targz"
 
-download_extract_install $args
+download_extract_install \
+    "$url" \
+    "$name" \
+    "$targz" \
+    "$flags" \
+    "$ver_pattern" \
+    "$ver_command"
+
 
 # AUTOMAKE -- https://www.gnu.org/software/automake/
 name=automake-1.16
-targz=$name.tar.gz
+targz="$name.tar.gz"
 flags=" "
 ver_pattern=1.16
 ver_command="$Root/bin/automake --version"
-args=(
-    http://ftp.gnu.org/gnu/automake/$targz
-    $name
-    $targz
-    $flags
-    $ver_pattern
-    $ver_command
-)
+url=http://ftp.gnu.org/gnu/automake/$targz
 
-download_extract_install $args
+download_extract_install \
+    "$url" \
+    "$name" \
+    "$targz" \
+    "$flags" \
+    "$ver_pattern" \
+    "$ver_command"
+
 
 # LIBTOOL -- https://www.gnu.org/software/libtool/
 name=libtool-2.4.6
@@ -88,33 +85,32 @@ targz=$name.tar.gz
 flags=" "
 ver_pattern=2.4.6
 ver_command="$Root/bin/libtool --version"
-args=(
-    http://ftp.gnu.org/gnu/libtool/$targz
-    $name
-    $targz
-    $flags
-    $ver_pattern
-    $ver_command
-)
+url="http://ftp.gnu.org/gnu/libtool/$targz"
 
-download_extract_install $args
+download_extract_install \
+    "$url" \
+    "$name" \
+    "$targz" \
+    "$flags" \
+    "$ver_pattern" \
+    "$ver_command"
 
 # PKG-CONFIG -- https://www.freedesktop.org/wiki/Software/pkg-config/
 name=pkg-config-0.29.2
-targz=$name.tar.gz
+targz="$name.tar.gz"
 flags="--with-internal-glib"
 ver_pattern=0.29.2
 ver_command="$Root/bin/pkg-config --version"
-args=(
-    https://pkg-config.freedesktop.org/releases/$targz
-    $name
-    $targz
-    $flags
-    $ver_pattern
-    $ver_command
-)
+url="https://pkg-config.freedesktop.org/releases/$targz"
 
-download_extract_install $args
+download_extract_install \
+    "$url" \
+    "$name" \
+    "$targz" \
+    "$flags" \
+    "$ver_pattern" \
+    "$ver_command"
+
 exit 1
 # ./configure --prefix /Users/kenny/Projects/Tesseract/Root --with-internal-glib
 
