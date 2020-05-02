@@ -38,12 +38,8 @@ From, [Arm architecture | Wikipedia][5]:
  * [Can't compile a C program on a Mac after upgrading to Catalina 10.15][3]
  * [Can't compile C program on a Mac after upgrade to Mojave][4]
 
-### zsh
-Writing `build.sh` in [zsh][6].
-
 [1]: https://news.ycombinator.com/item?id=17306454
 [2]: https://en.wikipedia.org/wiki/Fat_binary#NeXTSTEP_Multi-Architecture_Binaries
 [3]: https://stackoverflow.com/questions/58278260/cant-compile-a-c-program-on-a-mac-after-upgrading-to-catalina-10-15
 [4]: https://stackoverflow.com/questions/52509602/cant-compile-c-program-on-a-mac-after-upgrade-to-mojave
 [5]: https://en.wikipedia.org/wiki/ARM_architecture
-[6]: https://scriptingosx.com/2019/06/moving-to-zsh/
