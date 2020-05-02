@@ -1,6 +1,8 @@
 PATH=/Users/kenny/Projects/Tesseract/Root/bin:$PATH
 export PATH
 
+blah
+
 # https://www.gnu.org/software/autoconf/
 curl -L http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz --output autoconf-2.69.tar.gz
 ./configure --prefix /Users/kenny/Projects/Tesseract/Root
