@@ -51,15 +51,16 @@ targz=$name.tar.gz
 flags=" "
 ver_pattern=2.69
 ver_command="$Root/bin/autoconf --version"
-url="http://ftp.gnu.org/gnu/autoconf/$targz"
 
-download_extract_install \
-    "$url" \
-    "$name" \
-    "$targz" \
-    "$flags" \
-    "$ver_pattern" \
+args=(
+    "http://ftp.gnu.org/gnu/autoconf/$targz"
+    "$name"
+    "$targz"
+    "$flags"
+    "$ver_pattern"
     "$ver_command"
+)
+download_extract_install "$args"
 
 
 # AUTOMAKE -- https://www.gnu.org/software/automake/
@@ -68,16 +69,16 @@ targz="$name.tar.gz"
 flags=" "
 ver_pattern=1.16
 ver_command="$Root/bin/automake --version"
-url=http://ftp.gnu.org/gnu/automake/$targz
 
-download_extract_install \
-    "$url" \
-    "$name" \
-    "$targz" \
-    "$flags" \
-    "$ver_pattern" \
+args=(
+    "http://ftp.gnu.org/gnu/automake/$targz"
+    "$name"
+    "$targz"
+    "$flags"
+    "$ver_pattern"
     "$ver_command"
-
+)
+download_extract_install "$args"
 
 # LIBTOOL -- https://www.gnu.org/software/libtool/
 name=libtool-2.4.6
@@ -85,15 +86,16 @@ targz=$name.tar.gz
 flags=" "
 ver_pattern=2.4.6
 ver_command="$Root/bin/libtool --version"
-url="http://ftp.gnu.org/gnu/libtool/$targz"
 
-download_extract_install \
-    "$url" \
-    "$name" \
-    "$targz" \
-    "$flags" \
-    "$ver_pattern" \
+args=(
+    "http://ftp.gnu.org/gnu/libtool/$targz"
+    "$name"
+    "$targz"
+    "$flags"
+    "$ver_pattern"
     "$ver_command"
+)
+download_extract_install "$args"
 
 # PKG-CONFIG -- https://www.freedesktop.org/wiki/Software/pkg-config/
 name=pkg-config-0.29.2
@@ -101,15 +103,16 @@ targz="$name.tar.gz"
 flags="--with-internal-glib"
 ver_pattern=0.29.2
 ver_command="$Root/bin/pkg-config --version"
-url="https://pkg-config.freedesktop.org/releases/$targz"
 
-download_extract_install \
-    "$url" \
-    "$name" \
-    "$targz" \
-    "$flags" \
-    "$ver_pattern" \
+args=(
+    "https://pkg-config.freedesktop.org/releases/$targz"
+    "$name"
+    "$targz"
+    "$flags"
+    "$ver_pattern"
     "$ver_command"
+)
+download_extract_install
 
 exit 1
 # ./configure --prefix /Users/kenny/Projects/Tesseract/Root --with-internal-glib
