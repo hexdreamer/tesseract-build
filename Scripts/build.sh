@@ -17,10 +17,20 @@ export PATH=$Root/bin:$PATH
 while [ $# -gt 0 ]
 do
     case "$1" in
+    -h)
+        echo
+        echo Download and build Tesseract OCR, and all tooling
+        echo
+        echo '  -d        `set -x` for debugging'
+        echo '  -h        print this message'
+        echo
+        echo '  clean     remove all artifacts from Root, Downloads, and Sources'
+        echo
 
+        exit 1
+        ;;
     -d)
         set -x
-        break
         ;;
 
     clean)
@@ -55,12 +65,12 @@ download_extract_install() {
 
     s=$(eval "$_ver_command 2>&1")
     if [[ $s == *${_ver_pattern}* ]]; then
-        print "Skipped $_name, already installed"
+        echo "Skipped $_name, already installed"
         return 1
     fi
 
     if [[ -e $Downloads/$_targz ]]; then
-        print "Skipped download for $_targz, found cached in Downloads."
+        echo "Skipped download for $_targz, found cached in Downloads."
     else
         print -n "Downloading and extracting $_url..."
         curl -L -s "$_url" --output "$Downloads/$_targz"
@@ -71,6 +81,7 @@ download_extract_install() {
     print -n "Configuring, making, installing $_name..."
     cd "$Sources/$_name" || { echo " Failed to cd to $Sources/$_name"; exit 1; }
     if [[ -n $_config_flags ]]; then
+        print -n " with flags $_config_flags..."
         ./configure --prefix="$Root" "$_config_flags" >_build.log 2>_error.log
     else
         ./configure --prefix="$Root" >_build.log 2>_error.log
