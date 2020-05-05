@@ -32,7 +32,9 @@ do
     -d)
         set -x
         ;;
-
+    -t)
+        test=true
+        ;;
     clean)
         find "$Downloads" -name '*.tar.gz' -print0 | xargs -0 rm -rf
         find "$Root" -type d -depth 1 -print0 | xargs -0 rm -rf
@@ -47,49 +49,87 @@ done
 
 
 download_extract_install() {
-    _url=$1
-    _name=$2
-    _targz=$3
-    _ver_pattern=$4
-    _ver_command=$5
-    _config_flags=$6
-    _dir_name=$7
+    local url="$1"; shift
+    local name="$1"; shift
+    local targz="$1"; shift
 
-    s=$(eval "$_ver_command 2>&1")
-    if [[ $s == *${_ver_pattern}* ]]; then
-        echo "Skipped $_name, already installed"
-        return 1
+    # Default value
+    local dir_name="$name"
+
+    while [ $# -gt 0 ]
+    do
+        case "$1" in
+        --ver-command)
+            shift
+            local ver_command=$1
+            ;;
+        --ver-pattern)
+            shift
+            local ver_pattern=$1
+            ;;
+        --flags)
+            shift
+            local config_flags=$1
+            ;;
+        --dir-name)
+            # Override default
+            shift
+            local dir_name=$1
+            ;;
+        --pre-config)
+            shift
+            local pre_config=$1
+            ;;
+        esac
+        shift
+    done
+
+    print "\n======== $name ========"
+
+    if [ -n "$ver_command" ] && [ -n "$ver_pattern" ]; then
+        s=$(eval "$ver_command 2>&1")
+        if [[ $s == *${ver_pattern}* ]]; then
+            echo "Skipped, already installed"
+            return 1
+        fi
     fi
 
-    if [[ -e $Downloads/$_targz ]]; then
-        echo "Skipped download for $_targz, found cached in Downloads."
+    local downloadPath="$Downloads/$targz"
+    if [[ -e $downloadPath ]]; then
+        echo "Skipped download for $targz, found cached in Downloads."
     else
-        print -n "Downloading $_url..."
-        curl -L -s "$_url" --output "$Downloads/$_targz"
+        print -n "Downloading $url..."
+        curl -L -s "$url" --output "$downloadPath"
         print " done."
     fi
 
-    print -n "Extracting $Downloads/$_targz..."
-    tar -zxf "$Downloads/$_targz" --directory "$Sources"
+    print -n "Extracting $downloadPath..."
+    tar -zxf "$downloadPath" --directory "$Sources"
     print " done."
 
-    if [[ -n $_dir_name ]]; then
-        source_dir="$Sources/$_dir_name"
-    else
-        source_dir="$Sources/$_name"
+    dir_name="$Sources/$dir_name"
+    cd "$dir_name" || { echo " Failed to cd to $dir_name"; exit 1; }
+
+    if [ -n "$pre_config" ]; then
+        $pre_config >>_preconfig.log 2>>_preconfig_err.log
     fi
-    cd "$source_dir" || { echo " Failed to cd to $source_dir"; exit 1; }
 
-    print -n "Configuring, making, installing $_name..."
+    print -n "Configuring..."
 
-    if [[ -n $_config_flags ]]; then
-        print -n " with flags $_config_flags..."
-        ./configure --prefix="$Root" "$_config_flags" >_build.log 2>_error.log
+    if [[ -n $config_flags ]]; then
+        print -n " with flags $config_flags..."
+        ./configure --prefix="$Root" "$config_flags" >_build.log 2>_error.log
     else
         ./configure --prefix="$Root" >_build.log 2>_error.log
     fi
 
-    make >>_build.log 2>>_error.log
+    print -n " making..."
+    if make -n check &> /dev/null && [ -n "$test" ]; then
+        print -n " running tests..."
+        make check >>_build.log 2>>_error.log
+    else
+        make >>_build.log 2>>_error.log
+    fi
     make install >>_build.log 2>>_error.log
 
     print " done."
@@ -98,113 +138,115 @@ download_extract_install() {
 # AUTOCONF -- https://www.gnu.org/software/autoconf/
 name=autoconf-2.69
 targz=$name.tar.gz
-ver_pattern=2.69
-ver_command="$Root/bin/autoconf --version"
 
 download_extract_install \
     "http://ftp.gnu.org/gnu/autoconf/$targz" \
     "$name" \
     "$targz" \
-    "$ver_pattern" \
-    "$ver_command" \
+    --ver-command "$Root/bin/autoconf --version" \
+    --ver-pattern 2.69
 
 
 # AUTOMAKE -- https://www.gnu.org/software/automake/
 name=automake-1.16
 targz="$name.tar.gz"
-ver_pattern=1.16
-ver_command="$Root/bin/automake --version"
 
 download_extract_install \
     "http://ftp.gnu.org/gnu/automake/$targz" \
     "$name" \
     "$targz" \
-    "$ver_pattern" \
-    "$ver_command"
+    --ver-command "$Root/bin/automake --version" \
+    --ver-pattern 1.16
 
 
 # LIBTOOL -- https://www.gnu.org/software/libtool/
 name=libtool-2.4.6
 targz=$name.tar.gz
-ver_pattern=2.4.6
-ver_command="$Root/bin/libtool --version"
 
 download_extract_install \
     "http://ftp.gnu.org/gnu/libtool/$targz" \
     "$name" \
     "$targz" \
-    "$ver_pattern" \
-    "$ver_command" \
-    "$flags" \
+    --ver-command "$Root/bin/libtool --version" \
+    --ver-pattern 2.4.6
 
 
 # PKG-CONFIG -- https://www.freedesktop.org/wiki/Software/pkg-config/
 name=pkg-config-0.29.2
 targz="$name.tar.gz"
-ver_pattern=0.29.2
-ver_command="$Root/bin/pkg-config --version"
-flags="--with-internal-glib"
 
 download_extract_install \
     "https://pkg-config.freedesktop.org/releases/$targz" \
     "$name" \
     "$targz" \
     "$ver_pattern" \
-    "$ver_command" \
-    "$flags"
+    --flags "--with-internal-glib" \
+    --ver-command "$Root/bin/pkg-config --version" \
+    --ver-pattern 0.29.2
 
 
 # LEPTONICA -- https://github.com/DanBloomberg/leptonica
 name=leptonica-1.79.0
 targz="$name.tar.gz"
-ver_pattern="v. 1.5"
-ver_command="xtractprotos -h"
 
 download_extract_install \
     "https://github.com/DanBloomberg/leptonica/releases/download/1.79.0/$targz" \
     "$name" \
     "$targz" \
-    "$ver_pattern" \
-    "$ver_command" \
+    --ver-command "xtractprotos -h" \
+    --ver-pattern "v. 1.5"
 
 
 # Optionally libpng, libjpeg, libtiff (Already exists on system?)
 # LIBJPEG -- http://ijg.org/
 name=jpegsrc.v9d
 targz="$name.tar.gz"
-ver_pattern="abc"
-ver_command="unknown"
-flags=""
-dir_name=jpeg-9d
 
 download_extract_install \
     "http://www.ijg.org/files/$targz" \
     "$name" \
     "$targz" \
-    "$ver_pattern" \
-    "$ver_command" \
-    "$flags" \
-    "$dir_name"
+    --dir-name jpeg-9d \
+    --ver-command "jpegtran -v foo" \
+    --ver-pattern "JPEGTRAN, version 9d  12-Jan-2020"
 
 
 # LIBTIFF -- https://gitlab.com/libtiff/libtiff
 name=tiff-4.1.0
 targz="$name.tar.gz"
-ver_pattern="LIBTIFF, Version 4.1.0"
-ver_command="tiffcmp"
 
 download_extract_install \
     "http://download.osgeo.org/libtiff/$targz" \
     "$name" \
     "$targz" \
-    "$ver_pattern" \
-    "$ver_command"
+    --ver-command "tiffcmp" \
+    --ver-pattern "LIBTIFF, Version 4.1.0"
 
 
-# curl --remote-name --location http://download.sourceforge.net/libpng/libpng-1.6.35.tar.gz
+# LIBPNG -- http://www.libpng.org/pub/png/libpng.html
+name=libpng-1.6.37
+targz="$name.tar.gz"
 
-exit 1
-# https://github.com/tesseract-ocr/tesseract/archive/4.1.1.tar.gz
-curl -L https://github.com/tesseract-ocr/tesseract/archive/4.1.1.tar.gz --output tesseract-4.1.1.tar.gz
-./autogen.sh
-./configure --prefix /Users/kenny/Projects/Tesseract/Root
+download_extract_install \
+    "https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/$targz/download" \
+    "$name" \
+    "$targz" \
+    --ver-command "libpng-config --version" \
+    --ver-pattern "1.6.37"
+
+
+# TESSERACT OCR -- https://github.com/tesseract-ocr/tesseract
+name=tesseract-4.1.1
+targz="$name.tar.gz"
+
+download_extract_install \
+    "https://github.com/tesseract-ocr/tesseract/archive/4.1.1.tar.gz" \
+    "$name" \
+    "$targz" \
+    --pre-config "
+        ./autogen.sh; &&
+        export LEPTONICA_CFLAGS='-I$Root/include/leptonica'; &&
+        export LEPTONICA_LIBS='-L$Root/lib -llept';
+    " \
+    --ver-command "unknown" \
+    --ver-pattern "abc"
