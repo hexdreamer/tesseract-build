@@ -46,7 +46,7 @@ Need to debug an issue with `configure` in Tesseract-OCR.  configure is using pk
 $PKG_CONFIG --exists --print-errors "lept >= 1.74"
 ```
 
-Similar pkg-config commands are used to generate the strings that get passed to `LEPTONICA_CFLAGS` and `LEPTONICA_LIBS`, but pkg-config when run inside configure always errors out.  I can run those pkg-config manually and get the correct output, which I'm hard-coding into the `pre-config` flags for the Tesseract `download_extract_install()` call.
+Similar pkg-config commands are used to generate the strings that get passed to `LEPTONICA_CFLAGS` and `LEPTONICA_LIBS`, but pkg-config when run inside configure always errors out.  I can run those pkg-config manually and get the correct output, which I'm hard-coding into the `pre-config` flags for the Tesseract `download_extract_install()` call (which I decided on based on this [answer][4] and trying to pass them as args to configure, but to no avail).
 
 ```sh
 --pre-config "
@@ -61,3 +61,4 @@ I'm going to pursue enabling debugging in `./configure` to try and find the poin
 [1]: https://scriptingosx.com/2019/06/moving-to-zsh/
 [2]: https://insights.stackoverflow.com/trends?tags=bash%2Czsh
 [3]: https://github.com/koalaman/shellcheck/wiki/SC2086
+[4]: https://unix.stackexchange.com/a/149361/366399
