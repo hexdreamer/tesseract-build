@@ -1,5 +1,48 @@
 # Shells
 
+## TODOs
+
+- [] **Vet script with `-f` in shebang:**  make sure local env does not affect build; thinking specifically of how `find` might perform if someone has GNU find installed
+  - [] **Check variations in commands:** that have options, install GNU find, or at least find a side-by-side comparison of command-line flags/options
+- [] **Look into pkg-config/Leptonica:** this seems like it'll be hard, not sure how to approach this, other than running `./configure --debug` if that's even an option
+  - Output
+
+```none
++ pkg_failed=no
++ printf '%s\n' 'configure:18110: checking for lept >= 1.74'
++ printf %s 'checking for lept >= 1.74... '
+checking for lept >= 1.74... + test -n ''
++ test -n ''
++ pkg_failed=untried
++ test -n ''
++ test -n ''
++ pkg_failed=untried
++ test untried = yes
++ test untried = untried
++ printf '%s\n' 'configure:18169: result: no'
++ printf '%s\n' no
+no
++ have_lept=false
++ false
++ as_fn_error 1 'Leptonica 1.74 or higher is required. Try to install libleptonica-dev package.' 18182 5
++ as_status=1
++ test 1 -eq 0
++ test 5
++ as_lineno=18182
++ as_lineno_stack=as_lineno_stack=
++ printf '%s\n' 'configure:18182: error: Leptonica 1.74 or higher is required. Try to install libleptonica-dev package.'
++ printf '%s\n' 'configure: error: Leptonica 1.74 or higher is required. Try to install libleptonica-dev package.'
+configure: error: Leptonica 1.74 or higher is required. Try to install libleptonica-dev package.
++ as_fn_exit 1
++ set +e
++ as_fn_set_status 1
++ return 1
++ exit 1
+```
+
+- [] **Post-build validation:** just realized my grand-it's-finally-building build and e-mail to Kenny was for a broken build of Tesseract, because I had passed the `export LEPTONICA...` flags quoted, along with `./autogen.sh`, so the entire config-install step silently failed
+  - [] **Don't let steps silently fail!:** check exit status of every step along the way
+
 ## zsh
 
 zsh is now the macOS default, and it looks like bash will be going away at some point (but probably not soon enough for the scope of this project). From, [Will bash remain indefinitely?][1]:

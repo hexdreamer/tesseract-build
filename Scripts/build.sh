@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 # Set paths one dir up, relative to this running build.sh script
 SCRIPT=$0:A
@@ -243,10 +243,9 @@ download_extract_install \
     "https://github.com/tesseract-ocr/tesseract/archive/4.1.1.tar.gz" \
     "$name" \
     "$targz" \
-    --pre-config "
-        ./autogen.sh; &&
-        export LEPTONICA_CFLAGS='-I$Root/include/leptonica'; &&
-        export LEPTONICA_LIBS='-L$Root/lib -llept';
-    " \
+    --pre-config \
+        ./autogen.sh && \
+        export LEPTONICA_CFLAGS="-I$Root/include/leptonica" && \
+        export LEPTONICA_LIBS="-L$Root/lib -llept" \
     --ver-command "unknown" \
     --ver-pattern "abc"
