@@ -6,6 +6,7 @@
   - [] **Check variations in commands:** that have options, install GNU find, or at least find a side-by-side comparison of command-line flags/options
 - [] **Look into pkg-config/Leptonica:** this seems like it'll be hard, not sure how to approach this, other than running `./configure --debug` if that's even an option
   - Output
+- [] **Add pre-commit hook:** to prevent committing build.sh with bash in the shebang
 
 ```none
 + pkg_failed=no
@@ -80,6 +81,10 @@ Still, I think it's valuable to pick a standard and stick to it.  I've decided t
 I accept this wonkiness for a better understanding of any shell.  And because bash and zsh are both POSIX, I believe the understandings are transferable.
 
 There's also the benefit of the linter enforcing a formatting standard, which will keep Git commits cleaner.
+
+### Google Style Guide for Shell Script
+
+<https://google.github.io/styleguide/shellguide.html>
 
 ## Tesseract
 
