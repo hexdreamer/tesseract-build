@@ -10,11 +10,28 @@ readonly DOWNLOADS=$PROJECTDIR/Downloads
 readonly ROOT=$PROJECTDIR/Root
 readonly SOURCES=$PROJECTDIR/Sources
 
-readonly ERR_MSG="$SCRIPTSDIR/_err"
+readonly LOG_DIR="$PROJECTDIR/Logs"
 
 err() {
-  echo "$(date +'%Y-%m-%dT%H:%M:%S%z') ERROR $1, $(cat "$ERR_MSG")" >&2
-  rm "$ERR_MSG"
+  # $(date +"%y/%m/%d-%H:%M:%S")
+  echo "ERROR $*" >&2
+}
+
+exec_and_log() {
+  local name=$1
+  local step=$2
+  local log_out="${LOG_DIR}/${name}/${step}.out"
+  local log_err="${LOG_DIR}/${name}/${step}.err"
+
+  if ! [[ -d "${LOG_DIR}/${name}" ]]; then
+    mkdir -p "${LOG_DIR}/${name}"
+  fi
+
+  if ! "${@:3}" >"$log_out" 2>"$log_err"; then
+    err "runing" "${@:3}" >&2
+    err "see $log_err for more details" >&2
+    exit 1
+  fi
 }
 
 parse_args() {
@@ -65,7 +82,7 @@ download_extract_install() {
   local targz="$1"
   shift
 
-  local download_path="$DOWNLOADS/$targz"
+  local download_tgz="$DOWNLOADS/$targz"
 
   # Default value
   local dir_name="$name"
@@ -115,66 +132,47 @@ download_extract_install() {
     fi
   fi
 
-  if [[ -e "$download_path" ]]; then
-    echo "Skipped download for $targz, found cached in Downloads."
+  if [[ -e "$download_tgz" ]]; then
+    echo "Skipped download, using cached $targz in Downloads."
   else
-    print -n "Downloading $url..."
-    curl -L -s "$url" --output "$download_path"
+    print -n "Downloading..."
+    exec_and_log "${name}" "0_curl" curl -L -f "$url" --output "$download_tgz"
+
+    print -n " extracting..."
+    exec_and_log "${name}" "1_tar" tar -zxf "$download_tgz" --directory "$SOURCES"
+
     print " done."
   fi
 
-  print -n "Extracting $download_path..."
-  if ! tar -zxf "$download_path" --directory "$SOURCES" >"$ERR_MSG" 2>&1; then
-    err "tar -zxf \"$download_path\" --directory \"$SOURCES\""
-    exit 1
-  fi
-  print " done."
-
-  cd "$SOURCES/$dir_name" >"$ERR_MSG" 2>&1 || {
+  cd "$SOURCES/$dir_name" || {
     err "Failed to cd to $SOURCES/$dir_name"
     exit 1
   }
 
   if [[ -n "$pre_config" ]]; then
-    if ! "$pre_config" >_pre_config.log 2>"$ERR_MSG"; then
-      err "$pre_config:"
-      exit 1
-    fi
+    print -n "Preconfiguring..."
+    exec_and_log "${name}" "2_preconfig" "$pre_config"
+    print " done."
   fi
 
-  print -n "Configuring..."
   if [[ -n "$config_flags" ]]; then
-    print -n " with flags $config_flags..."
-    if ! ./configure --prefix="$ROOT" "$config_flags" >_config.log 2>"$ERR_MSG"; then
-      error "./configure --prefix=\"$ROOT\" \"$config_flags\":"
-      exit 2
-    fi
+    print -n "Configuring with flags..."
+    exec_and_log "${name}" "3_config" ./configure --prefix="$ROOT" "$config_flags"
   else
-    if ! ./configure --prefix="$ROOT" >_config.log 2>"$ERR_MSG"; then
-      err "./configure --prefix=\"$ROOT\":"
-      exit 2
-    fi
+    print -n "Configuring..."
+    exec_and_log "${name}" "3_config" ./configure --prefix="$ROOT"
   fi
 
   print -n " making..."
   if [[ -n "$run_test" ]] && make -n check &>/dev/null; then
     print -n " running tests..."
-    if ! make check >_build.log 2>"$ERR_MSG"; then
-      err "Making & testing:"
-      exit 1
-    fi
+    exec_and_log "${name}" "4_make" make check
   else
-    if ! make >_build.log 2>"$ERR_MSG"; then
-      err "Making:"
-      exit 1
-    fi
+    exec_and_log "${name}" "4_make" make
   fi
 
   print -n " installing..."
-  if ! make install >_install.log 2>"$ERR_MSG"; then
-    err "Installing:"
-    exit 1
-  fi
+  exec_and_log "${name}" "5_install" make install
   print " done."
 }
 
