@@ -1,175 +1,178 @@
-#!/bin/sh -f
+#!/bin/zsh -f
 
 # Set paths one dir up, relative to this running build.sh script
-SCRIPT=$0:A
-BASEDIR=${SCRIPT%/Scripts/build.sh}
+readonly PROGNAME=$0:A
+readonly ARGS=( "$@" )
 
-# make all caps
-Downloads=$BASEDIR/Downloads
-Root=$BASEDIR/Root
-Sources=$BASEDIR/Sources
+readonly SCRIPTSDIR=${PROGNAME%/build.sh}
+readonly PROJECTDIR=${SCRIPTSDIR%/Scripts}
+readonly DOWNLOADS=$PROJECTDIR/Downloads
+readonly ROOT=$PROJECTDIR/Root
+readonly SOURCES=$PROJECTDIR/Sources
 
-# PATH=/Users/kenny/Projects/Tesseract/Root/bin:$PATH
-export PATH=$Root/bin:$PATH
-
-# Handy little substitution for splitting PATH into lines
-# echo ${PATH//:/\\n}  # | grep $Root
+readonly ERR_MSG="$SCRIPTSDIR/_err"
 
 err() {
-  echo "$(date +'%Y-%m-%dT%H:%M:%S%z') ERROR $*" >&2
+  echo "$(date +'%Y-%m-%dT%H:%M:%S%z') ERROR $1, $(cat "$ERR_MSG")" >&2
+  rm "$ERR_MSG"
 }
 
+parse_args() {
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -h)
+        echo
+        echo Download and build Tesseract OCR, and all tooling
+        echo
+        echo '  -d        set -x for debugging'
+        echo '  -h        print this message'
+        echo
+        echo '  clean     remove all artifacts from Root, Downloads, and Sources'
+        echo
 
-while [ $# -gt 0 ]; do
-  case "$1" in
-    -h)
-      echo
-      echo Download and build Tesseract OCR, and all tooling
-      echo
-      echo '  -d        set -x for debugging'
-      echo '  -h        print this message'
-      echo
-      echo '  clean     remove all artifacts from Root, Downloads, and Sources'
-      echo
+        exit 1
+        ;;
+      -d)
+        set -x
+        ;;
+      -t)
+        run_test=true
+        ;;
+      clean)
+        if [[ -n "$2" ]]; then
+          find "$DOWNLOADS" -name "$2*.tar.gz" -exec rm -rf {} \;
+          find "$ROOT" -name "$2*" -prune -exec rm -rf {} \;
+          find "$ROOT/lib/pkgconfig" -name "*$2*" -prune -exec rm -rf {} \;
+          find "$SOURCES" -type d -name "$2*" -depth 1 -prune -exec rm -rf {} \;
+        else
+          find "$DOWNLOADS" -name '*.tar.gz' -prune -exec rm -rf {} \;
+          find "$ROOT" -type d -depth 1 -prune -exec rm -rf {} \;
+          find "$SOURCES" -type d -depth 1 -prune -exec rm -rf {} \;
+        fi
+        exit 0
+        ;;
+    esac
 
-      exit 1
-      ;;
-    -d)
-      set -x
-      ;;
-    -t)
-      run_test=true
-      ;;
-    clean)
-      find "$Downloads" -name '*.tar.gz' -print0 | xargs -0 rm -rf
-      find "$Root" -type d -depth 1 -print0 | xargs -0 rm -rf
-      find "$Sources" -type d -depth 1 -print0 | xargs -0 rm -rf
-
-      ls -l "$Root" "$Downloads" "$Sources"
-      exit 0
-      ;;
-  esac
-
-  shift
-done
+    shift
+  done
+}
 
 download_extract_install() {
-  local url="$1"
-  shift
-  local name="$1"
-  shift
-  local targz="$1"
-  shift
+  local url="$1";  shift
+  local name="$1";  shift
+  local targz="$1";  shift
+
+  local download_path="$DOWNLOADS/$targz"
 
   # Default value
   local dir_name="$name"
 
-  while [ $# -gt 0 ]; do
+  while [[ $# -gt 0 ]]; do
     case "$1" in
       --ver-command)
-        shift
-        local ver_command=$1
+        local ver_command=$2;        shift
         ;;
       --ver-pattern)
-        shift
-        local ver_pattern=$1
+        local ver_pattern=$2; shift
         ;;
       --flags)
-        shift
-        local config_flags=$1
+        local config_flags=$2;        shift
         ;;
       --dir-name)
         # Override default
-        shift
-        local dir_name=$1
+        local dir_name=$2;         shift
         ;;
       --pre-config)
-        shift
-        local pre_config=$1
+        local pre_config=$2;         shift
         ;;
     esac
     shift
   done
 
   print "\n======== $name ========"
-  if [ -n "$ver_pattern" ]; then
+  if [[ -n "$ver_pattern" ]]; then
     # Try pkg-config first
     if pkg-config --exists "$ver_pattern"; then
       echo "Skipped, already installed"
       return 0
     fi
 
-    # Try parsing some version-y output from program
-    if [ -n "$ver_command" ]; then
+    # Try parsing some version-y output directly from program
+    if [[ -n "$ver_command" ]]; then
       s=$(eval "$ver_command 2>&1")
-      if [[ $s == *ver_pattern* ]]; then
+      if [[ $s == *$ver_pattern* ]]; then
         echo "Skipped, already installed"
         return 0
       fi
     fi
   fi
 
-  local downloadPath="$Downloads/$targz"
-  if [ -e "$downloadPath" ]; then
+  if [[ -e "$download_path" ]]; then
     echo "Skipped download for $targz, found cached in Downloads."
   else
     print -n "Downloading $url..."
-    curl -L -s "$url" --output "$downloadPath"
+    curl -L -s "$url" --output "$download_path"
     print " done."
   fi
 
-  print -n "Extracting $downloadPath..."
-  tar -zxf "$downloadPath" --directory "$Sources"
+  print -n "Extracting $download_path..."
+  if ! tar -zxf "$download_path" --directory "$SOURCES" > "$ERR_MSG" 2>&1; then
+    err "tar -zxf \"$download_path\" --directory \"$SOURCES\""
+    exit 1
+  fi
   print " done."
 
-  dir_name="$Sources/$dir_name"
-  cd "$dir_name" || {
-    err " Failed to cd to $dir_name"
+  cd "$SOURCES/$dir_name" > "$ERR_MSG" 2>&1 || {
+    err "Failed to cd to $SOURCES/$dir_name"
     exit 1
   }
 
-  if [ -n "$pre_config" ]; then
-    if ! "$pre_config" >_pre_config.log 2>_err; then
-      err "$pre_config:" "$(cat _err)"
+  if [[ -n "$pre_config" ]]; then
+    if ! "$pre_config" >_pre_config.log 2>"$ERR_MSG"; then
+      err "$pre_config:"
       exit 1
     fi
   fi
 
   print -n "Configuring..."
-  if [ -n "$config_flags" ]; then
+  if [[ -n "$config_flags" ]]; then
     print -n " with flags $config_flags..."
-    if ! ./configure --prefix="$Root" "$config_flags" >_config.log 2>_err; then
-      error "./configure --prefix=\"$Root\" \"$config_flags\":" "$(cat _err)"
+    if ! ./configure --prefix="$ROOT" "$config_flags" >_config.log 2>"$ERR_MSG"; then
+      error "./configure --prefix=\"$ROOT\" \"$config_flags\":"
       exit 2
     fi
   else
-    if ! ./configure --prefix="$Root" >_config.log 2>_err; then
-      err "./configure --prefix=\"$Root\":" "$(cat _err)"
+    if ! ./configure --prefix="$ROOT" >_config.log 2>"$ERR_MSG"; then
+      err "./configure --prefix=\"$ROOT\":"
       exit 2
     fi
   fi
 
   print -n " making..."
-  if [ -n "$run_test" ] && make -n check &> /dev/null; then
+  if [[ -n "$run_test" ]] && make -n check &> /dev/null; then
       print -n " running tests..."
-      if ! make check>_build.log 2>_err; then
-        err "Making & testing:" "$(cat _err)"
+      if ! make check>_build.log 2>"$ERR_MSG"; then
+        err "Making & testing:"
         exit 1
       fi
   else
-      if ! make >_build.log 2>_err; then
-        err "Making:" "$(cat _err)"
+      if ! make >_build.log 2>"$ERR_MSG"; then
+        err "Making:"
         exit 1
       fi
   fi
 
   print -n " installing..."
-  if ! make install >_install.log 2>_err; then
-    err "Installing:" "$(cat _err)"
+  if ! make install >_install.log 2>"$ERR_MSG"; then
+    err "Installing:"
     exit 1
   fi
   print " done."
 }
+
+main() {
+  parse_args "${ARGS[@]}"
+  export PATH="$ROOT/bin:$PATH"
 
 # PKG-CONFIG -- https://www.freedesktop.org/wiki/Software/pkg-config/
 name=pkg-config-0.29.2
@@ -181,7 +184,7 @@ download_extract_install \
   "$targz" \
   "$ver_pattern" \
   --flags "--with-internal-glib" \
-  --ver-command "$Root/bin/pkg-config --version" \
+  --ver-command "$ROOT/bin/pkg-config --version" \
   --ver-pattern 0.29.2
 
 # AUTOCONF -- https://www.gnu.org/software/autoconf/
@@ -192,7 +195,7 @@ download_extract_install \
   "http://ftp.gnu.org/gnu/autoconf/$targz" \
   "$name" \
   "$targz" \
-  --ver-command "$Root/bin/autoconf --version" \
+  --ver-command "$ROOT/bin/autoconf --version" \
   --ver-pattern "2.69"
 
 # AUTOMAKE -- https://www.gnu.org/software/automake/
@@ -203,7 +206,7 @@ download_extract_install \
   "http://ftp.gnu.org/gnu/automake/$targz" \
   "$name" \
   "$targz" \
-  --ver-command "$Root/bin/automake --version" \
+  --ver-command "$ROOT/bin/automake --version" \
   --ver-pattern "1.16"
 
 # LIBTOOL -- https://www.gnu.org/software/libtool/
@@ -214,7 +217,7 @@ download_extract_install \
   "http://ftp.gnu.org/gnu/libtool/$targz" \
   "$name" \
   "$targz" \
-  --ver-command "$Root/bin/libtool --version" \
+  --ver-command "$ROOT/bin/libtool --version" \
   --ver-pattern "2.4.6"
 
 # LEPTONICA -- https://github.com/DanBloomberg/leptonica
@@ -280,3 +283,6 @@ download_extract_install \
   "$targz" \
   --pre-config "./autogen.sh" \
   --ver-pattern "tesseract >= 4.1.1"
+}
+
+main

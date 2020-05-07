@@ -8,7 +8,7 @@
 - [] **Post-build validation:** just realized my grand-it's-finally-building build and e-mail to Kenny was for a broken build of Tesseract, because I had passed the `export LEPTONICA...` flags quoted, along with `./autogen.sh`, so the entire config-install step silently failed
   - [x] **Don't let steps silently fail!:** check exit status of every step along the way
 
-- [] Convert to caps for Sources, Root, Scripts
+- [x] Convert to caps for Sources, Root, Scripts
 - [] Log directory, logs for each component autoconf2.49-config.log, -make.log
 - [] iOS target for Leptonica and image libs, as well as Tesseract
       .c --> .o linked into .a/exec; .so sharedlibrary (framework) not for us
@@ -31,6 +31,8 @@ From the man page,
 > sh is a POSIX-compliant command interpreter (shell).  It is implemented by re-execing as either bash(1), dash(1), or zsh(1) as determined by the symbolic link located at /private/var/select/sh
 
 So, even though I thought I was doing some generic "sh" scripting, there's really no thing.
+
+Still coming to terms with choosing zsh.  After reading more in <https://wiki.ubuntu.com/DashAsBinSh> and <https://google.github.io/styleguide/shellguide.html#s2.1-file-extensions>, the script will be `build`, and its shebang will be `#! /bin/zsh -f`.
 
 ## Robustness: "correctness", linting
 
@@ -55,7 +57,6 @@ There's also the benefit of the linter enforcing a formatting standard, which wi
 ### Google Style Guide for Shell Script
 
 <https://google.github.io/styleguide/shellguide.html>
-
 
 [1]: https://scriptingosx.com/2019/06/moving-to-zsh/
 [2]: https://insights.stackoverflow.com/trends?tags=bash%2Czsh
