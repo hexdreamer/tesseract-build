@@ -2,7 +2,7 @@
 
 # Set paths one dir up, relative to this running build.sh script
 readonly PROGNAME=$0:A
-readonly ARGS=( "$@" )
+readonly ARGS=("$@")
 
 readonly SCRIPTSDIR=${PROGNAME%/build.sh}
 readonly PROJECTDIR=${SCRIPTSDIR%/Scripts}
@@ -58,9 +58,12 @@ parse_args() {
 }
 
 download_extract_install() {
-  local url="$1";  shift
-  local name="$1";  shift
-  local targz="$1";  shift
+  local url="$1"
+  shift
+  local name="$1"
+  shift
+  local targz="$1"
+  shift
 
   local download_path="$DOWNLOADS/$targz"
 
@@ -70,20 +73,25 @@ download_extract_install() {
   while [[ $# -gt 0 ]]; do
     case "$1" in
       --ver-command)
-        local ver_command=$2;        shift
+        local ver_command=$2
+        shift
         ;;
       --ver-pattern)
-        local ver_pattern=$2; shift
+        local ver_pattern=$2
+        shift
         ;;
       --flags)
-        local config_flags=$2;        shift
+        local config_flags=$2
+        shift
         ;;
       --dir-name)
         # Override default
-        local dir_name=$2;         shift
+        local dir_name=$2
+        shift
         ;;
       --pre-config)
-        local pre_config=$2;         shift
+        local pre_config=$2
+        shift
         ;;
     esac
     shift
@@ -116,13 +124,13 @@ download_extract_install() {
   fi
 
   print -n "Extracting $download_path..."
-  if ! tar -zxf "$download_path" --directory "$SOURCES" > "$ERR_MSG" 2>&1; then
+  if ! tar -zxf "$download_path" --directory "$SOURCES" >"$ERR_MSG" 2>&1; then
     err "tar -zxf \"$download_path\" --directory \"$SOURCES\""
     exit 1
   fi
   print " done."
 
-  cd "$SOURCES/$dir_name" > "$ERR_MSG" 2>&1 || {
+  cd "$SOURCES/$dir_name" >"$ERR_MSG" 2>&1 || {
     err "Failed to cd to $SOURCES/$dir_name"
     exit 1
   }
@@ -149,17 +157,17 @@ download_extract_install() {
   fi
 
   print -n " making..."
-  if [[ -n "$run_test" ]] && make -n check &> /dev/null; then
-      print -n " running tests..."
-      if ! make check>_build.log 2>"$ERR_MSG"; then
-        err "Making & testing:"
-        exit 1
-      fi
+  if [[ -n "$run_test" ]] && make -n check &>/dev/null; then
+    print -n " running tests..."
+    if ! make check >_build.log 2>"$ERR_MSG"; then
+      err "Making & testing:"
+      exit 1
+    fi
   else
-      if ! make >_build.log 2>"$ERR_MSG"; then
-        err "Making:"
-        exit 1
-      fi
+    if ! make >_build.log 2>"$ERR_MSG"; then
+      err "Making:"
+      exit 1
+    fi
   fi
 
   print -n " installing..."
@@ -174,115 +182,115 @@ main() {
   parse_args "${ARGS[@]}"
   export PATH="$ROOT/bin:$PATH"
 
-# PKG-CONFIG -- https://www.freedesktop.org/wiki/Software/pkg-config/
-name=pkg-config-0.29.2
-targz="$name.tar.gz"
+  # PKG-CONFIG -- https://www.freedesktop.org/wiki/Software/pkg-config/
+  name=pkg-config-0.29.2
+  targz="$name.tar.gz"
 
-download_extract_install \
-  "https://pkg-config.freedesktop.org/releases/$targz" \
-  "$name" \
-  "$targz" \
-  "$ver_pattern" \
-  --flags "--with-internal-glib" \
-  --ver-command "$ROOT/bin/pkg-config --version" \
-  --ver-pattern 0.29.2
+  download_extract_install \
+    "https://pkg-config.freedesktop.org/releases/$targz" \
+    "$name" \
+    "$targz" \
+    "$ver_pattern" \
+    --flags "--with-internal-glib" \
+    --ver-command "$ROOT/bin/pkg-config --version" \
+    --ver-pattern 0.29.2
 
-# AUTOCONF -- https://www.gnu.org/software/autoconf/
-name=autoconf-2.69
-targz=$name.tar.gz
+  # AUTOCONF -- https://www.gnu.org/software/autoconf/
+  name=autoconf-2.69
+  targz=$name.tar.gz
 
-download_extract_install \
-  "http://ftp.gnu.org/gnu/autoconf/$targz" \
-  "$name" \
-  "$targz" \
-  --ver-command "$ROOT/bin/autoconf --version" \
-  --ver-pattern "2.69"
+  download_extract_install \
+    "http://ftp.gnu.org/gnu/autoconf/$targz" \
+    "$name" \
+    "$targz" \
+    --ver-command "$ROOT/bin/autoconf --version" \
+    --ver-pattern "2.69"
 
-# AUTOMAKE -- https://www.gnu.org/software/automake/
-name=automake-1.16
-targz="$name.tar.gz"
+  # AUTOMAKE -- https://www.gnu.org/software/automake/
+  name=automake-1.16
+  targz="$name.tar.gz"
 
-download_extract_install \
-  "http://ftp.gnu.org/gnu/automake/$targz" \
-  "$name" \
-  "$targz" \
-  --ver-command "$ROOT/bin/automake --version" \
-  --ver-pattern "1.16"
+  download_extract_install \
+    "http://ftp.gnu.org/gnu/automake/$targz" \
+    "$name" \
+    "$targz" \
+    --ver-command "$ROOT/bin/automake --version" \
+    --ver-pattern "1.16"
 
-# LIBTOOL -- https://www.gnu.org/software/libtool/
-name=libtool-2.4.6
-targz=$name.tar.gz
+  # LIBTOOL -- https://www.gnu.org/software/libtool/
+  name=libtool-2.4.6
+  targz=$name.tar.gz
 
-download_extract_install \
-  "http://ftp.gnu.org/gnu/libtool/$targz" \
-  "$name" \
-  "$targz" \
-  --ver-command "$ROOT/bin/libtool --version" \
-  --ver-pattern "2.4.6"
+  download_extract_install \
+    "http://ftp.gnu.org/gnu/libtool/$targz" \
+    "$name" \
+    "$targz" \
+    --ver-command "$ROOT/bin/libtool --version" \
+    --ver-pattern "2.4.6"
 
-# LEPTONICA -- https://github.com/DanBloomberg/leptonica
-name=leptonica-1.79.0
-targz="$name.tar.gz"
+  # LEPTONICA -- https://github.com/DanBloomberg/leptonica
+  name=leptonica-1.79.0
+  targz="$name.tar.gz"
 
-download_extract_install \
-  "https://github.com/DanBloomberg/leptonica/releases/download/1.79.0/$targz" \
-  "$name" \
-  "$targz" \
-  --ver-pattern "lept >= 1.79.0"
+  download_extract_install \
+    "https://github.com/DanBloomberg/leptonica/releases/download/1.79.0/$targz" \
+    "$name" \
+    "$targz" \
+    --ver-pattern "lept >= 1.79.0"
 
-# Optionally libpng, libjpeg, libtiff (Already exists on system?)
-# LIBJPEG -- http://ijg.org/
-name=jpegsrc.v9d
-targz="$name.tar.gz"
+  # Optionally libpng, libjpeg, libtiff (Already exists on system?)
+  # LIBJPEG -- http://ijg.org/
+  name=jpegsrc.v9d
+  targz="$name.tar.gz"
 
-download_extract_install \
-  "http://www.ijg.org/files/$targz" \
-  "$name" \
-  "$targz" \
-  --dir-name jpeg-9d \
-  --ver-pattern "libjpeg >= 9.4.0"
+  download_extract_install \
+    "http://www.ijg.org/files/$targz" \
+    "$name" \
+    "$targz" \
+    --dir-name jpeg-9d \
+    --ver-pattern "libjpeg >= 9.4.0"
 
-# LIBTIFF -- https://gitlab.com/libtiff/libtiff
-name=tiff-4.1.0
-targz="$name.tar.gz"
+  # LIBTIFF -- https://gitlab.com/libtiff/libtiff
+  name=tiff-4.1.0
+  targz="$name.tar.gz"
 
-download_extract_install \
-  "http://download.osgeo.org/libtiff/$targz" \
-  "$name" \
-  "$targz" \
-  --ver-pattern "libtiff-4 >= 4.1.0"
+  download_extract_install \
+    "http://download.osgeo.org/libtiff/$targz" \
+    "$name" \
+    "$targz" \
+    --ver-pattern "libtiff-4 >= 4.1.0"
 
-# ZLIB --
-name=zlib-1.2.11
-targz="$name.tar.gz"
+  # ZLIB --
+  name=zlib-1.2.11
+  targz="$name.tar.gz"
 
-download_extract_install \
-  "https://sourceforge.net/projects/libpng/files/zlib/1.2.11/$targz/download" \
-  "$name" \
-  "$targz" \
-  --ver-pattern "zlib >= 1.2.11"
+  download_extract_install \
+    "https://sourceforge.net/projects/libpng/files/zlib/1.2.11/$targz/download" \
+    "$name" \
+    "$targz" \
+    --ver-pattern "zlib >= 1.2.11"
 
-# LIBPNG -- http://www.libpng.org/pub/png/libpng.html
-name=libpng-1.6.37
-targz="$name.tar.gz"
+  # LIBPNG -- http://www.libpng.org/pub/png/libpng.html
+  name=libpng-1.6.37
+  targz="$name.tar.gz"
 
-download_extract_install \
-  "https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/$targz/download" \
-  "$name" \
-  "$targz" \
-  --ver-command "libpng-config --version" \
-  --ver-pattern "libpng >= 1.6.37"
+  download_extract_install \
+    "https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/$targz/download" \
+    "$name" \
+    "$targz" \
+    --ver-command "libpng-config --version" \
+    --ver-pattern "libpng >= 1.6.37"
 
-# TESSERACT OCR -- https://github.com/tesseract-ocr/tesseract
-name=tesseract-4.1.1
-targz="$name.tar.gz"
+  # TESSERACT OCR -- https://github.com/tesseract-ocr/tesseract
+  name=tesseract-4.1.1
+  targz="$name.tar.gz"
 
-download_extract_install \
-  "https://github.com/tesseract-ocr/tesseract/archive/4.1.1.tar.gz" \
-  "$name" \
-  "$targz" \
-  --pre-config "./autogen.sh" \
-  --ver-pattern "tesseract >= 4.1.1"
+  download_extract_install \
+    "https://github.com/tesseract-ocr/tesseract/archive/4.1.1.tar.gz" \
+    "$name" \
+    "$targz" \
+    --pre-config "./autogen.sh" \
+    --ver-pattern "tesseract >= 4.1.1"
 }
 
 main
