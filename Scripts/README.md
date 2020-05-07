@@ -4,45 +4,15 @@
 
 - [] **Vet script with `-f` in shebang:**  make sure local env does not affect build; thinking specifically of how `find` might perform if someone has GNU find installed
   - [] **Check variations in commands:** that have options, install GNU find, or at least find a side-by-side comparison of command-line flags/options
-- [] **Look into pkg-config/Leptonica:** this seems like it'll be hard, not sure how to approach this, other than running `./configure --debug` if that's even an option
-  - Output
 - [] **Add pre-commit hook:** to prevent committing build.sh with bash in the shebang
-
-```none
-+ pkg_failed=no
-+ printf '%s\n' 'configure:18110: checking for lept >= 1.74'
-+ printf %s 'checking for lept >= 1.74... '
-checking for lept >= 1.74... + test -n ''
-+ test -n ''
-+ pkg_failed=untried
-+ test -n ''
-+ test -n ''
-+ pkg_failed=untried
-+ test untried = yes
-+ test untried = untried
-+ printf '%s\n' 'configure:18169: result: no'
-+ printf '%s\n' no
-no
-+ have_lept=false
-+ false
-+ as_fn_error 1 'Leptonica 1.74 or higher is required. Try to install libleptonica-dev package.' 18182 5
-+ as_status=1
-+ test 1 -eq 0
-+ test 5
-+ as_lineno=18182
-+ as_lineno_stack=as_lineno_stack=
-+ printf '%s\n' 'configure:18182: error: Leptonica 1.74 or higher is required. Try to install libleptonica-dev package.'
-+ printf '%s\n' 'configure: error: Leptonica 1.74 or higher is required. Try to install libleptonica-dev package.'
-configure: error: Leptonica 1.74 or higher is required. Try to install libleptonica-dev package.
-+ as_fn_exit 1
-+ set +e
-+ as_fn_set_status 1
-+ return 1
-+ exit 1
-```
-
 - [] **Post-build validation:** just realized my grand-it's-finally-building build and e-mail to Kenny was for a broken build of Tesseract, because I had passed the `export LEPTONICA...` flags quoted, along with `./autogen.sh`, so the entire config-install step silently failed
-  - [] **Don't let steps silently fail!:** check exit status of every step along the way
+  - [x] **Don't let steps silently fail!:** check exit status of every step along the way
+
+- [] Convert to caps for Sources, Root, Scripts
+- [] Log directory, logs for each component autoconf2.49-config.log, -make.log
+- [] iOS target for Leptonica and image libs, as well as Tesseract
+      .c --> .o linked into .a/exec; .so sharedlibrary (framework) not for us
+- [] Thinking about unit tests
 
 ## zsh
 
@@ -86,25 +56,6 @@ There's also the benefit of the linter enforcing a formatting standard, which wi
 
 <https://google.github.io/styleguide/shellguide.html>
 
-## Tesseract
-
-Need to debug an issue with `configure` in Tesseract-OCR.  configure is using pkg-config to validate the presence and version of Leptonica:
-
-```sh
-$PKG_CONFIG --exists --print-errors "lept >= 1.74"
-```
-
-Similar pkg-config commands are used to generate the strings that get passed to `LEPTONICA_CFLAGS` and `LEPTONICA_LIBS`, but pkg-config when run inside configure always errors out.  I can run those pkg-config manually and get the correct output, which I'm hard-coding into the `pre-config` flags for the Tesseract `download_extract_install()` call (which I decided on based on this [answer][4] and trying to pass them as args to configure, but to no avail).
-
-```sh
---pre-config "
-    ./autogen.sh; &&
-    export LEPTONICA_CFLAGS='-I$Root/include/leptonica'; &&
-    export LEPTONICA_LIBS='-L$Root/lib -llept';
-" \
-```
-
-I'm going to pursue enabling debugging in `./configure` to try and find the point of failure; I'd really like to see pkg-config do its thing.
 
 [1]: https://scriptingosx.com/2019/06/moving-to-zsh/
 [2]: https://insights.stackoverflow.com/trends?tags=bash%2Czsh

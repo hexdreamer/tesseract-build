@@ -1,9 +1,10 @@
-#!/bin/zsh
+#!/bin/sh -f
 
 # Set paths one dir up, relative to this running build.sh script
 SCRIPT=$0:A
 BASEDIR=${SCRIPT%/Scripts/build.sh}
 
+# make all caps
 Downloads=$BASEDIR/Downloads
 Root=$BASEDIR/Root
 Sources=$BASEDIR/Sources
@@ -101,7 +102,7 @@ download_extract_install() {
     # Try parsing some version-y output from program
     if [ -n "$ver_command" ]; then
       s=$(eval "$ver_command 2>&1")
-      if [[ $s == *${ver_pattern}* ]]; then
+      if [[ $s == *ver_pattern* ]]; then
         echo "Skipped, already installed"
         return 0
       fi
@@ -224,7 +225,6 @@ download_extract_install \
   "https://github.com/DanBloomberg/leptonica/releases/download/1.79.0/$targz" \
   "$name" \
   "$targz" \
-  --ver-command "xtractprotos -h" \
   --ver-pattern "lept >= 1.79.0"
 
 # Optionally libpng, libjpeg, libtiff (Already exists on system?)
