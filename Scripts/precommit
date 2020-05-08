@@ -1,0 +1,21 @@
+#! /bin/zsh
+
+checkFile() {
+  local fname=$1
+
+  shebang=$(head -n1 "$fname")
+  if [[ $shebang != */bin/zsh* ]]; then
+    echo "ERROR $fname: wanted shebang == */bin/zsh*, got '$shebang'"
+  fi
+
+  # Even though using zsh, scripts should be mostly conformant as Zsh includes
+  # some features of Bash, and Zsh-specific irregularities will have accompanying
+  # `shellcheck disable` statements inline, or in the .shellcheckrc file
+  shellcheck -f gcc -s bash "$fname" | sed "s/$fname/ERROR $fname/"
+
+  shFmt -i 2 -ci -w "$fname"
+}
+
+for i in build.sh test.sh precommit; do
+  checkFile "$i"
+done

@@ -1,4 +1,4 @@
-#!/bin/zsh -f
+#! /bin/zsh -f
 
 # Set paths one dir up, relative to this running build.sh script
 readonly PROGNAME=$0:A
@@ -10,7 +10,7 @@ readonly DOWNLOADS=$PROJECTDIR/Downloads
 readonly ROOT=$PROJECTDIR/Root
 readonly SOURCES=$PROJECTDIR/Sources
 
-readonly LOG_DIR="$PROJECTDIR/Logs"
+LOG_DIR="$PROJECTDIR/Logs"
 
 err() {
   # $(date +"%y/%m/%d-%H:%M:%S")
@@ -18,20 +18,30 @@ err() {
 }
 
 exec_and_log() {
-  local name=$1
+  # Try and execute a named step in the build process, and
+  # log its stdout and stderr.
+  #
+  # Returns non-zero code for any error during execution.
+  local pkgname=$1
   local step=$2
-  local log_out="${LOG_DIR}/${name}/${step}.out"
-  local log_err="${LOG_DIR}/${name}/${step}.err"
+  local log_out="${LOG_DIR}/${pkgname}/${step}.out"
+  local log_err="${LOG_DIR}/${pkgname}/${step}.err"
 
-  if ! [[ -d "${LOG_DIR}/${name}" ]]; then
-    mkdir -p "${LOG_DIR}/${name}"
+  local _status=
+
+  if ! [[ -d ${LOG_DIR}/${pkgname} ]]; then
+    mkdir -p "${LOG_DIR}/${pkgname}"
   fi
 
-  if ! "${@:3}" >"$log_out" 2>"$log_err"; then
+  "${@:3}" >"$log_out" 2>"$log_err"
+  _status=$?
+  if [ $_status -ne 0 ]; then
     err "runing" "${@:3}" >&2
     err "see $log_err for more details" >&2
-    exit 1
+    return "$_status"
   fi
+
+  return 0
 }
 
 parse_args() {
@@ -54,6 +64,10 @@ parse_args() {
         ;;
       -t)
         run_test=true
+        ;;
+      build)
+        main
+        exit 0
         ;;
       clean)
         if [[ -n "$2" ]]; then
@@ -290,5 +304,3 @@ main() {
     --pre-config "./autogen.sh" \
     --ver-pattern "tesseract >= 4.1.1"
 }
-
-main

@@ -9,7 +9,7 @@
   - [x] **Don't let steps silently fail!:** check exit status of every step along the way
 
 - [x] Convert to caps for Sources, Root, Scripts
-- [] Log directory, logs for each component autoconf2.49-config.log, -make.log
+- [x] Log directory, logs for each component autoconf2.49-config.log, -make.log
 - [] iOS target for Leptonica and image libs, as well as Tesseract
       .c --> .o linked into .a/exec; .so sharedlibrary (framework) not for us
 - [] Thinking about unit tests
@@ -54,9 +54,31 @@ I accept this wonkiness for a better understanding of any shell.  And because ba
 
 There's also the benefit of the linter enforcing a formatting standard, which will keep Git commits cleaner.
 
-### Google Style Guide for Shell Script
+## Considerations for Shell Script style
 
-<https://google.github.io/styleguide/shellguide.html>
+- <https://google.github.io/styleguide/shellguide.html>
+- <http://kfirlavi.herokuapp.com/blog/2012/11/14/defensive-bash-programming/>
+- <https://wiki.ubuntu.com/DashAsBinSh>
+
+### Wrapping my head around word splitting
+
+<https://unix.stackexchange.com/a/26672/366399>
+
+> Zsh had arrays from the start, and its author opted for a saner language design at the expense of backward compatibility. In zsh (under the default expansion rules) $var does not perfom word splitting; if you want to store a list of words in a variable, you are meant to use an array; and if you really want word splitting, you can write $=var.
+>
+> ```zsh
+> files=(foo bar qux)
+> myprogram $files
+> ```
+
+<http://zsh.sourceforge.net/FAQ/zshfaq03.html>
+
+> ...
+> after which $words is an array with the words of $sentence (note characters special to the shell, such as the ' in this example, must already be quoted), or, less standard but more reliable, turning on SH_WORD_SPLIT for one variable only:
+>
+> ```zsh
+> args ${=sentence}
+> ```
 
 [1]: https://scriptingosx.com/2019/06/moving-to-zsh/
 [2]: https://insights.stackoverflow.com/trends?tags=bash%2Czsh
