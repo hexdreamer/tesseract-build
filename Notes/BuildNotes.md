@@ -29,6 +29,21 @@ From, [Arm architecture | Wikipedia][5]:
 >
 > ARMv8-A (often called ARMv8[...]) represents a fundamental change to the ARM architecture. It adds an optional 64-bit architecture [...], named "AArch64", and the associated new "A64" instruction set. AArch64 provides user-space compatibility with ARMv7-A, the 32-bit architecture, therein referred to as "AArch32" and the old 32-bit instruction set, now named "A32"
 
+## SwiftyTesseract
+
+Looking at what SwiftyTesseract does
+
+```diff
+90c90
+< host_triplet = arm-apple-darwin64
+---
+> host_triplet = x86_64-apple-darwin
+250c250
+< CC = /Applications/Xcode.app/Contents/Developer/usr/bin/gcc --target=arm-apple-darwin64
+---
+> CC = /Applications/Xcode.app/Contents/Developer/usr/bin/gcc --target=x86_64-apple-darwin
+```
+
 ## Build tools for macOS
 
 ### Xcode 11

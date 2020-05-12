@@ -2,17 +2,16 @@
 
 ## TODOs
 
-- [] **Vet script with `-f` in shebang:**  make sure local env does not affect build; thinking specifically of how `find` might perform if someone has GNU find installed
-  - [] **Check variations in commands:** that have options, install GNU find, or at least find a side-by-side comparison of command-line flags/options
-- [] **Add pre-commit hook:** to prevent committing build.sh with bash in the shebang
-- [] **Post-build validation:** just realized my grand-it's-finally-building build and e-mail to Kenny was for a broken build of Tesseract, because I had passed the `export LEPTONICA...` flags quoted, along with `./autogen.sh`, so the entire config-install step silently failed
+- [x] **Vet script with `-f` in shebang:**  make sure local env does not affect build; thinking specifically of how `find` might perform if someone has GNU find installed
+- [ ] **Add pre-commit hook:** to prevent committing build.sh with bash in the shebang
+- [x] **Post-build validation:** just realized my grand-it's-finally-building build and e-mail to Kenny was for a broken build of Tesseract, because I had passed the `export LEPTONICA...` flags quoted, along with `./autogen.sh`, so the entire config-install step silently failed
   - [x] **Don't let steps silently fail!:** check exit status of every step along the way
 
 - [x] Convert to caps for Sources, Root, Scripts
 - [x] Log directory, logs for each component autoconf2.49-config.log, -make.log
 - [] iOS target for Leptonica and image libs, as well as Tesseract
       .c --> .o linked into .a/exec; .so sharedlibrary (framework) not for us
-- [] Thinking about unit tests
+- [x] Thinking about unit tests
 
 ## zsh
 
