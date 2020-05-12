@@ -47,6 +47,9 @@ exec_and_log() {
 parse_args() {
   while [[ $# -gt 0 ]]; do
     case "$1" in
+      unittest)
+        return -1
+        ;;
       -h)
         echo
         echo Download and build Tesseract OCR, and all tooling
@@ -192,6 +195,11 @@ download_extract_install() {
 
 main() {
   parse_args "${ARGS[@]}"
+  _status=$?
+  if [[ _status -eq -1 ]]; then
+    return 0
+  fi
+
   export PATH="$ROOT/bin:$PATH"
 
   # PKG-CONFIG -- https://www.freedesktop.org/wiki/Software/pkg-config/
@@ -304,3 +312,5 @@ main() {
     --pre-config "./autogen.sh" \
     --ver-pattern "tesseract >= 4.1.1"
 }
+
+main

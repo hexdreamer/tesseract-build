@@ -2,7 +2,8 @@
 
 # Tried doing it the right way, `shellcheck source=build.sh`, but still got error
 # shellcheck disable=SC1091
-source build.sh
+# Include unittest positional arg so build.sh doesn't try to build anything
+source build.sh unittest
 
 readonly TMP_DIR=./tmp
 readonly ERR="${TMP_DIR}/err"
