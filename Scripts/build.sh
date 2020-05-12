@@ -3,6 +3,7 @@
 # Set paths one dir up, relative to this running build.sh script
 readonly PROGNAME=$0:A
 readonly ARGS=("$@")
+readonly ABORT_BUILD=21
 
 readonly SCRIPTSDIR=${PROGNAME%/build.sh}
 readonly PROJECTDIR=${SCRIPTSDIR%/Scripts}
@@ -48,7 +49,7 @@ parse_args() {
   while [[ $# -gt 0 ]]; do
     case "$1" in
       unittest)
-        return -1
+        return $ABORT_BUILD
         ;;
       -h)
         echo
@@ -60,7 +61,7 @@ parse_args() {
         echo '  clean     remove all artifacts from Root, Downloads, and Sources'
         echo
 
-        exit 1
+        return $ABORT_BUILD
         ;;
       -d)
         set -x
@@ -196,7 +197,7 @@ download_extract_install() {
 main() {
   parse_args "${ARGS[@]}"
   _status=$?
-  if [[ _status -eq -1 ]]; then
+  if [[ _status -eq $ABORT_BUILD ]]; then
     return 0
   fi
 
