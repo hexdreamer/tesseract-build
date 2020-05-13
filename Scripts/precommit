@@ -1,0 +1,81 @@
+#! /bin/zsh
+
+
+checkFile() {
+  local fname=$1
+  local tmpfile=
+
+  tmpfile=.precommit-tmp-file
+
+  # :0:FNAME means "stage 0 entry", or just "staged"
+  git cat-file -p :0:"$fname" > $tmpfile
+
+  # Make sure shebang is zsh
+  # sed -i.bak '1 s/bin\/bash/bin\/zsh/' "$fname"
+  # rm "${fname}.bak"
+
+  # And if sed didn't work for some reason...
+  shebang=$(head -n1 "$tmpfile")
+  if [[ $shebang != */bin/zsh* ]]; then
+    echo "ERROR $fname: wanted shebang == */bin/zsh*, got '$shebang'"
+  fi
+
+  # Even though using Bash rules, Zsh is mostly similar.
+  # Any Zsh-specific irregularities will have accompanying
+  # `shellcheck disable` statements inline, or in the .shellcheckrc file
+  shellcheck -f gcc -s bash "$tmpfile" | awk '{print "ERROR " $0; }'
+
+  # Format scripts for whitespace and indents
+  # shFmt -i 2 -ci -w "$fname"
+
+  rm "$tmpfile"
+}
+
+print_errors() {
+  echo
+  echo "- precommit errors with $fname"
+  for i in "$@"; do
+    echo "  - $i"
+  done
+}
+
+main() {
+  local fname=
+
+  if git rev-parse --verify HEAD >/dev/null 2>&1; then
+    against=HEAD
+  else
+    # Initial commit: diff against an empty tree object
+    against=$(git hash-object -t tree /dev/null)
+  fi
+
+  # Redirect output to stderr.
+  exec 1>&2
+
+  local errs=
+  for fname in $(git diff --cached --name-only "$against"); do
+    for i in Scripts/build.sh Scripts/test.sh Scripts/precommit; do
+      if [ "$fname" = "$i" ]; then
+        local _errs=
+        _errs=$(checkFile "$fname")
+        if [ "$_errs" != "" ]; then
+          local msg=
+          msg=$(print_errors "$_errs")
+          if [ "$errs" = "" ]; then
+            errs="$msg"
+          else
+            errs="$errs\n$msg"
+          fi
+        fi
+      fi
+    done
+  done
+
+  if [ "$errs" != "" ]; then
+    echo "$errs"
+    echo
+    exit 1
+  fi
+}
+
+main
