@@ -13,60 +13,41 @@ From, [Actually it's not THAT uncommon for fat binaries to contain multiple arch
 >
 >| Library | Description |
 |-------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
-| libobjc.dylib: | Mach-O universal binary with 3 architectures: [x86_64:Mach-O 64-bit dynamically linked shared library x86_64] [x86_64h] |
-| libobjc.dylib (for architecture x86_64): | Mach-O 64-bit dynamically linked shared library x86_64 |
-| libobjc.dylib (for architecture i386): | Mach-O dynamically linked shared library i386 |
-| libobjc.dylib (for architecture x86_64h): | Mach-O 64-bit dynamically linked shared library x86_64h |
+>| libobjc.dylib: | Mach-O universal binary with 3 architectures: [x86_64:Mach-O 64-bit dynamically linked shared library x86_64] [x86_64h] |
+>| libobjc.dylib (for architecture x86_64): | Mach-O 64-bit dynamically linked shared library x86_64 |
+>| libobjc.dylib (for architecture i386): | Mach-O dynamically linked shared library i386 |
+>| libobjc.dylib (for architecture x86_64h): | Mach-O 64-bit dynamically linked shared library x86_64h |
 >
 > On iOS, having a non-fat binary is almost the exception to the rule. For the longest time, it was common to have both armv6 and armv7 slices, and these days, armv7 and aarch64 slices. Granted, with iOS11 dropping armv[6|7] and apps starting to drop iOS10 support, we'll have a run with non-fat aarch64 binaries for a while. This is quite visible for compile times and compile errors during development! Also, for iOS, there's bitcode and app thinning which does mean end user devices are often served a single slice non-fat binary anyways.
 >
-> Vendors of closed source iOS libraries, such as the "Google maps for iOS" SDK, often ship fat binaries for the .dylibs containing both armv7, aarch64, i386 and/or x86_64. Why are Intel slices for iOS a thing? To be able to run your app and the library in the Xcode iOS simulator, which actually runs x86 code only. That's why it's not called an "emulator".
+> Vendors of closed source iOS libraries, such as the "Google maps for iOS" SDK, often ship fat binaries for the .dylibs containing both armv7, aarch64, i386 and/or x86_64. Why are Intel slices for iOS a thing? To be able to run your app and the library in the Xcode iOS **simulator**, which actually runs x86 code only. That's why it's not called an **"emulator"**.
 >
 > The history of fat binaries in macOS goes all the way back to NeXTSTEP (of course, since macOS is basically a modern NeXTSTEP, with NSObject still showing off the legacy behind the curtain to new iOS developers) where even m68k was a common slice. [NeXTSTEP, Multi-Architecture ("Fat") Binaries][2] which at times even exploded to "Quad-fat binaries" containing slices for m68k, i386, pa-risc and sparc all together in one executable.
 
-From, [Arm architecture | Wikipedia][5]:
+From, [Arm architecture | Wikipedia][3]:
 > iOS supports ARMv8-A in iOS 7 and later on 64-bit Apple SoCs. iOS 11 and later only supports 64-bit ARM processors and applications.
 >
 > ARMv8-A (often called ARMv8[...]) represents a fundamental change to the ARM architecture. It adds an optional 64-bit architecture [...], named "AArch64", and the associated new "A64" instruction set. AArch64 provides user-space compatibility with ARMv7-A, the 32-bit architecture, therein referred to as "AArch32" and the old 32-bit instruction set, now named "A32"
 
-## SwiftyTesseract
-
-Looking at what SwiftyTesseract does
-
-```diff
-90c90
-< host_triplet = arm-apple-darwin64
----
-> host_triplet = x86_64-apple-darwin
-250c250
-< CC = /Applications/Xcode.app/Contents/Developer/usr/bin/gcc --target=arm-apple-darwin64
----
-> CC = /Applications/Xcode.app/Contents/Developer/usr/bin/gcc --target=x86_64-apple-darwin
-```
-
-## Build tools for macOS
-
-### Xcode 11
-
-> * is available in the Mac App Store and includes SDKs for iOS 13, macOS Catalina 10.15...
-> * supports development for devices running iOS 13.1.
-> * supports on-device debugging for iOS 8 and later...
-> * requires a Mac running macOS Mojave 10.14.4 or later.
-
-### Problems you might run into with Pre-requisites
-
-* [Can't compile a C program on a Mac after upgrading to Catalina 10.15][3]
-* [Can't compile C program on a Mac after upgrade to Mojave][4]
-
 ## Bitcode
 
 * <https://stackoverflow.com/questions/32868297/compiling-ios-library-with-bitcode-enabled>
+
+  This suggestion was met with opposition, might be useful in the future, at least to remember the `otool`
+
+  > Also, the easiest way to check if the binary contains bitcode is to use otool and grep:
+  >
+  > ```s
+  > otool -l binary_name | grep __LLVM
+  > ```
+
 * <https://www.infoq.com/articles/ios-9-bitcode/>
+
+  Interesting, but probably irrelevant
+
   > This unlocked the potential for a complete LLVM based tool chain to compile iOS applications. LLVM provides a virtual instruction set that can be translated to (and optimised for) a specific processor architecture. The generic instruction set also has several representation forms: it can be stored in a textual based assembler format called IR (like assembly) or translated to a binary format (like an object file). It is this binary format that is called bitcode.
   >
   > However, bitcode is not completely architecture or calling convention independent. The size of registers is a fairly important property in an instruction set; more data can be stored in a 64-bit register than a 32-bit register. Generated bit code for a 64-bit platform will therefore look different than bit code generated for a 32-bit platform.
-
-  But this doesn't apply to us
 
 ### Guardsquare: "Is it safe to enable bitcode?"
 
@@ -114,6 +95,4 @@ There has been some discussion about the security implications of embedding bitc
 
 [1]: https://news.ycombinator.com/item?id=17306454
 [2]: https://en.wikipedia.org/wiki/Fat_binary#NeXTSTEP_Multi-Architecture_Binaries
-[3]: https://stackoverflow.com/questions/58278260/cant-compile-a-c-program-on-a-mac-after-upgrading-to-catalina-10-15
-[4]: https://stackoverflow.com/questions/52509602/cant-compile-c-program-on-a-mac-after-upgrade-to-mojave
-[5]: https://en.wikipedia.org/wiki/ARM_architecture
+[3]: https://en.wikipedia.org/wiki/ARM_architecture
