@@ -22,6 +22,9 @@ exec_and_log() {
   # Try and execute a named step in the build process, and
   # log its stdout and stderr.
   #
+  # pkgname :: the name of the pkg being configured/installed e.g., autoconf, leptonica
+  # step :: intended to be a numbered step in the process of pkgname, e.g., 1_download, 2_configure
+  # ${@:3} :: interpreted as "the command", (all arguments that follow pkgname and step)
   # Returns non-zero code for any error during execution.
   local pkgname=$1
   local step=$2
