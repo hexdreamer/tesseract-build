@@ -41,6 +41,19 @@ Then proceeds to the following dependencies.
     1. ARM
 
         ```sh
+        export SDKROOT="{XCODE_DEV}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.4.sdk"
+        export CFLAGS="\
+            -arch arm64 \
+            -pipe \
+            -no-cpp-precomp \
+            -isysroot $SDKROOT \
+            -miphoneos-version-min="11.0" \
+            -O2 \
+            -fembed-bitcode"
+        export CPPFLAGS=$CFLAGS
+        export CXXFLAGS="$CFLAGS -Wno-deprecated-register"
+        export LDFLAGS="-L$SDKROOT/usr/lib/"
+
         cd {ROOT}/libpng-1.6.36/arm-apple-darwin64
         ../configure \
             CXX="""`xcode-select -p`"/usr/bin/g++" --target=arm-apple-darwin64" \
@@ -53,6 +66,19 @@ Then proceeds to the following dependencies.
     1. x86
 
         ```sh
+        export SDKROOT="{XCODE_DEV}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.4.sdk" ; \
+        export CFLAGS="\
+            -arch x86_64 \
+            -pipe \
+            -no-cpp-precomp \
+            -isysroot $SDKROOT \
+            -mios-simulator-version-min="11.0" \
+            -O2 \
+            -fembed-bitcode"
+        export CPPFLAGS=$CFLAGS ; \
+        export CXXFLAGS="$CFLAGS -Wno-deprecated-register"; \
+        export LDFLAGS="-L$SDKROOT/usr/lib/" ; \
+
         cd {ROOT}/libpng-1.6.36/x86_64-apple-darwin
         ../configure \
             CXX="""`xcode-select -p`"/usr/bin/g++" --target=x86_64-apple-darwin" \
@@ -104,11 +130,30 @@ Then proceeds to the following dependencies.
 
 ### libjpeg
 
+1. **Download**
+
+    ```sh
+    curl http://www.ijg.org/files/jpegsrc.v9c.tar.gz | tar -xpf-
+    ```
+
 1. **Configure**
 
     1. ARM
 
         ```sh
+        export SDKROOT="{XCODE_DEV}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.4.sdk"
+        export CFLAGS="\
+            -arch arm64 \
+            -pipe \
+            -no-cpp-precomp \
+            -isysroot $SDKROOT \
+            -miphoneos-version-min="11.0" \
+            -O2 \
+            -fembed-bitcode"
+        export CPPFLAGS=$CFLAGS
+        export CXXFLAGS="$CFLAGS -Wno-deprecated-register"
+        export LDFLAGS="-L$SDKROOT/usr/lib/"
+
         cd {ROOT}/jpeg-9c/arm-apple-darwin64
         ../configure \
             CXX="""`xcode-select -p`"/usr/bin/g++" --target=arm-apple-darwin64" \
@@ -121,6 +166,19 @@ Then proceeds to the following dependencies.
     2. x86
 
         ```sh
+        export SDKROOT="{XCODE_DEV}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.4.sdk"
+        export CFLAGS="\
+            -arch x86_64 \
+            -pipe \
+            -no-cpp-precomp \
+            -isysroot $SDKROOT \
+            -mios-simulator-version-min="11.0" \
+            -O2 \
+            -fembed-bitcode"
+        export CPPFLAGS=$CFLAGS
+        export CXXFLAGS="$CFLAGS -Wno-deprecated-register"
+        export LDFLAGS="-L$SDKROOT/usr/lib/"
+
         cd {ROOT}/jpeg-9c/x86_64-apple-darwin
         ../configure \
             CXX="""`xcode-select -p`"/usr/bin/g++" --target=x86_64-apple-darwin" \
@@ -152,38 +210,182 @@ Then proceeds to the following dependencies.
             ...
         ```
 
-    cd {ROOT}/tiff-4.0.10/arm-apple-darwin64 ; \
-    ../configure CXX="""`xcode-select -p`"/usr/bin/g++" --target=arm-apple-darwin64" CC="""`xcode-select -p`"/usr/bin/gcc" --target=arm-apple-darwin64" --host=arm-apple-darwin64 --enable-fast-install --enable-shared=no --prefix=`pwd` --without-x --with-jpeg-include-dir={ROOT}/jpeg-9c/arm-apple-darwin64/include --with-jpeg-lib-dir={ROOT}/jpeg-9c/arm-apple-darwin64/lib
-checking build system type... x86_64-apple-darwin19.4.0
---
---
-    cd {ROOT}/tiff-4.0.10/x86_64-apple-darwin ; \
-    ../configure CXX="""`xcode-select -p`"/usr/bin/g++" --target=x86_64-apple-darwin" CC="""`xcode-select -p`"/usr/bin/gcc" --target=x86_64-apple-darwin" --host=x86_64-apple-darwin --enable-fast-install --enable-shared=no --prefix=`pwd` --without-x --with-jpeg-include-dir={ROOT}/jpeg-9c/x86_64-apple-darwin/include --with-jpeg-lib-dir={ROOT}/jpeg-9c/x86_64-apple-darwin/lib
-checking build system type... x86_64-apple-darwin19.4.0
---
---
-cd {ROOT}/tiff-4.0.10/arm-apple-darwin64 ; \
-    {XCODE_DEV}/usr/bin/make -sj8 && {XCODE_DEV}/usr/bin/make install
-Making all in port
---
---
-cd {ROOT}/tiff-4.0.10/x86_64-apple-darwin ; \
-    {XCODE_DEV}/usr/bin/make -sj8 && {XCODE_DEV}/usr/bin/make install
-Making all in port
---
---
+### libtiff
 
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
- 10 12.3M   10 1338k    0     0  1084k      0  0:00:11  0:00:01  0:00:10 1083k
- 11 12.3M   11 1479k    0     0   658k      0  0:00:19  0:00:02  0:00:17  658k
- 14 12.3M   14 1792k    0     0   550k      0  0:00:22  0:00:03  0:00:19  550k
- 17 12.3M   17 2213k    0     0   522k      0  0:00:24  0:00:04  0:00:20  521k
- 24 12.3M   24 3127k    0     0   596k      0  0:00:21  0:00:05  0:00:16  641k
- 36 12.3M   36 4627k    0     0   739k      0  0:00:17  0:00:06  0:00:11  655k
- 55 12.3M   55 7024k    0     0   970k      0  0:00:12  0:00:07  0:00:05 1111k
- 81 12.3M   81 10.0M    0     0  1246k      0  0:00:10  0:00:08  0:00:02 1701k
-100 12.3M  100 12.3M    0     0  1368k      0  0:00:09  0:00:09 --:--:-- 2089k
+1. **Download**
+
+    ```sh
+    curl http://download.osgeo.org/libtiff/tiff-4.0.10.tar.gz | tar -xpf-
+    ```
+
+1. **Configure**
+
+    1. ARM
+
+        ```sh
+        export SDKROOT="{XCODE_DEV}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.4.sdk"
+        export CFLAGS="\
+            -arch arm64 \
+            -pipe \
+            -no-cpp-precomp \
+            -isysroot $SDKROOT \
+            -miphoneos-version-min="11.0" \
+            -O2 \
+            -fembed-bitcode"
+        export CPPFLAGS=$CFLAGS
+        export CXXFLAGS="$CFLAGS -Wno-deprecated-register"
+        export LDFLAGS="-L$SDKROOT/usr/lib/"
+
+        cd {ROOT}/tiff-4.0.10/arm-apple-darwin64
+        ../configure \
+            CXX="""`xcode-select -p`"/usr/bin/g++" --target=arm-apple-darwin64" \
+            CC="""`xcode-select -p`"/usr/bin/gcc" --target=arm-apple-darwin64" \
+            -host=arm-apple-darwin64 \
+            --enable-fast-install \
+            --enable-shared=no \
+            --prefix=`pwd` \
+            --without-x \
+            --with-jpeg-include-dir={ROOT}/jpeg-9c/arm-apple-darwin64/include \
+            --with-jpeg-lib-dir={ROOT}/jpeg-9c/arm-apple-darwin64/lib
+        ```
+
+    2. x86
+
+        ```sh
+        export SDKROOT="{XCODE_DEV}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.4.sdk"
+        export CFLAGS="\
+            -arch x86_64 \
+            -pipe \
+            -no-cpp-precomp \
+            -isysroot $SDKROOT \
+            -mios-simulator-version-min="11.0" \
+            -O2 \
+            -fembed-bitcode"
+        export CPPFLAGS=$CFLAGS
+        export CXXFLAGS="$CFLAGS -Wno-deprecated-register"
+        export LDFLAGS="-L$SDKROOT/usr/lib/"
+
+        cd {ROOT}/tiff-4.0.10/x86_64-apple-darwin
+        ../configure \
+            CXX="""`xcode-select -p`"/usr/bin/g++" --target=x86_64-apple-darwin" \
+            CC="""`xcode-select -p`"/usr/bin/gcc" --target=x86_64-apple-darwin" \
+            --host=x86_64-apple-darwin \
+            --enable-fast-install \
+            --enable-shared=no \
+            --prefix=`pwd` \
+            --without-x \
+            --with-jpeg-include-dir={ROOT}/jpeg-9c/x86_64-apple-darwin/include \
+            --with-jpeg-lib-dir={ROOT}/jpeg-9c/x86_64-apple-darwin/lib
+        ```
+
+1. **Make**
+
+    1. ARM
+
+        ```sh
+        cd {ROOT}/tiff-4.0.10/arm-apple-darwin64
+        {XCODE_DEV}/usr/bin/make -sj8
+        {XCODE_DEV}/usr/bin/make install
+            Making all in port
+            ...
+        ```
+
+    1. x86
+
+        ```sh
+        cd {ROOT}/tiff-4.0.10/x86_64-apple-darwin
+        {XCODE_DEV}/usr/bin/make -sj8
+        {XCODE_DEV}/usr/bin/make install
+            Making all in port
+            ...
+        ```
+
+### leptonica
+
+1. **Download**
+
+    ```sh
+    curl http://leptonica.org/source/leptonica-1.78.0.tar.gz | tar -xpf-
+    ```
+
+1. **Pre-Configure**
+
+    ```sh
+    cd {ROOT}/leptonica-1.78.0
+    ./autogen.sh 2> /dev/null
+    ```
+
+1. **Configure**
+
+    1. ARM
+
+        ```sh
+        export LIBS="-lz -lpng -ljpeg -ltiff"
+        export SDKROOT="{XCODE_DEV}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.4.sdk"
+        export CFLAGS="\
+            -I{ROOT}/ios/include \
+            -arch arm64 \
+            -pipe \
+            -no-cpp-precomp \
+            -isysroot $SDKROOT \
+            -miphoneos-version-min="11.0" \
+            -O2 \
+            -fembed-bitcode"
+        export CPPFLAGS=$CFLAGS
+        export CXXFLAGS="-I{ROOT}/ios/include \
+            -arch arm64 \
+            -pipe \
+            -no-cpp-precomp \
+            -isysroot $SDKROOT \
+            -miphoneos-version-min="11.0" \
+            -O2 \
+            -Wno-deprecated-register"; \
+        export LDFLAGS="
+            -L$SDKROOT/usr/lib/ \
+            -L{ROOT}/ios/lib"
+        export PKG_CONFIG_PATH="\
+            {ROOT}/libpng-1.6.36/arm-apple-darwin64/:\
+            {ROOT}/jpeg-9c/arm-apple-darwin64/:\
+            {ROOT}/tiff-4.0.10/arm-apple-darwin64/"
+        export CXX="""`xcode-select -p`"/usr/bin/g++" --target=arm-apple-darwin64"
+        export CXX_FOR_BUILD="""`xcode-select -p`"/usr/bin/g++" --target=arm-apple-darwin64"
+        export CC="""`xcode-select -p`"/usr/bin/gcc" --target=arm-apple-darwin64"
+
+        mkdir -p {ROOT}/leptonica-1.78.0/ios/arm-apple-darwin64--
+        cd {ROOT}/leptonica-1.78.0/ios/arm-apple-darwin64
+
+        ../../configure \
+            CXX="""`xcode-select -p`"/usr/bin/g++" --target=arm-apple-darwin64" \
+            CC="""`xcode-select -p`"/usr/bin/gcc" --target=arm-apple-darwin64" \
+            --host=arm-apple-darwin64 \
+            --prefix=`pwd` \
+            --enable-shared=no \
+            --disable-programs \
+            --with-zlib \
+            --with-libpng \
+            --with-jpeg \
+            --with-libtiff \
+            --without-giflib \
+            --without-libwebp
+        ```
+
+    2. x86
+
+        ```sh
+        ```
+
+1. **Make**
+
+    1. ARM
+
+        ```sh
+        ```
+
+    1. x86
+
+        ```sh
+        ```
+
 cd {ROOT}/leptonica-1.78.0 && ./autogen.sh 2> /dev/null
 libtoolize: putting auxiliary files in AC_CONFIG_AUX_DIR, 'config'.
 --
@@ -271,3 +473,30 @@ checking whether the C++ compiler works... yes
 
 cd {ROOT}/tesseract-4.1.0/macos/x86_64-apple-darwin && {XCODE_DEV}/usr/bin/make -sj8 && {XCODE_DEV}/usr/bin/make install
 Making all in src/arch
+
+### library
+
+1. **Download**
+1. **Configure**
+
+    1. ARM
+
+        ```sh
+        ```
+
+    2. x86
+
+        ```sh
+        ```
+
+1. **Make**
+
+    1. ARM
+
+        ```sh
+        ```
+
+    1. x86
+
+        ```sh
+        ```
