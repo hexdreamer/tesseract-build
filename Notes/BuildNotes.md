@@ -11,12 +11,12 @@ From, [Actually it's not THAT uncommon for fat binaries to contain multiple arch
 >
 > Edit: actually, even in today's mostly-x86_64-only world, there are fat binaries in macOS, because there is a separate "x86_64h" architecture for "haswell and better". So even in a pure 64bit intel world, there's going to be fat binaries for a while. For example, "file /usr/lib/libobjc.dylib" shows three slices on macOS 10.13:
 >
->| Library | Description |
+| Library | Description |
 |-------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
->| libobjc.dylib: | Mach-O universal binary with 3 architectures: [x86_64:Mach-O 64-bit dynamically linked shared library x86_64] [x86_64h] |
->| libobjc.dylib (for architecture x86_64): | Mach-O 64-bit dynamically linked shared library x86_64 |
->| libobjc.dylib (for architecture i386): | Mach-O dynamically linked shared library i386 |
->| libobjc.dylib (for architecture x86_64h): | Mach-O 64-bit dynamically linked shared library x86_64h |
+| libobjc.dylib: | Mach-O universal binary with 3 architectures: [x86_64:Mach-O 64-bit dynamically linked shared library x86_64] [x86_64h] |
+| libobjc.dylib (for architecture x86_64): | Mach-O 64-bit dynamically linked shared library x86_64 |
+| libobjc.dylib (for architecture i386): | Mach-O dynamically linked shared library i386 |
+| libobjc.dylib (for architecture x86_64h): | Mach-O 64-bit dynamically linked shared library x86_64h |
 >
 > On iOS, having a non-fat binary is almost the exception to the rule. For the longest time, it was common to have both armv6 and armv7 slices, and these days, armv7 and aarch64 slices. Granted, with iOS11 dropping armv[6|7] and apps starting to drop iOS10 support, we'll have a run with non-fat aarch64 binaries for a while. This is quite visible for compile times and compile errors during development! Also, for iOS, there's bitcode and app thinning which does mean end user devices are often served a single slice non-fat binary anyways.
 >
