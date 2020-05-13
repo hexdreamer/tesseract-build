@@ -2,30 +2,49 @@
 
 How SwiftyTesseract builds Tesseract OCR and its dependencies.
 
-The input for this MD file was assembled from the filtered commands created by running the following `grep` against the full output (../make.log) after running SwiftyTesseract's `make`:
+From the root of SwiftyTesseract, simply running:
 
 ```sh
-grep -C1 -E \\./configure\|usr/bin/make\|autogen make.log > swifty-make.txt
+cd ./SwiftyTesseract/SwiftyTesseract/SwiftyTesseract
+make
 ```
 
-These commands were then hand-edited and organized into the following document.
+produces the following high-level flow for the dependencies of Tesseract-OCR, and finally Tesseract-OCR itself:
 
-To try and make the sequence of steps clear and concise, the following substitutions were made throughout.
+1. Download
+1. Pre-configure (optional) - Leptonica and Tesseract have autogen.sh scripts to do some preconfiguration, *dunno really what they're doing at the moment*
+1. Configure
+1. Make - uses the flags: `-s` "silent", `-j8` "8 workers/threads/jobs"
+1. Lipo - create one universal "iOS" lib from the ARM and x86 libs
+
+## Platforms & Architectures
+
+As our project is only concerend with iOS, I am ignoring the same set of steps that produce build artifacts for macOS.  The `ios` platform targets both ARM and x86 architectures.  x86 is necessary as it's the architecture for iPhoneSimulator (cross-reference with [BuildNotes.md](./BuildNotes.md#understanding-multi-arch-binaries-and-supported-ios-architectures)):
+
+> Why are Intel slices for iOS a thing? To be able to run your app and the library in the Xcode iOS **simulator**, which actually runs x86 code only. That's why it's *not* called an **"emulator"**.
+
+And the SDK for the x86 build is always `SDKs/iPhoneSimulator13.4.sdk`.
+
+## About this document
+
+The following substitutions were made throughout.
 
 ```sh
 XCODE_DEV=/Applications/Xcode.app/Contents/Developer
 ROOT=/Your/Project/Root
 ```
 
+and, now...
+
 ## The build starts
 
-The build starts off with a platform-specific `make` invocation.  As this project is only concerend with iOS, it ignores the same set of steps that produce build artifacts for macOS.
+The build starts off with a platform-specific invocation of `make`:
 
 ```sh
 {XCODE_DEV}/usr/bin/make platform=ios
 ```
 
-Then proceeds to the following dependencies.
+which proceeds to the dependencies and Tesseract.
 
 ## Dependencies
 
@@ -88,7 +107,7 @@ Then proceeds to the following dependencies.
             --prefix=`pwd`
         ```
 
-1. **Make**, `-sj8` means `-s` "silent", `-j8` "8 workers/threads/jobs"
+1. **Make**
 
     1. ARM
 
@@ -96,16 +115,12 @@ Then proceeds to the following dependencies.
         cd {ROOT}/libpng-1.6.36/arm-apple-darwin64
         {XCODE_DEV}/usr/bin/make -sj8
         {XCODE_DEV}/usr/bin/make install
-            libtool: compile:  {XCODE_DEV}/usr/bin/gcc --target=arm-apple-darwin64 -DHAVE_CONFIG_H -I. -I.. -arch arm64 -pipe -no-cpp-precomp -isysroot {XCODE_DEV}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.4.sdk -miphoneos-version-min=11.0 -O2 -fembed-bitcode -arch arm64 -pipe -no-cpp-precomp -isysroot {XCODE_DEV}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.4.sdk -miphoneos-version-min=11.0 -O2 -fembed-bitcode -MT pngget.lo -MD -MP -MF .deps/pngget.Tpo -c ../pngget.c -o pngget.o
             ...
         {XCODE_DEV}/usr/bin/make  install-am
-            ../install-sh -c -d '{ROOT}/libpng-1.6.36/arm-apple-darwin64/lib'
             ...
         {XCODE_DEV}/usr/bin/make  install-exec-hook
-            + cd {ROOT}/libpng-1.6.36/arm-apple-darwin64/lib
             ...
         {XCODE_DEV}/usr/bin/make  install-data-hook
-            + cd {ROOT}/libpng-1.6.36/arm-apple-darwin64/include
             ...
         ```
 
@@ -115,18 +130,25 @@ Then proceeds to the following dependencies.
         cd {ROOT}/libpng-1.6.36/x86_64-apple-darwin
         {XCODE_DEV}/usr/bin/make -sj8
         {XCODE_DEV}/usr/bin/make install
-            libtool: compile:  {XCODE_DEV}/usr/bin/gcc --target=x86_64-apple-darwin -DHAVE_CONFIG_H -I. -I.. -arch x86_64 -pipe -no-cpp-precomp -isysroot {XCODE_DEV}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.4.sdk -mios-simulator-version-min=11.0 -O2 -fembed-bitcode -arch x86_64 -pipe -no-cpp-precomp -isysroot {XCODE_DEV}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.4.sdk -mios-simulator-version-min=11.0 -O2 -fembed-bitcode -MT pngerror.lo -MD -MP -MF .deps/pngerror.Tpo -c ../pngerror.c -o pngerror.o
             ...
         {XCODE_DEV}/usr/bin/make  install-am
-            ../install-sh -c -d '{ROOT}/libpng-1.6.36/x86_64-apple-darwin/lib'
             ...
         {XCODE_DEV}/usr/bin/make  install-exec-hook
-            + cd {ROOT}/libpng-1.6.36/x86_64-apple-darwin/lib
             ...
         {XCODE_DEV}/usr/bin/make  install-data-hook
-            + cd {ROOT}/libpng-1.6.36/x86_64-apple-darwin/include
             ...
         ```
+
+1. **lipo**
+
+    ```sh
+    xcrun lipo \
+    {ROOT}/libpng-1.6.36/arm-apple-darwin64/lib/libpng16.a \
+    {ROOT}/libpng-1.6.36/x86_64-apple-darwin/lib/libpng16.a \
+    -create \
+    -output \
+    {ROOT}/ios/lib/libpng.a
+    ```
 
 ### libjpeg
 
@@ -196,8 +218,6 @@ Then proceeds to the following dependencies.
         cd {ROOT}/jpeg-9c/arm-apple-darwin64
         {XCODE_DEV}/usr/bin/make -sj8
         {XCODE_DEV}/usr/bin/make install
-            CC       jaricom.lo
-            ...
         ```
 
     1. x86
@@ -206,9 +226,18 @@ Then proceeds to the following dependencies.
         cd {ROOT}/jpeg-9c/x86_64-apple-darwin
         {XCODE_DEV}/usr/bin/make -sj8
         {XCODE_DEV}/usr/bin/make install
-            CC       jaricom.lo
-            ...
         ```
+
+1. **Lipo**
+
+    ```sh
+    xcrun lipo \
+    {ROOT}/jpeg-9c/arm-apple-darwin64/lib/libjpeg.a \
+    {ROOT}/jpeg-9c/x86_64-apple-darwin/lib/libjpeg.a \
+    -create \
+    -output \
+    {ROOT}/ios/lib/libjpeg.a
+    ```
 
 ### libtiff
 
@@ -286,8 +315,6 @@ Then proceeds to the following dependencies.
         cd {ROOT}/tiff-4.0.10/arm-apple-darwin64
         {XCODE_DEV}/usr/bin/make -sj8
         {XCODE_DEV}/usr/bin/make install
-            Making all in port
-            ...
         ```
 
     1. x86
@@ -296,9 +323,18 @@ Then proceeds to the following dependencies.
         cd {ROOT}/tiff-4.0.10/x86_64-apple-darwin
         {XCODE_DEV}/usr/bin/make -sj8
         {XCODE_DEV}/usr/bin/make install
-            Making all in port
-            ...
         ```
+
+1. **lipo**
+
+    ```sh
+    xcrun lipo \
+    {ROOT}/tiff-4.0.10/arm-apple-darwin64/lib/libtiff.a \
+    {ROOT}/tiff-4.0.10/x86_64-apple-darwin/lib/libtiff.a \
+    -create \
+    -output \
+    {ROOT}/ios/lib/libtiff.a
+    ```
 
 ### leptonica
 
@@ -318,6 +354,8 @@ Then proceeds to the following dependencies.
 1. **Configure**
 
     1. ARM
+
+        I did notice that flags like `CC` and `CXX` are exported *and* included in-line as positional arguments to configure.  I might experiment with removing one or the other and seeing if there's any difference.  I'd like to see a unified configuration, but maybe individual config processes will not permit.
 
         ```sh
         export LIBS="-lz -lpng -ljpeg -ltiff"
@@ -372,6 +410,54 @@ Then proceeds to the following dependencies.
     2. x86
 
         ```sh
+        export LIBS="-lz -lpng -ljpeg -ltiff"
+        export SDKROOT="{XCODE_DEV}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.4.sdk"
+        export CFLAGS="\
+            -I{ROOT}/ios/include \
+            -arch x86_64 \n-pipe \
+            -no-cpp-precomp \
+            -isysroot $SDKROOT \
+            -mios-simulator-version-min="11.0" \
+            -O2 \
+            -fembed-bitcode"
+        export CPPFLAGS=$CFLAGS
+        export CXXFLAGS="\
+            -I{ROOT}/ios/include \
+            -arch x86_64 \
+            -pipe \
+            -no-cpp-precomp \
+            -isysroot $SDKROOT \
+            -mios-simulator-version-min="11.0" \
+            -O2 \
+            -Wno-deprecated-register"
+        export LDFLAGS="\
+            -L$SDKROOT/usr/lib/ \
+            -L{ROOT}/ios/lib"
+        export PKG_CONFIG_PATH="\
+            {ROOT}/libpng-1.6.36/x86_64-apple-darwin/:\
+            {ROOT}/jpeg-9c/x86_64-apple-darwin/:\
+            {ROOT}/tiff-4.0.10/x86_64-apple-darwin/"
+        export CXX="""`xcode-select -p`"/usr/bin/g++" --target=x86_64-apple-darwin"
+        export CXX_FOR_BUILD="""`xcode-select -p`"/usr/bin/g++" --target=x86_64-apple-darwin"
+        export CC="""`xcode-select -p`"/usr/bin/gcc" --target=x86_64-apple-darwin"
+
+        mkdir -p {ROOT}/leptonica-1.78.0/ios/x86_64-apple-darwin
+        cd {ROOT}/leptonica-1.78.0/ios/x86_64-apple-darwin
+
+        ../../configure \
+            CXX="""`xcode-select -p`"/usr/bin/g++" --target=x86_64-apple-darwin" \
+            CC="""`xcode-select -p`"/usr/bin/gcc" \
+            --target=x86_64-apple-darwin" \
+            --host=x86_64-apple-darwin \
+            --prefix=`pwd` \
+            --enable-shared=no \
+            --disable-programs \
+            --with-zlib \
+            --with-libpng \
+            --with-jpeg \
+            --with-libtiff \
+            --without-giflib \
+            --without-libwebp
         ```
 
 1. **Make**
@@ -379,114 +465,141 @@ Then proceeds to the following dependencies.
     1. ARM
 
         ```sh
+        cd {ROOT}/leptonica-1.78.0/ios/arm-apple-darwin64
+        {XCODE_DEV}/usr/bin/make -sj8
+        {XCODE_DEV}/usr/bin/make install
         ```
 
     1. x86
 
         ```sh
+        cd {ROOT}/leptonica-1.78.0/ios/x86_64-apple-darwin
+        {XCODE_DEV}/usr/bin/make -sj8
+        {XCODE_DEV}/usr/bin/make install
         ```
 
-cd {ROOT}/leptonica-1.78.0 && ./autogen.sh 2> /dev/null
-libtoolize: putting auxiliary files in AC_CONFIG_AUX_DIR, 'config'.
---
---
-    cd {ROOT}/leptonica-1.78.0/ios/arm-apple-darwin64 ; \
-    ../../configure CXX="""`xcode-select -p`"/usr/bin/g++" --target=arm-apple-darwin64" CC="""`xcode-select -p`"/usr/bin/gcc" --target=arm-apple-darwin64" --host=arm-apple-darwin64 --prefix=`pwd` --enable-shared=no --disable-programs --with-zlib --with-libpng --with-jpeg --with-libtiff --without-giflib --without-libwebp
-checking build system type... x86_64-apple-darwin19.4.0
---
---
-    cd {ROOT}/leptonica-1.78.0/ios/x86_64-apple-darwin ; \
-    ../../configure CXX="""`xcode-select -p`"/usr/bin/g++" --target=x86_64-apple-darwin" CC="""`xcode-select -p`"/usr/bin/gcc" --target=x86_64-apple-darwin" --host=x86_64-apple-darwin --prefix=`pwd` --enable-shared=no --disable-programs --with-zlib --with-libpng --with-jpeg --with-libtiff --without-giflib --without-libwebp
-checking build system type... x86_64-apple-darwin19.4.0
---
---
-cd {ROOT}/leptonica-1.78.0/ios/arm-apple-darwin64 ; \
-    {XCODE_DEV}/usr/bin/make -sj8 && {XCODE_DEV}/usr/bin/make install
-Making all in src
---
---
-cd {ROOT}/leptonica-1.78.0/ios/x86_64-apple-darwin ; \
-    {XCODE_DEV}/usr/bin/make -sj8 && {XCODE_DEV}/usr/bin/make install
-Making all in src
---
---
-{ROOT}/leptonica-1.78.0/ios/arm-apple-darwin64/include/leptonica/arrayaccess.h -> {ROOT}/ios/include/leptonica/arrayaccess.h
-curl -LO https://github.com/tesseract-ocr/tesseract/archive/4.1.0.zip && unzip -a 4.1.0.zip
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
---
---
-  inflating: tesseract-4.1.0/appveyor.yml  [text]  
-  inflating: tesseract-4.1.0/autogen.sh  [text]  
-   creating: tesseract-4.1.0/cmake/
---
---
-  inflating: tesseract-4.1.0/unittest/validator_test.cc  [text]  
-cd {ROOT}/tesseract-4.1.0 && ./autogen.sh 2> /dev/null
-Running aclocal
---
---
+1. **Lipo**
 
-$ ./configure [--enable-debug] [...other options]
-export LIBS="-lz -lpng -ljpeg -ltiff" ; \
---
---
-    ln -s {ROOT}/leptonica-1.78.0/src/ leptonica ; \
-    ../../configure CXX="""`xcode-select -p`"/usr/bin/g++" --target=arm-apple-darwin64" CC="""`xcode-select -p`"/usr/bin/gcc" --target=arm-apple-darwin64" --host=arm-apple-darwin64 --prefix=`pwd` --enable-shared=no --disable-graphics
-checking whether the C++ compiler works... yes
---
---
-    ln -s {ROOT}/leptonica-1.78.0/src/ leptonica ; \
-    ../../configure CXX="""`xcode-select -p`"/usr/bin/g++" --target=x86_64-apple-darwin" CC="""`xcode-select -p`"/usr/bin/gcc" --target=x86_64-apple-darwin" --host=x86_64-apple-darwin --prefix=`pwd` --enable-shared=no --disable-graphics
-checking whether the C++ compiler works... yes
---
---
+    ```sh
+    xcrun lipo \
+    {ROOT}/leptonica-1.78.0/ios/arm-apple-darwin64/lib/liblept.a \
+    {ROOT}/leptonica-1.78.0/ios/x86_64-apple-darwin/lib/liblept.a \
+    -create \
+    -output \
+    {ROOT}/ios/lib/liblept.a
+    ```
 
-cd {ROOT}/tesseract-4.1.0/ios/arm-apple-darwin64 && {XCODE_DEV}/usr/bin/make -sj8 && {XCODE_DEV}/usr/bin/make install
-Making all in src/arch
---
---
-make[4]: Nothing to be done for `install-data-am'.
-cd {ROOT}/tesseract-4.1.0/ios/x86_64-apple-darwin && {XCODE_DEV}/usr/bin/make -sj8 && {XCODE_DEV}/usr/bin/make install
-Making all in src/arch
---
---
-{ROOT}/tesseract-4.1.0/ios/arm-apple-darwin64/include/tesseract/tesscallback.h -> {ROOT}/ios/include/tesseract/tesscallback.h
-{XCODE_DEV}/usr/bin/make platform=macos
-mkdir -p {ROOT}/macos/lib
---
---
-    cd {ROOT}/leptonica-1.78.0/macos/x86_64-apple-darwin ; \
-    ../../configure CXX="""`xcode-select -p`"/usr/bin/g++" --target=x86_64-apple-darwin" CC="""`xcode-select -p`"/usr/bin/gcc" --target=x86_64-apple-darwin" --host=x86_64-apple-darwin --prefix=`pwd` --enable-shared=no --disable-programs --with-zlib --with-libpng --with-jpeg --with-libtiff --without-giflib --without-libwebp
-checking build system type... x86_64-apple-darwin19.4.0
---
---
-cd {ROOT}/leptonica-1.78.0/macos/x86_64-apple-darwin ; \
-    {XCODE_DEV}/usr/bin/make -sj8 && {XCODE_DEV}/usr/bin/make install
-Making all in src
---
---
-    ln -s {ROOT}/leptonica-1.78.0/src/ leptonica ; \
-    ../../configure CXX="""`xcode-select -p`"/usr/bin/g++" --target=x86_64-apple-darwin" CC="""`xcode-select -p`"/usr/bin/gcc" --target=x86_64-apple-darwin" --host=x86_64-apple-darwin --prefix=`pwd` --enable-shared=no --disable-graphics
-checking whether the C++ compiler works... yes
---
---
-
-cd {ROOT}/tesseract-4.1.0/macos/x86_64-apple-darwin && {XCODE_DEV}/usr/bin/make -sj8 && {XCODE_DEV}/usr/bin/make install
-Making all in src/arch
-
-### library
+## Tesseract-OCR
 
 1. **Download**
+
+    ```sh
+    curl -LO https://github.com/tesseract-ocr/tesseract/archive/4.1.0.zip && unzip -a 4.1.0.zip
+    ```
+
+1. **Pre-Configure**
+
+    ```sh
+    cd {ROOT}/tesseract-4.1.0
+    ./autogen.sh 2>/dev/null
+    ```
+
 1. **Configure**
 
     1. ARM
 
         ```sh
+        export LIBS="-lz -lpng -ljpeg -ltiff"
+        export SDKROOT="{XCODE_DEV}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.4.sdk"
+        export CFLAGS="\
+            -I{ROOT}/tesseract-4.1.0/ios/arm-apple-darwin64/ \
+            -arch arm64 \
+            -pipe \
+            -no-cpp-precomp \
+            -isysroot $SDKROOT \
+            -miphoneos-version-min="11.0" \
+            -O2 \
+            -fembed-bitcode"
+        export CPPFLAGS=$CFLAGS
+        export CXXFLAGS="\
+            -I{ROOT}/tesseract-4.1.0/ios/arm-apple-darwin64/ \
+            -arch arm64 \
+            -pipe \
+            -no-cpp-precomp \
+            -isysroot $SDKROOT \
+            -miphoneos-version-min="11.0" \
+            -O2 \
+            -Wno-deprecated-register"
+        export LDFLAGS="\
+            -L$SDKROOT/usr/lib/ \
+            -L{ROOT}/ios/lib \
+            -L{ROOT}/leptonica-1.78.0/ios/arm-apple-darwin64/src/.libs"
+        export LIBLEPT_HEADERSDIR={ROOT}/tesseract-4.1.0/ios/arm-apple-darwin64/
+        export PKG_CONFIG_PATH={ROOT}/leptonica-1.78.0/ios/arm-apple-darwin64/
+        export CXX="""$(xcode-select -p)"/usr/bin/g++" --target=arm-apple-darwin64"
+        export CXX_FOR_BUILD="""$(xcode-select -p)"/usr/bin/g++" --target=arm-apple-darwin64"
+        export CC="""$(xcode-select -p)"/usr/bin/gcc" --target=arm-apple-darwin64"
+
+        mkdir -p {ROOT}/tesseract-4.1.0/ios/arm-apple-darwin64
+        cd {ROOT}/tesseract-4.1.0/ios/arm-apple-darwin64
+        ln -s {ROOT}/leptonica-1.78.0/src/ leptonica
+
+        ../../configure \
+            CXX="""$(xcode-select -p)"/usr/bin/g++" --target=arm-apple-darwin64" \
+            CC="""$(xcode-select -p)"/usr/bin/gcc" \
+            --target=arm-apple-darwin64" \
+            --host=arm-apple-darwin64 \
+            --prefix=$(pwd) \
+            --enable-shared=no \
+            --disable-graphics
         ```
 
     2. x86
 
         ```sh
+        export LIBS="-lz -lpng -ljpeg -ltiff"
+        export SDKROOT="{XCODE_DEV}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.4.sdk"
+        export CFLAGS="\
+            -I{ROOT}/tesseract-4.1.0/ios/x86_64-apple-darwin/ \
+            -arch x86_64 \
+            -pipe \
+            -no-cpp-precomp \
+            -isysroot $SDKROOT \
+            -mios-simulator-version-min="11.0" \
+            -O2 \
+            -fembed-bitcode"
+        export CPPFLAGS=$CFLAGS
+        export CXXFLAGS="\
+            -I{ROOT}/tesseract-4.1.0/ios/x86_64-apple-darwin/ \
+            -arch x86_64 \
+            -pipe \
+            -no-cpp-precomp \
+            -isysroot $SDKROOT \
+            -mios-simulator-version-min="11.0" \
+            -O2 \
+            -Wno-deprecated-register"
+        export LDFLAGS="\
+            -L$SDKROOT/usr/lib/ \
+            -L{ROOT}/ios/lib \
+            -L{ROOT}/leptonica-1.78.0/ios/x86_64-apple-darwin/src/.libs"
+        export LIBLEPT_HEADERSDIR={ROOT}/tesseract-4.1.0/ios/x86_64-apple-darwin/
+        export PKG_CONFIG_PATH={ROOT}/leptonica-1.78.0/ios/x86_64-apple-darwin/
+        export CXX="""$(xcode-select -p)"/usr/bin/g++" --target=x86_64-apple-darwin"
+        export CXX_FOR_BUILD="""$(xcode-select -p)"/usr/bin/g++" --target=x86_64-apple-darwin"
+        export CC="""$(xcode-select -p)"/usr/bin/gcc" --target=x86_64-apple-darwin"
+
+        mkdir -p {ROOT}/tesseract-4.1.0/ios/x86_64-apple-darwin
+        cd {ROOT}/tesseract-4.1.0/ios/x86_64-apple-darwin
+        ln -s {ROOT}/leptonica-1.78.0/src/ leptonica
+
+        ../../configure \
+            CXX="""$(xcode-select -p)"/usr/bin/g++" --target=x86_64-apple-darwin" \
+            CC="""$(xcode-select -p)"/usr/bin/gcc" \
+            --target=x86_64-apple-darwin" \
+            --host=x86_64-apple-darwin \
+            --prefix=$(pwd) \
+            --enable-shared=no \
+            --disable-graphics
         ```
 
 1. **Make**
@@ -494,9 +607,53 @@ Making all in src/arch
     1. ARM
 
         ```sh
+        cd {ROOT}/tesseract-4.1.0/ios/arm-apple-darwin64
+        {XCODE_DEV}/usr/bin/make -sj8
+        {XCODE_DEV}/usr/bin/make install
         ```
 
     1. x86
 
         ```sh
+        cd {ROOT}/tesseract-4.1.0/ios/x86_64-apple-darwin
+        {XCODE_DEV}/usr/bin/make -sj8
+        {XCODE_DEV}/usr/bin/make install
         ```
+
+1. **Lipo**
+
+    ```sh
+    mkdir -p {ROOT}/ios/lib
+    xcrun lipo \
+    {ROOT}/tesseract-4.1.0/ios/arm-apple-darwin64/lib/libtesseract.a \
+    {ROOT}/tesseract-4.1.0/ios/x86_64-apple-darwin/lib/libtesseract.a \
+    -create \
+    -output \
+    {ROOT}/ios/lib/libtesseract.a
+    ```
+
+## Miscellaneous
+
+### About this MD
+
+The input for this MD file was assembled from the filtered commands created by running the following `grep` against the full output of `../make.log`, which was captured by running SwiftyTesseract's `make > make.log 2>&1`:
+
+```sh
+grep -v -E \
+'^checking |'\
+'^config|'\
+'libtool|'\
+'^\+ |'\
+'^ .*|'\
+'^/|'\
+'^make|'\
+'^\.\./|'\
+'^cp|'\
+'^#define|'\
+'^[A-Z]' \
+make.log | shFmt > swifty-make-subtractive.txt
+```
+
+`shFmt` was used to normalize the text to the extent it could.
+
+These commands were then hand-edited and organized into the this document.
