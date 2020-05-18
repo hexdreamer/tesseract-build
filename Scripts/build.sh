@@ -96,104 +96,106 @@ parse_args() {
 }
 
 download_extract_install() {
-  local url="$1"
-  shift
-  local name="$1"
-  shift
-  local targz="$1"
-  shift
+  local NAME=
+  local TARGZ=
+  local URL=
+  local VER_COMMAND=
+  local VER_PATTERN=
+  local DIR_NAME=
+  local PRE_CONFIG=
 
-  local download_tgz="$DOWNLOADS/$targz"
+  # shellcheck source=/dev/null
+  source "$1"
+
+  local DOWNLOAD_TGZ="$DOWNLOADS/$TARGZ"
 
   # Default value
-  local dir_name="$name"
 
-  while [[ $# -gt 0 ]]; do
-    case "$1" in
-      --ver-command)
-        local ver_command=$2
-        shift
-        ;;
-      --ver-pattern)
-        local ver_pattern=$2
-        shift
-        ;;
-      --flags)
-        local config_flags=$2
-        shift
-        ;;
-      --dir-name)
-        # Override default
-        local dir_name=$2
-        shift
-        ;;
-      --pre-config)
-        local pre_config=$2
-        shift
-        ;;
-    esac
-    shift
-  done
+  # while [[ $# -gt 0 ]]; do
+  #   case "$1" in
+  #     --ver-command)
+  #       local VER_COMMAND=$2
+  #       shift
+  #       ;;
+  #     --ver-pattern)
+  #       local VER_PATTERN=$2
+  #       shift
+  #       ;;
+  #     --flags)
+  #       local config_flags=$2
+  #       shift
+  #       ;;
+  #     --dir-name)
+  #       # Override default
+  #       local DIR_NAME=$2
+  #       shift
+  #       ;;
+  #     --pre-config)
+  #       local pre_config=$2
+  #       shift
+  #       ;;
+  #   esac
+  #   shift
+  # done
 
-  print "\n======== $name ========"
-  if [[ -n "$ver_pattern" ]]; then
+  print "\n======== $NAME ========"
+  if [[ -n "$VER_PATTERN" ]]; then
     # Try pkg-config first
-    if pkg-config --exists "$ver_pattern"; then
+    if pkg-config --exists "$VER_PATTERN"; then
       echo "Skipped, already installed"
       return 0
     fi
 
     # Try parsing some version-y output directly from program
-    if [[ -n "$ver_command" ]]; then
-      s=$(eval "$ver_command 2>&1")
-      if [[ $s == *$ver_pattern* ]]; then
+    if [[ -n "$VER_COMMAND" ]]; then
+      s=$(eval "$VER_COMMAND 2>&1")
+      if [[ $s == *$VER_PATTERN* ]]; then
         echo "Skipped, already installed"
         return 0
       fi
     fi
   fi
 
-  if [[ -e "$download_tgz" ]]; then
-    echo "Skipped download, using cached $targz in Downloads."
+  if [[ -e "$DOWNLOAD_TGZ" ]]; then
+    echo "Skipped download, using cached $TARGZ in Downloads."
   else
     print -n "Downloading..."
-    exec_and_log "${name}" "0_curl" curl -L -f "$url" --output "$download_tgz"
+    exec_and_log "${NAME}" "0_curl" curl -L -f "$URL" --output "$DOWNLOAD_TGZ"
 
     print -n " extracting..."
-    exec_and_log "${name}" "1_tar" tar -zxf "$download_tgz" --directory "$SOURCES"
+    exec_and_log "${NAME}" "1_tar" tar -zxf "$DOWNLOAD_TGZ" --directory "$SOURCES"
 
     print " done."
   fi
 
-  cd "$SOURCES/$dir_name" || {
-    err "Failed to cd to $SOURCES/$dir_name"
+  if [ -z "$DIR_NAME" ]; then 
+    DIR_NAME=$NAME
+  fi
+
+  cd "$SOURCES/$DIR_NAME" || {
+    err "Failed to cd to $SOURCES/$DIR_NAME"
     exit 1
   }
 
-  if [[ -n "$pre_config" ]]; then
+  if [[ -n "$PRE_CONFIG" ]]; then
     print -n "Preconfiguring..."
-    exec_and_log "${name}" "2_preconfig" "$pre_config"
+    exec_and_log "${NAME}" "2_preconfig" "$PRE_CONFIG"
     print " done."
   fi
 
-  if [[ -n "$config_flags" ]]; then
-    print -n "Configuring with flags..."
-    exec_and_log "${name}" "3_config" ./configure --prefix="$ROOT" "$config_flags"
-  else
-    print -n "Configuring..."
-    exec_and_log "${name}" "3_config" ./configure --prefix="$ROOT"
-  fi
+  
+  exec_and_log "${NAME}" "3_config" ./configure --prefix="$ROOT" "${CONFIG_FLAGS}"
 
   print -n " making..."
   if [[ -n "$run_test" ]] && make -n check &>/dev/null; then
     print -n " running tests..."
-    exec_and_log "${name}" "4_make" make check
+    exec_and_log "${NAME}" "4_make" make check
   else
-    exec_and_log "${name}" "4_make" make
+    exec_and_log "${NAME}" "4_make" make
   fi
 
   print -n " installing..."
-  exec_and_log "${name}" "5_install" make install
+  exec_and_log "${NAME}" "5_install" make install
   print " done."
 }
 
@@ -214,7 +216,6 @@ main() {
     "https://pkg-config.freedesktop.org/releases/$targz" \
     "$name" \
     "$targz" \
-    "$ver_pattern" \
     --flags "--with-internal-glib" \
     --ver-command "$ROOT/bin/pkg-config --version" \
     --ver-pattern 0.29.2
@@ -243,7 +244,7 @@ main() {
 
   # LIBTOOL -- https://www.gnu.org/software/libtool/
   name=libtool-2.4.6
-  targz=$name.tar.gz
+  targz=$NAME.tar.gz
 
   download_extract_install \
     "http://ftp.gnu.org/gnu/libtool/$targz" \
@@ -294,16 +295,8 @@ main() {
     "$targz" \
     --ver-pattern "zlib >= 1.2.11"
 
-  # LIBPNG -- http://www.libpng.org/pub/png/libpng.html
-  name=libpng-1.6.37
-  targz="$name.tar.gz"
-
-  download_extract_install \
-    "https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/$targz/download" \
-    "$name" \
-    "$targz" \
-    --ver-command "libpng-config --version" \
-    --ver-pattern "libpng >= 1.6.37"
+  
+  download_extract_install "libpng"
 
   # TESSERACT OCR -- https://github.com/tesseract-ocr/tesseract
   name=tesseract-4.1.1
