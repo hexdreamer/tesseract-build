@@ -48,6 +48,42 @@ exec_and_log() {
   return 0
 }
 
+config_make_install() {
+  local target=$1
+
+  print -n "$target "
+
+  # Execute config-function to export variables
+  $target
+
+  if ! [ -d $target ]; then
+    mkdir $target
+  fi
+
+  cd $target || exit
+
+  exec_args=(
+    $NAME
+    "3_${target}_config"
+    $CONFIG_CMD
+    $CONFIG_FLAGS
+    "--prefix=$ROOT"
+  )
+  exec_and_log $exec_args
+
+  print -n " making..."
+  if [[ -n "$run_test" ]] && make -n check &>/dev/null; then
+    print -n " running tests..."
+    exec_and_log "${NAME}" "4_${target}_make" make check
+  else
+    exec_and_log "${NAME}" "4_${target}_make" make
+  fi
+
+  print -n " installing..."
+  exec_and_log "${NAME}" "5_${target}_install" make install
+  print " done."
+}
+
 parse_args() {
   while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -103,9 +139,12 @@ download_extract_install() {
   local VER_PATTERN=
   local DIR_NAME=
   local PRE_CONFIG=
+  local CONFIG_CMD=
+  local CONFIG_FLAGS=
+  local TARGETS=
 
   # shellcheck source=/dev/null
-  source "$1"
+  source "${SCRIPTSDIR}/${1}.sh"
 
   local DOWNLOAD_TGZ="$DOWNLOADS/$TARGZ"
 
@@ -168,12 +207,13 @@ download_extract_install() {
     print " done."
   fi
 
-  if [ -z "$DIR_NAME" ]; then 
+  if [ -z "$DIR_NAME" ]; then
     DIR_NAME=$NAME
   fi
 
-  cd "$SOURCES/$DIR_NAME" || {
-    err "Failed to cd to $SOURCES/$DIR_NAME"
+  pkg_dir="$SOURCES/$DIR_NAME"
+  cd  $pkg_dir || {
+    err "Failed to cd to $pkg_dir"
     exit 1
   }
 
@@ -183,20 +223,13 @@ download_extract_install() {
     print " done."
   fi
 
+  for target in $TARGETS; do
+    $target
   
-  exec_and_log "${NAME}" "3_config" ./configure --prefix="$ROOT" "${CONFIG_FLAGS}"
+    config_make_install $target
 
-  print -n " making..."
-  if [[ -n "$run_test" ]] && make -n check &>/dev/null; then
-    print -n " running tests..."
-    exec_and_log "${NAME}" "4_make" make check
-  else
-    exec_and_log "${NAME}" "4_make" make
-  fi
-
-  print -n " installing..."
-  exec_and_log "${NAME}" "5_install" make install
-  print " done."
+    cd $pkg_dir || exit
+  done
 }
 
 main() {
@@ -207,6 +240,10 @@ main() {
   fi
 
   export PATH="$ROOT/bin:$PATH"
+
+  download_extract_install "libpng"
+
+  exit 1
 
   # PKG-CONFIG -- https://www.freedesktop.org/wiki/Software/pkg-config/
   name=pkg-config-0.29.2
@@ -294,9 +331,6 @@ main() {
     "$name" \
     "$targz" \
     --ver-pattern "zlib >= 1.2.11"
-
-  
-  download_extract_install "libpng"
 
   # TESSERACT OCR -- https://github.com/tesseract-ocr/tesseract
   name=tesseract-4.1.1

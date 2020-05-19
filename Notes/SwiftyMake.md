@@ -19,11 +19,29 @@ produces the following high-level flow for the dependencies of Tesseract-OCR, an
 
 ## Platforms & Architectures
 
-As our project is only concerend with iOS, I am ignoring the same set of steps that produce build artifacts for macOS.  The `ios` platform targets both ARM and x86 architectures.  x86 is necessary as it's the architecture for iPhoneSimulator (cross-reference with [BuildNotes.md](./BuildNotes.md#understanding-multi-arch-binaries-and-supported-ios-architectures)):
+The `ios` platform targets both ARM and x86 architectures.  x86 is necessary as it's the architecture for iPhoneSimulator (cross-reference with [BuildNotes.md](./BuildNotes.md#understanding-multi-arch-binaries-and-supported-ios-architectures)):
 
 > Why are Intel slices for iOS a thing? To be able to run your app and the library in the Xcode iOS **simulator**, which actually runs x86 code only. That's why it's *not* called an **"emulator"**.
 
 And the SDK for the x86 build is always `SDKs/iPhoneSimulator13.4.sdk`.
+
+### macOS
+
+To give developers the option to integrate Tesseract-OCR into a desktop app, we're also building for the macOS platform.  In the output of the SwiftyTesseract make log, it looks like the x86 library is "recycled" for macOS:
+
+```sh
+# iOS platform phase
+xcrun lipo /Users/zyoung/dev/SwiftyTesseract/SwiftyTesseract/SwiftyTesseract/libpng-1.6.36/arm-apple-darwin64/lib/libpng16.a /Users/zyoung/dev/SwiftyTesseract/SwiftyTesseract/SwiftyTesseract/libpng-1.6.36/x86_64-apple-darwin/lib/libpng16.a -create -output /Users/zyoung/dev/SwiftyTesseract/SwiftyTesseract/SwiftyTesseract/ios/lib/libpng.a
+
+# macOS platform phase
+xcrun lipo /Users/zyoung/dev/SwiftyTesseract/SwiftyTesseract/SwiftyTesseract/libpng-1.6.36/x86_64-apple-darwin/lib/libpng16.a -create -output /Users/zyoung/dev/SwiftyTesseract/SwiftyTesseract/SwiftyTesseract/macos/lib/libpng.a
+```
+
+I say recycled because the x86 target references the Simulator SDK/sysroot, so I'm not sure this is actually what we want.  Clang also has flags specific to macOS, `-mmacosx-version-min=<arg>, -mmacos-version-min=<arg>`.  There's also a completely different SDK for macOS at `/Applications/Xcode.app/Contents/Developer/Platforms/`.
+
+### Clang
+
+Command-line options for Clang, like `-miphonesimulator-version-min`, can be found [here][1].  The users manual is [here][2].
 
 ## About this document
 
@@ -657,3 +675,6 @@ make.log | shFmt > swifty-make-subtractive.txt
 `shFmt` was used to normalize the text to the extent it could.
 
 These commands were then hand-edited and organized into the this document.
+
+[1]:[https://clang.llvm.org/docs/ClangCommandLineReference.html]
+[2]:[https://clang.llvm.org/docs/UsersManual.html]
