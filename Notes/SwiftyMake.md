@@ -39,9 +39,23 @@ xcrun lipo /Users/zyoung/dev/SwiftyTesseract/SwiftyTesseract/SwiftyTesseract/lib
 
 I say recycled because the x86 target references the Simulator SDK/sysroot, so I'm not sure this is actually what we want.  Clang also has flags specific to macOS, `-mmacosx-version-min=<arg>, -mmacos-version-min=<arg>`.  There's also a completely different SDK for macOS at `/Applications/Xcode.app/Contents/Developer/Platforms/`.
 
-### Clang
+### Build/Compiler flags
 
-Command-line options for Clang, like `-miphonesimulator-version-min`, can be found [here][1].  The users manual is [here][2].
+- Command-line options for Clang, like `-miphonesimulator-version-min`, can be found [here][1].  The users manual is [here][2].
+
+- `--enable-shared=no`, gets integrated into the libtool script
+
+### Clang v. LLVM
+
+Taking from SO answers [here][4]:
+
+> LLVM originally stood for "low-level virtual machine", though it now just stands for itself as it has grown to be something other than a traditional virtual machine. It is a set of libraries and tools, as well as a standardized intermediate representation, that can be used to help build compilers and just-in-time compilers. It cannot compile anything other than its own intermediate representation on its own; it needs a language-specific frontend in order to do so.
+
+and,
+
+> LLVM is a backend compiler meant to build compilers on top of it. It deals with optimizations and production of code adapted to the target architecture.
+>
+> CLang is a front end which parses C, C++ and Objective C code and translates it into a representation suitable for LLVM.
 
 ## About this document
 
@@ -676,5 +690,7 @@ make.log | shFmt > swifty-make-subtractive.txt
 
 These commands were then hand-edited and organized into the this document.
 
-[1]:[https://clang.llvm.org/docs/ClangCommandLineReference.html]
-[2]:[https://clang.llvm.org/docs/UsersManual.html]
+[1]: https://clang.llvm.org/docs/ClangCommandLineReference.html
+[2]: https://clang.llvm.org/docs/UsersManual.html
+[3]: https://llvm.org/docs/Packaging.html
+[4]: https://stackoverflow.com/questions/5708610/llvm-vs-clang-on-os-x

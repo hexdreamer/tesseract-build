@@ -43,7 +43,6 @@ set_common() {
     "CC=$(xcode-select -p)/usr/bin/gcc --target=$TARGET"
     "--host=$TARGET"
     '--enable-shared=no'
-    '--disable-graphics'
   )
 
   export CONFIG_FLAGS
