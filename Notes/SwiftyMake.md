@@ -682,8 +682,11 @@ grep -v -E \
 '^\.\./|'\
 '^cp|'\
 '^#define|'\
-'^[A-Z]' \
-make.log | shFmt > swifty-make-subtractive.txt
+'^[A-Z]|'\
+'^ld:|'\
+'% Total|'\
+'[0-9-][0-9-]:[0-9-][0-9-]:[0-9-][0-9-]' \
+make.log > swifty-make-subtractive.txt && shFmt -i 2 -w swifty-make-subtractive.txt
 ```
 
 `shFmt` was used to normalize the text to the extent it could.
@@ -693,4 +696,4 @@ These commands were then hand-edited and organized into the this document.
 [1]: https://clang.llvm.org/docs/ClangCommandLineReference.html
 [2]: https://clang.llvm.org/docs/UsersManual.html
 [3]: https://llvm.org/docs/Packaging.html
-[4]: https://stackoverflow.com/questions/5708610/llvm-vs-clang-on-os-x
+[4]: https://stackoverflow.com/questions/5708610/llvm-vs-clang-on-os-
