@@ -8,23 +8,25 @@ from collections import defaultdict
 
 
 def process_lines(lines, config_map):
-    arch = None
+    # arch = None
     configs = []
     pkg = None
 
-    target=list(config_map['_TARGET'])[0]
+    arch = list(config_map['_ARCH'])[0]
+    target = list(config_map['_TARGET'])[0]
 
     for line in lines:
+        line = line.replace(f'-arch {arch}', '-arch $ARCH')
         line = line.replace(target, '$TARGET')
-    
+
         # Parse exports
         if line.startswith('export'):
             name, config = line.split('=', 1)
             if 'FLAGS' in name and config.startswith('"'):
                 config = config[1:config.rindex('"')]
 
-                if 'CFLAGS' in name:
-                    arch = re.search(r'-arch (.+?) ', config).groups()[0]
+                # if 'CFLAGS' in name:
+                #     arch = re.search(r'-arch (.+?) ', config).groups()[0]
 
                 opts = config.split(' -')
                 configs.append(name + ': ' + opts[0])
@@ -56,15 +58,25 @@ def process_lines(lines, config_map):
     config_map[f'export TARGET: {target}'].add(f'{pkg},{arch}')
     del(config_map['_TARGET'])
 
+    config_map[f'export ARCH: {arch}'].add(f'{pkg},{arch}')
+    del(config_map['_ARCH'])
+
     return config_map
 
 
 def extract_vars(line, config_map):
+    # ARCH CFLAGS="-arch arm64 -pipe -no-c
+    m = re.search(r'-arch (.+?) ', line)
+    if m:
+        arch = m.group(1)
+        config_map['_ARCH'].add(arch)
+
+    # TARGET
     m = re.search(r'--target=(.+?)"', line)
     if m:
         target = m.group(1)
         config_map['_TARGET'].add(target)
-    
+
     return config_map
 
 
@@ -108,6 +120,7 @@ def main():
     with open('swifty-make-subtractive.txt', 'r') as f:
         config_map = parse_make(f.readlines())
         print(json.dumps(config_map, indent=2))
+
 
 if __name__ == "__main__":
     main()
