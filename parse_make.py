@@ -13,10 +13,13 @@ def process_lines(lines, config_map):
     pkg = None
 
     arch = list(config_map['_ARCH'])[0]
+    platform = list(config_map['_PLATFORM'])[0]
+    platform_version = list(config_map['_PLATFORM_VERSION'])[0]
     target = list(config_map['_TARGET'])[0]
 
     for line in lines:
         line = line.replace(f'-arch {arch}', '-arch $ARCH')
+        line = line.replace(platform, '$PLATFORM')
         line = line.replace(target, '$TARGET')
 
         # Parse exports
@@ -31,7 +34,9 @@ def process_lines(lines, config_map):
                 opts = config.split(' -')
                 configs.append(name + ': ' + opts[0])
                 for opt in opts[1:]:
-                    configs.append(name + ': -' + opt)
+                    opt = '-' + opt
+                    opt = opt.replace(platform_version, '$PLATFORM_VERSION')
+                    configs.append(name + ': '+opt)
             else:
                 configs.append(name + ': ' + config)
 
@@ -55,11 +60,18 @@ def process_lines(lines, config_map):
         config = config.replace(pkg, '{PKG_NAME}')
         config_map[config].add(f'{pkg},{arch}')
 
-    config_map[f'export TARGET: {target}'].add(f'{pkg},{arch}')
-    del(config_map['_TARGET'])
-
     config_map[f'export ARCH: {arch}'].add(f'{pkg},{arch}')
     del(config_map['_ARCH'])
+
+    config_map[f'export PLATFORM: {platform}'].add(f'{pkg},{arch}')
+    del(config_map['_PLATFORM'])
+
+    config_map[f'export PLATFORM_VERSION: {platform_version}'].add(
+        f'{pkg},{arch}')
+    del(config_map['_PLATFORM_VERSION'])
+
+    config_map[f'export TARGET: {target}'].add(f'{pkg},{arch}')
+    del(config_map['_TARGET'])
 
     return config_map
 
@@ -70,6 +82,23 @@ def extract_vars(line, config_map):
     if m:
         arch = m.group(1)
         config_map['_ARCH'].add(arch)
+
+    # PLATFORM
+    # export SDKROOT="{XCODE_DEV}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.4.sdk"
+    # export SDKROOT="{XCODE_DEV}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.4.sdk"
+    m = re.search(r'Platforms/(.+?)"', line)
+    if m:
+        platform = m.group(1)
+        config_map['_PLATFORM'].add(platform)
+
+    # PLATFORM_VERSION
+    # export CFLAGS="-arch arm64  ... -miphoneos-version-min="11.0"       -O2 -fembed-bitcode"
+    # export CFLAGS="-arch x86_64 ... -mios-simulator-version-min="11.0"  -O2 -fembed-bitcode"
+    # export CFLAGS="-arch x86_64 ... -mmacosx-version-min="10.13"        -O2 -fembed-bitcode -I{ROOT}/tesseract-4.1.0/macos/x86_64-apple-darwin/ "
+    m = re.search(r'(-m.+-min=".+?")', line)
+    if m:
+        platform_version = m.group(1)
+        config_map['_PLATFORM_VERSION'].add(platform_version)
 
     # TARGET
     m = re.search(r'--target=(.+?)"', line)
