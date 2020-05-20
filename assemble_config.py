@@ -10,24 +10,43 @@ with open('configs.json', 'r') as f:
 
 configs = []
 pkg = sys.argv[1]
-arch = sys.argv[2]
 
-configs = defaultdict(list)
+configs = defaultdict(set)
 for config, pkgs_arches in config_map.items():
     for pkg_arch in pkgs_arches:
-        if pkg_arch == f'{pkg},{arch}':
-            k, v = config.split(': ')
-            configs[k].append(v)
+        if pkg in pkg_arch:
+            arch = pkg_arch.split(',')[1]
+            configs[arch].add(config)
+            
+arm = configs['arm64']
+x86 = configs['x86_64']
 
-for k, vs in sorted(configs.items()):
-    # special sort for ./configure to put CC and CCX before --flags
-    vs = sorted(vs, key=lambda x: (x.startswith('-'), x.lower()))
+common = arm.intersection(x86)
+arm = arm - common
+x86 = x86 - common
 
-    print('%s=(' % k )
-    for v in vs:
-        if v.startswith('-'):
-            print("'%s'" % v)
+print('#!/bin/zsh -f')
+for name, configs in [('common', common), ('arm', arm), ('x86', x86)]:
+    print('%s() {' % name)
+
+    _configs = defaultdict(list)
+    for config in configs:
+        k,v = config.split(': ')
+        _configs[k].append(v)
+    
+    for k, vs in sorted(_configs.items()):
+        # special sort for ./configure to put CC and CCX before --flags
+        vs = sorted(vs, key=lambda x: (x.startswith('-'), x.lower()))
+
+        if len(vs) == 1:
+            print("%s=%s" % (k, vs[0]) )
         else:
-            print(v)
-    print(')')
+            print('%s=(' % k )
+            for v in vs:
+                if v.startswith('-'):
+                    print("'%s'" % v)
+                else:
+                    print(v)
+            print(')')
 
+    print('}')

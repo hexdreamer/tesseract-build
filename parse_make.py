@@ -67,7 +67,7 @@ with open('make.log', 'r') as f:
         line = line.replace(
             '/Applications/Xcode.app/Contents/Developer', '{XCODE_DEV}')
 
-        if line.startswith('export SDKROOT'):
+        if line.startswith('export LIBS') or line.startswith('export SDKROOT'):
             record_lines = True
 
         if record_lines:
