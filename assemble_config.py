@@ -6,27 +6,26 @@ import sys
 from collections import defaultdict
 
 with open('configs.json', 'r') as f:
-    config_map = json.loads(f.read())
+    config_arch_map = json.loads(f.read())
 
-configs = []
 pkg = sys.argv[1]
 
-configs = defaultdict(set)
-for config, pkgs_arches in config_map.items():
+arch_config_map = defaultdict(set)
+for config, pkgs_arches in config_arch_map.items():
     for pkg_arch in pkgs_arches:
         if pkg in pkg_arch:
             arch = pkg_arch.split(',')[1]
-            configs[arch].add(config)
-            
-arm = configs['arm64']
-x86 = configs['x86_64']
+            arch_config_map[arch].add(config)
 
-common = arm.intersection(x86)
-arm = arm - common
-x86 = x86 - common
+arches = list(arch_config_map.keys())
+configs = list(arch_config_map.values())
+
+common = configs[0].intersection(*configs[1:])
+for i in range(len(configs)):
+    configs[i] = configs[i] - common
 
 print('#!/bin/zsh -f')
-for name, configs in [('common', common), ('arm', arm), ('x86', x86)]:
+for name, configs in [('common', common)] + list(zip(arches, configs)):
     print('%s() {' % name)
 
     _configs = defaultdict(list)

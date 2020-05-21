@@ -13,15 +13,12 @@ def process_lines(lines, config_map):
     pkg = None
 
     arch = list(config_map['_ARCH'])[0]
+    os = list(config_map['_OS'])[0]
     platform = list(config_map['_PLATFORM'])[0]
     platform_version = list(config_map['_PLATFORM_VERSION'])[0]
     target = list(config_map['_TARGET'])[0]
 
     for line in lines:
-        line = line.replace(f'-arch {arch}', '-arch $ARCH')
-        line = line.replace(platform, '$PLATFORM')
-        line = line.replace(target, '$TARGET')
-
         # Parse exports
         if line.startswith('export'):
             name, config = line.split('=', 1)
@@ -35,7 +32,6 @@ def process_lines(lines, config_map):
                 configs.append(name + ': ' + opts[0])
                 for opt in opts[1:]:
                     opt = '-' + opt
-                    opt = opt.replace(platform_version, '$PLATFORM_VERSION')
                     configs.append(name + ': '+opt)
             else:
                 configs.append(name + ': ' + config)
@@ -56,21 +52,30 @@ def process_lines(lines, config_map):
             line = line.replace('mkdir -p {ROOT}/', '')
             pkg = line.split('/')[0]
 
+    pkg_os_arch = f'{pkg},{os}_{arch}'
+
     for config in configs:
         config = config.replace(pkg, '{PKG_NAME}')
-        config_map[config].add(f'{pkg},{arch}')
+        config = config.replace(f'-arch {arch}', '-arch $ARCH')
+        config = config.replace(platform, '$PLATFORM')
+        config = config.replace(platform_version, '$PLATFORM_VERSION')
+        config = config.replace(os, "$PLATFORM_OS")
+        config = config.replace(target, '$TARGET')
+        config_map[config].add(pkg_os_arch)
 
-    config_map[f'export ARCH: {arch}'].add(f'{pkg},{arch}')
+    config_map[f'export ARCH: {arch}'].add(pkg_os_arch)
     del(config_map['_ARCH'])
 
-    config_map[f'export PLATFORM: {platform}'].add(f'{pkg},{arch}')
+    config_map[f'export PLATFORM: {platform}'].add(pkg_os_arch)
     del(config_map['_PLATFORM'])
 
-    config_map[f'export PLATFORM_VERSION: {platform_version}'].add(
-        f'{pkg},{arch}')
+    config_map[f'export PLATFORM_OS: {os}'].add(pkg_os_arch)
+    del(config_map['_OS'])
+
+    config_map[f'export PLATFORM_VERSION: {platform_version}'].add(pkg_os_arch)
     del(config_map['_PLATFORM_VERSION'])
 
-    config_map[f'export TARGET: {target}'].add(f'{pkg},{arch}')
+    config_map[f'export TARGET: {target}'].add(pkg_os_arch)
     del(config_map['_TARGET'])
 
     return config_map
@@ -90,6 +95,11 @@ def extract_vars(line, config_map):
     if m:
         platform = m.group(1)
         config_map['_PLATFORM'].add(platform)
+
+        if 'iPhone' in platform:
+            config_map['_OS'].add('ios')
+        else:
+            config_map['_OS'].add('macos')
 
     # PLATFORM_VERSION
     # export CFLAGS="-arch arm64  ... -miphoneos-version-min="11.0"       -O2 -fembed-bitcode"
@@ -115,8 +125,8 @@ def parse_make(lines):
     record_lines = False
 
     for line in lines:
-        if 'usr/bin/make platform=macos' in line:
-            break
+        # if 'usr/bin/make platform=macos' in line:
+        #     break
 
         line = line.strip()
         line = line.replace('; \\', '')
