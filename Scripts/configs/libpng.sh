@@ -7,11 +7,16 @@ export VER_PATTERN='libpng >= 1.6.37'
 export TARGETS=('ios_arm64' 'ios_x86_64' 'macos_x86_64')
 
 common() {
-  export CXXFLAGS=$CFLAGS
-  export CONFIG_CMD='../configure'
-
   source "${SCRIPTSDIR}/configs/common.sh"
   common_all
+
+  CXXFLAGS_ARR=(
+    $CXXFLAGS_ARR
+    $CFLAGS
+  )
+  export CXXFLAGS="$CXXFLAGS_ARR"
+
+  export CONFIG_CMD='../configure'
 }
 ios_arm64() {
   export ARCH='arm64'

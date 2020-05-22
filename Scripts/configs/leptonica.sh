@@ -1,6 +1,10 @@
 #!/bin/zsh -f
 common() {
+  source "${SCRIPTSDIR}/configs/common.sh"
+  common_all
+
   CONFIG_FLAGS=(
+    $CONFIG_FLAGS
     '--disable-programs'
     '--with-jpeg'
     '--with-libpng'
@@ -11,26 +15,30 @@ common() {
   )
 
   export CC="$(xcode-select -p)/usr/bin/gcc --target=$TARGET"
-  export CFLAGS=-I{ROOT}/$PLATFORM_OS/include
   export CXX="$(xcode-select -p)/usr/bin/g++ --target=$TARGET"
+  export CXX_FOR_BUILD="$(xcode-select -p)/usr/bin/g++ --target=$TARGET"
+  
+  # Need to resolve $ROOT difference between this project and SwiftyTesseract
+  export CFLAGS=-I$ROOT/$PLATFORM_OS/include
+
   CXXFLAGS_ARR=(
     $PLATFORM_VERSION
     "-arch $ARCH"
     "-isysroot $SDKROOT"
-    "-I{ROOT}/$PLATFORM_OS/include"
+    "-I$ROOT/$PLATFORM_OS/include"
     '-no-cpp-precomp'
     '-O2'
     '-pipe'
   )
   export CXXFLAGS="$CXXFLAGS_ARR"
 
-  export CXX_FOR_BUILD="$(xcode-select -p)/usr/bin/g++ --target=$TARGET"
-  export LDFLAGS=-L{ROOT}/$PLATFORM_OS/lib
-  export LIBS=''-lz -lpng -ljpeg -ltiff''
-  export PKG_CONFIG_PATH={ROOT}/libpng-1.6.36/$TARGET/:{ROOT}/jpeg-9c/$TARGET/:{ROOT}/tiff-4.0.10/$TARGET/
+  export LDFLAGS=-L$ROOT/$PLATFORM_OS/lib
+  export LIBS='-lz -lpng -ljpeg -ltiff'
 
-  common_all
+  # Commenting out because previous experience w/PKG_CONFIG_PATH showed it was unnecessary
+  # export PKG_CONFIG_PATH={ROOT}/libpng-1.6.36/$TARGET/:{ROOT}/jpeg-9c/$TARGET/:{ROOT}/tiff-4.0.10/$TARGET/
 }
+
 ios_arm64() {
   export ARCH='arm64'
   export PLATFORM='iPhoneOS.platform/Developer/SDKs/iPhoneOS13.4.sdk'
@@ -40,6 +48,7 @@ ios_arm64() {
 
   common
 }
+
 ios_x86_64() {
   export ARCH='x86_64'
   export PLATFORM='iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.4.sdk'
@@ -49,6 +58,7 @@ ios_x86_64() {
 
   common
 }
+
 macos_x86_64() {
   export ARCH='x86_64'
   export PLATFORM='MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk'
