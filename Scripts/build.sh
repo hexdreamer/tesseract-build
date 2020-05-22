@@ -270,19 +270,9 @@ main() {
   download_extract_install "zlib"
   download_extract_install "libjpeg"
   download_extract_install "libpng"
+  download_extract_install "libtiff   "
 
   exit 1
-
-  # LIBTIFF -- https://gitlab.com/libtiff/libtiff
-  name=tiff-4.1.0
-  targz="$name.tar.gz"
-
-  download_extract_install \
-    "http://download.osgeo.org/libtiff/$targz" \
-    "$name" \
-    "$targz" \
-    --ver-pattern "libtiff-4 >= 4.1.0"
-
 
   # LEPTONICA -- https://github.com/DanBloomberg/leptonica
   name=leptonica-1.79.0

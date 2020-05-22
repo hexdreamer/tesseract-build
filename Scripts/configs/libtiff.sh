@@ -1,17 +1,36 @@
 #!/bin/zsh -f
-common() {
-  export CXXFLAGS=$CFLAGS
 
+# LIBTIFF -- https://gitlab.com/libtiff/libtiff
+
+export NAME='tiff-4.1.0'
+export TARGZ="$NAME.tar.gz"
+
+export URL="http://download.osgeo.org/libtiff/$TARGZ"
+export VER_PATTERN='libtiff-4 >= 4.1.0'
+export TARGETS=('ios_arm64' 'ios_x86_64' 'macos_x86_64')
+
+common() {
+  source "${SCRIPTSDIR}/configs/common.sh"
   common_all
-}
-ios_arm64() {
-  CONFIG_FLAGS=(
+
+  export CONFIG_FLAGS=(
+    $CONFIG_FLAGS
     '--enable-fast-install'
-    "--with-jpeg-include-dir={ROOT}/jpeg-9c/$TARGET/include"
-    "--with-jpeg-lib-dir={ROOT}/jpeg-9c/$TARGET/lib"
+    "--with-jpeg-include-dir=$ROOT/include"
+    "--with-jpeg-lib-dir=$ROOT/lib"
     '--without-x'
   )
 
+  CXXFLAGS_ARR=(
+    $CXXFLAGS_ARR
+    $CFLAGS
+  )
+  export CXXFLAGS="$CXXFLAGS_ARR"
+
+  export CONFIG_CMD='../configure'
+}
+
+ios_arm64() {
   export ARCH='arm64'
   export PLATFORM='iPhoneOS.platform/Developer/SDKs/iPhoneOS13.4.sdk'
   export PLATFORM_OS='ios'
@@ -20,14 +39,8 @@ ios_arm64() {
 
   common
 }
-ios_x86_64() {
-  CONFIG_FLAGS=(
-    '--enable-fast-install'
-    "--with-jpeg-include-dir={ROOT}/jpeg-9c/$TARGET/include"
-    "--with-jpeg-lib-dir={ROOT}/jpeg-9c/$TARGET/lib"
-    '--without-x'
-  )
 
+ios_x86_64() {
   export ARCH='x86_64'
   export PLATFORM='iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.4.sdk'
   export PLATFORM_OS='ios'
@@ -36,6 +49,7 @@ ios_x86_64() {
 
   common
 }
+
 macos_x86_64() {
   export ARCH='x86_64'
   export PLATFORM='MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk'
