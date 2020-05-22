@@ -34,14 +34,14 @@ class TestExtractVars(unittest.TestCase):
 
         self.assertIn('export ARCH: arm64', config_map)
         self.assertEqual(
-            config_map['export ARCH: arm64'], ['libpng-1.6.36,arm64'])
+            config_map['export ARCH: arm64'], ['libpng-1.6.36,ios_arm64'])
         self.assertEqual(
             config_map['export CFLAGS: -arch $ARCH'],
-            ['libpng-1.6.36,arm64', 'libpng-1.6.36,x86_64'])
+            ['libpng-1.6.36,ios_arm64', 'libpng-1.6.36,ios_x86_64'])
 
         self.assertIn('export ARCH: x86_64', config_map)
         self.assertEqual(
-            config_map['export ARCH: x86_64'], ['libpng-1.6.36,x86_64'])
+            config_map['export ARCH: x86_64'], ['libpng-1.6.36,ios_x86_64'])
 
     def test_PLATFORM(self):
         config_map = self.config_map
@@ -49,16 +49,16 @@ class TestExtractVars(unittest.TestCase):
         export_platform_key='export PLATFORM: iPhoneOS.platform/Developer/SDKs/iPhoneOS13.4.sdk'
         self.assertIn(export_platform_key, config_map)
         self.assertEqual(
-            config_map[export_platform_key], ['libpng-1.6.36,arm64'])
+            config_map[export_platform_key], ['libpng-1.6.36,ios_arm64'])
 
         export_platform_key='export PLATFORM: iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.4.sdk'
         self.assertIn(export_platform_key, config_map)
         self.assertEqual(
-            config_map[export_platform_key], ['libpng-1.6.36,x86_64'])
+            config_map[export_platform_key], ['libpng-1.6.36,ios_x86_64'])
 
         self.assertEqual(
             config_map['export SDKROOT: \"{XCODE_DEV}/Platforms/$PLATFORM\"'],
-            ['libpng-1.6.36,arm64', 'libpng-1.6.36,x86_64'])
+            ['libpng-1.6.36,ios_arm64', 'libpng-1.6.36,ios_x86_64'])
 
     def test_PLATFORM_VERSION(self):
         config_map = self.config_map
@@ -66,16 +66,16 @@ class TestExtractVars(unittest.TestCase):
         export_platform_version='export PLATFORM_VERSION: -miphoneos-version-min="11.0"'
         self.assertIn(export_platform_version, config_map)
         self.assertEqual(
-            config_map[export_platform_version], ['libpng-1.6.36,arm64'])
+            config_map[export_platform_version], ['libpng-1.6.36,ios_arm64'])
 
         export_platform_version='export PLATFORM_VERSION: -mios-simulator-version-min="11.0"'
         self.assertIn(export_platform_version, config_map)
         self.assertEqual(
-            config_map[export_platform_version], ['libpng-1.6.36,x86_64'])
+            config_map[export_platform_version], ['libpng-1.6.36,ios_x86_64'])
 
         self.assertEqual(
             config_map['export CFLAGS: $PLATFORM_VERSION'],
-            ['libpng-1.6.36,arm64', 'libpng-1.6.36,x86_64'])
+            ['libpng-1.6.36,ios_arm64', 'libpng-1.6.36,ios_x86_64'])
 
     def test_TARGET(self):
         config_map = self.config_map
@@ -84,14 +84,14 @@ class TestExtractVars(unittest.TestCase):
         self.assertIn(config_target_key, config_map)
         self.assertEqual(
             config_map[config_target_key],
-            ['libpng-1.6.36,arm64', 'libpng-1.6.36,x86_64'])
+            ['libpng-1.6.36,ios_arm64', 'libpng-1.6.36,ios_x86_64'])
 
         self.assertIn('export TARGET: arm-apple-darwin64', config_map)
         self.assertEqual(
             config_map['export TARGET: arm-apple-darwin64'],
-            ['libpng-1.6.36,arm64'])
+            ['libpng-1.6.36,ios_arm64'])
 
         self.assertIn('export TARGET: x86_64-apple-darwin', config_map)
         self.assertEqual(
             config_map['export TARGET: x86_64-apple-darwin'],
-            ['libpng-1.6.36,x86_64'])
+            ['libpng-1.6.36,ios_x86_64'])
