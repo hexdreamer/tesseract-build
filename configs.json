@@ -1,502 +1,502 @@
 {
   "export SDKROOT: \"{XCODE_DEV}/Platforms/$PLATFORM\"": [
-    "jpeg-9c,ios_arm64",
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "libpng-1.6.36,ios_arm64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64",
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+    "libjpeg,ios_arm64",
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "libpng,ios_arm64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64",
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
   "export CFLAGS: -arch $ARCH": [
-    "jpeg-9c,ios_arm64",
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "libpng-1.6.36,ios_arm64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64",
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+    "libjpeg,ios_arm64",
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "libpng,ios_arm64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64",
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
   "export CFLAGS: -pipe": [
-    "jpeg-9c,ios_arm64",
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "libpng-1.6.36,ios_arm64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64",
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+    "libjpeg,ios_arm64",
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "libpng,ios_arm64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64",
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
   "export CFLAGS: -no-cpp-precomp": [
-    "jpeg-9c,ios_arm64",
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "libpng-1.6.36,ios_arm64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64",
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+    "libjpeg,ios_arm64",
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "libpng,ios_arm64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64",
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
   "export CFLAGS: -isysroot $SDKROOT": [
-    "jpeg-9c,ios_arm64",
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "libpng-1.6.36,ios_arm64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64",
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+    "libjpeg,ios_arm64",
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "libpng,ios_arm64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64",
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
   "export CFLAGS: $PLATFORM_VERSION": [
-    "jpeg-9c,ios_arm64",
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "libpng-1.6.36,ios_arm64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64",
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+    "libjpeg,ios_arm64",
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "libpng,ios_arm64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64",
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
   "export CFLAGS: -O2": [
-    "jpeg-9c,ios_arm64",
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "libpng-1.6.36,ios_arm64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64",
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+    "libjpeg,ios_arm64",
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "libpng,ios_arm64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64",
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
   "export CFLAGS: -fembed-bitcode": [
-    "jpeg-9c,ios_arm64",
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "libpng-1.6.36,ios_arm64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64",
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+    "libjpeg,ios_arm64",
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "libpng,ios_arm64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64",
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
   "export CPPFLAGS: $CFLAGS": [
-    "jpeg-9c,ios_arm64",
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "libpng-1.6.36,ios_arm64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64",
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+    "libjpeg,ios_arm64",
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "libpng,ios_arm64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64",
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
   "export CXXFLAGS: $CFLAGS": [
-    "jpeg-9c,ios_arm64",
-    "jpeg-9c,ios_x86_64",
-    "libpng-1.6.36,ios_arm64",
-    "libpng-1.6.36,ios_x86_64",
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+    "libjpeg,ios_arm64",
+    "libjpeg,ios_x86_64",
+    "libpng,ios_arm64",
+    "libpng,ios_x86_64",
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
   "export CXXFLAGS: -Wno-deprecated-register": [
-    "jpeg-9c,ios_arm64",
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "libpng-1.6.36,ios_arm64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64",
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+    "libjpeg,ios_arm64",
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "libpng,ios_arm64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64",
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
   "export LDFLAGS: -L$SDKROOT/usr/lib/": [
-    "jpeg-9c,ios_arm64",
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "libpng-1.6.36,ios_arm64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64",
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+    "libjpeg,ios_arm64",
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "libpng,ios_arm64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64",
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
-  "configure: CXX=\"\"\"$(xcode-select -p)\"/usr/bin/g++\" --target=$TARGET\"": [
-    "jpeg-9c,ios_arm64",
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "libpng-1.6.36,ios_arm64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64",
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+  "CONFIG_FLAGS: CXX=\"$(xcode-select -p)/usr/bin/g++ --target=$TARGET\"": [
+    "libjpeg,ios_arm64",
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "libpng,ios_arm64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64",
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
-  "configure: CC=\"\"\"$(xcode-select -p)\"/usr/bin/gcc\" --target=$TARGET\"": [
-    "jpeg-9c,ios_arm64",
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "libpng-1.6.36,ios_arm64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64",
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+  "CONFIG_FLAGS: CC=\"$(xcode-select -p)/usr/bin/gcc --target=$TARGET\"": [
+    "libjpeg,ios_arm64",
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "libpng,ios_arm64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64",
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
-  "configure: --host=$TARGET": [
-    "jpeg-9c,ios_arm64",
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "libpng-1.6.36,ios_arm64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64",
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+  "CONFIG_FLAGS: --host=$TARGET": [
+    "libjpeg,ios_arm64",
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "libpng,ios_arm64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64",
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
-  "configure: --enable-shared=no": [
-    "jpeg-9c,ios_arm64",
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "libpng-1.6.36,ios_arm64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64",
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+  "CONFIG_FLAGS: --enable-shared=no": [
+    "libjpeg,ios_arm64",
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "libpng,ios_arm64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64",
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
-  "configure: --prefix=$(pwd)": [
-    "jpeg-9c,ios_arm64",
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "libpng-1.6.36,ios_arm64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64",
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+  "CONFIG_FLAGS: --prefix=$(pwd)": [
+    "libjpeg,ios_arm64",
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "libpng,ios_arm64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64",
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
   "export ARCH: arm64": [
-    "jpeg-9c,ios_arm64",
-    "leptonica-1.78.0,ios_arm64",
-    "libpng-1.6.36,ios_arm64",
-    "tesseract-4.1.0,ios_arm64",
-    "tiff-4.0.10,ios_arm64"
+    "libjpeg,ios_arm64",
+    "leptonica,ios_arm64",
+    "libpng,ios_arm64",
+    "tesseract,ios_arm64",
+    "libtiff,ios_arm64"
   ],
   "export PLATFORM: iPhoneOS.platform/Developer/SDKs/iPhoneOS13.4.sdk": [
-    "jpeg-9c,ios_arm64",
-    "leptonica-1.78.0,ios_arm64",
-    "libpng-1.6.36,ios_arm64",
-    "tesseract-4.1.0,ios_arm64",
-    "tiff-4.0.10,ios_arm64"
+    "libjpeg,ios_arm64",
+    "leptonica,ios_arm64",
+    "libpng,ios_arm64",
+    "tesseract,ios_arm64",
+    "libtiff,ios_arm64"
   ],
   "export PLATFORM_OS: ios": [
-    "jpeg-9c,ios_arm64",
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "libpng-1.6.36,ios_arm64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+    "libjpeg,ios_arm64",
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "libpng,ios_arm64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
-  "export PLATFORM_VERSION: -miphoneos-version-min=\"11.0\"": [
-    "jpeg-9c,ios_arm64",
-    "leptonica-1.78.0,ios_arm64",
-    "libpng-1.6.36,ios_arm64",
-    "tesseract-4.1.0,ios_arm64",
-    "tiff-4.0.10,ios_arm64"
+  "export PLATFORM_VERSION: -miphoneos-version-min=11.0": [
+    "libjpeg,ios_arm64",
+    "leptonica,ios_arm64",
+    "libpng,ios_arm64",
+    "tesseract,ios_arm64",
+    "libtiff,ios_arm64"
   ],
   "export TARGET: arm-apple-darwin64": [
-    "jpeg-9c,ios_arm64",
-    "leptonica-1.78.0,ios_arm64",
-    "libpng-1.6.36,ios_arm64",
-    "tesseract-4.1.0,ios_arm64",
-    "tiff-4.0.10,ios_arm64"
+    "libjpeg,ios_arm64",
+    "leptonica,ios_arm64",
+    "libpng,ios_arm64",
+    "tesseract,ios_arm64",
+    "libtiff,ios_arm64"
   ],
   "export ARCH: x86_64": [
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64",
-    "tiff-4.0.10,ios_x86_64"
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64",
+    "libtiff,ios_x86_64"
   ],
   "export PLATFORM: iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.4.sdk": [
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_x86_64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tiff-4.0.10,ios_x86_64"
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_x86_64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_x86_64",
+    "libtiff,ios_x86_64"
   ],
-  "export PLATFORM_VERSION: -mios-simulator-version-min=\"11.0\"": [
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_x86_64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tiff-4.0.10,ios_x86_64"
+  "export PLATFORM_VERSION: -mios-simulator-version-min=11.0": [
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_x86_64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_x86_64",
+    "libtiff,ios_x86_64"
   ],
   "export TARGET: x86_64-apple-darwin": [
-    "jpeg-9c,ios_x86_64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "libpng-1.6.36,ios_x86_64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64",
-    "tiff-4.0.10,ios_x86_64"
+    "libjpeg,ios_x86_64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "libpng,ios_x86_64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64",
+    "libtiff,ios_x86_64"
   ],
-  "configure: --enable-fast-install": [
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+  "CONFIG_FLAGS: --enable-fast-install": [
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
-  "configure: --without-x": [
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+  "CONFIG_FLAGS: --without-x": [
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
-  "configure: --with-jpeg-include-dir={ROOT}/jpeg-9c/$TARGET/include": [
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+  "CONFIG_FLAGS: --with-jpeg-include-dir={ROOT}/jpeg-9c/$TARGET/include": [
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
-  "configure: --with-jpeg-lib-dir={ROOT}/jpeg-9c/$TARGET/lib": [
-    "tiff-4.0.10,ios_arm64",
-    "tiff-4.0.10,ios_x86_64"
+  "CONFIG_FLAGS: --with-jpeg-lib-dir={ROOT}/jpeg-9c/$TARGET/lib": [
+    "libtiff,ios_arm64",
+    "libtiff,ios_x86_64"
   ],
-  "export LIBS: \"-lz -lpng -ljpeg -ltiff\"": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+  "export LIBS: '-lz -lpng -ljpeg -ltiff'": [
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64"
   ],
   "export CFLAGS: -I{ROOT}/$PLATFORM_OS/include": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64"
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64"
   ],
   "export CXXFLAGS: -I{ROOT}/$PLATFORM_OS/include": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64"
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64"
   ],
   "export CXXFLAGS: -arch $ARCH": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64"
   ],
   "export CXXFLAGS: -pipe": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64"
   ],
   "export CXXFLAGS: -no-cpp-precomp": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64"
   ],
   "export CXXFLAGS: -isysroot $SDKROOT": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64"
   ],
   "export CXXFLAGS: $PLATFORM_VERSION": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64"
   ],
   "export CXXFLAGS: -O2": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64"
   ],
   "export LDFLAGS: -L{ROOT}/$PLATFORM_OS/lib": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64"
   ],
   "export PKG_CONFIG_PATH: {ROOT}/libpng-1.6.36/$TARGET/:{ROOT}/jpeg-9c/$TARGET/:{ROOT}/tiff-4.0.10/$TARGET/": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64"
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64"
   ],
-  "export CXX: \"\"\"$(xcode-select -p)\"/usr/bin/g++\" --target=$TARGET\"": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+  "export CXX: \"$(xcode-select -p)/usr/bin/g++ --target=$TARGET\"": [
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64"
   ],
-  "export CXX_FOR_BUILD: \"\"\"$(xcode-select -p)\"/usr/bin/g++\" --target=$TARGET\"": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+  "export CXX_FOR_BUILD: \"$(xcode-select -p)/usr/bin/g++ --target=$TARGET\"": [
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64"
   ],
-  "export CC: \"\"\"$(xcode-select -p)\"/usr/bin/gcc\" --target=$TARGET\"": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64",
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+  "export CC: \"$(xcode-select -p)/usr/bin/gcc --target=$TARGET\"": [
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64",
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64"
   ],
-  "configure: --disable-programs": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64"
+  "CONFIG_FLAGS: --disable-programs": [
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64"
   ],
-  "configure: --with-zlib": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64"
+  "CONFIG_FLAGS: --with-zlib": [
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64"
   ],
-  "configure: --with-libpng": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64"
+  "CONFIG_FLAGS: --with-libpng": [
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64"
   ],
-  "configure: --with-jpeg": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64"
+  "CONFIG_FLAGS: --with-jpeg": [
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64"
   ],
-  "configure: --with-libtiff": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64"
+  "CONFIG_FLAGS: --with-libtiff": [
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64"
   ],
-  "configure: --without-giflib": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64"
+  "CONFIG_FLAGS: --without-giflib": [
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64"
   ],
-  "configure: --without-libwebp": [
-    "leptonica-1.78.0,ios_arm64",
-    "leptonica-1.78.0,ios_x86_64",
-    "leptonica-1.78.0,macos_x86_64"
+  "CONFIG_FLAGS: --without-libwebp": [
+    "leptonica,ios_arm64",
+    "leptonica,ios_x86_64",
+    "leptonica,macos_x86_64"
   ],
   "export CFLAGS: -I{ROOT}/{PKG_NAME}/$PLATFORM_OS/$TARGET/": [
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64"
   ],
   "export CXXFLAGS: -I{ROOT}/{PKG_NAME}/$PLATFORM_OS/$TARGET/": [
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64"
   ],
   "export LDFLAGS: -L{ROOT}/leptonica-1.78.0/$PLATFORM_OS/$TARGET/src/.libs": [
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64"
   ],
   "export LIBLEPT_HEADERSDIR: {ROOT}/{PKG_NAME}/$PLATFORM_OS/$TARGET/": [
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64"
   ],
   "export PKG_CONFIG_PATH: {ROOT}/leptonica-1.78.0/$PLATFORM_OS/$TARGET/": [
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64"
   ],
-  "configure: --disable-graphics": [
-    "tesseract-4.1.0,ios_arm64",
-    "tesseract-4.1.0,ios_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+  "CONFIG_FLAGS: --disable-graphics": [
+    "tesseract,ios_arm64",
+    "tesseract,ios_x86_64",
+    "tesseract,macos_x86_64"
   ],
   "export PLATFORM: MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk": [
-    "leptonica-1.78.0,macos_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+    "leptonica,macos_x86_64",
+    "tesseract,macos_x86_64"
   ],
   "export PLATFORM_OS: macos": [
-    "leptonica-1.78.0,macos_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+    "leptonica,macos_x86_64",
+    "tesseract,macos_x86_64"
   ],
-  "export PLATFORM_VERSION: -mmacosx-version-min=\"10.13\"": [
-    "leptonica-1.78.0,macos_x86_64",
-    "tesseract-4.1.0,macos_x86_64"
+  "export PLATFORM_VERSION: -mmacosx-version-min=10.13": [
+    "leptonica,macos_x86_64",
+    "tesseract,macos_x86_64"
   ]
 }

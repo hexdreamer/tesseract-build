@@ -21,15 +21,28 @@ def build_config_func(name, configs, call_common, call_common_all):
         vs = sorted(vs, key=lambda x: (x.startswith('-'), x.lower()))
 
         if len(vs) == 1:
-            s.write("%s=%s\n" % (k, vs[0]))
+            if '$' in vs[0]:
+                s.write("%s=%s\n" % (k, vs[0]))
+            else:
+                s.write("%s='%s'\n" % (k, vs[0]))
         else:
-            s.write('%s=(\n' % k)
+            if 'export ' in k:
+                s.write('%s_ARR=(\n' % k.replace('export ', ''))
+            else:
+                s.write('%s=(\n' % k)
             for v in vs:
                 if v.startswith('-'):
-                    s.write("'%s'\n" % v)
+                    if '$' in v:
+                        s.write('"%s"\n' % v)
+                    else:
+                        s.write("'%s'\n" % v)
                 else:
                     s.write('%s\n' % v)
             s.write(')\n')
+            if 'export ' in k:
+                s.write('%s="$%s_ARR"\n\n' %(k, k.replace('export ', '')))
+            else:
+                s.write('\n')
 
     if call_common:
         s.write('\ncommon\n')
