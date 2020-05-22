@@ -6,6 +6,5 @@ Root
 Sources
 tmp
 
-*.json
 *.pyc
 swifty-make.txt
