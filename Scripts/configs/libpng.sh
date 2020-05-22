@@ -1,5 +1,7 @@
 #!/bin/zsh -f
 
+# LIBPNG -- http://www.libpng.org/pub/png/libpng.html
+
 export NAME='libpng-1.6.37'
 export TARGZ="$NAME.tar.gz"
 export URL="https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/$TARGZ/download"
@@ -19,6 +21,7 @@ common() {
 
   export CONFIG_CMD='../configure'
 }
+
 ios_arm64() {
   export ARCH='arm64'
   export PLATFORM='iPhoneOS.platform/Developer/SDKs/iPhoneOS13.4.sdk'
@@ -28,6 +31,7 @@ ios_arm64() {
 
   common
 }
+
 ios_x86_64() {
   export ARCH='x86_64'
   export PLATFORM='iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.4.sdk'
@@ -37,6 +41,7 @@ ios_x86_64() {
 
   common
 }
+
 macos_x86_64() {
   export ARCH='x86_64'
   export PLATFORM='MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk'

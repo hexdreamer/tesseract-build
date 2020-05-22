@@ -192,9 +192,12 @@ download_extract_install() {
   pkg_dir="$SOURCES/$DIR_NAME"
 
   print "\n======== $NAME ========"
-  if [[ -n "$VER_PATTERN" ]]; then
+  if [ -n "$VER_PATTERN" ]; then
     # Try pkg-config first
-    if pkg-config --exists "$VER_PATTERN"; then
+    if {
+      type pkg-config >/dev/null && 
+      pkg-config --exists "$VER_PATTERN"
+    }; then
       echo "Skipped, already installed"
       return 0
     fi
@@ -254,52 +257,21 @@ main() {
 
   export PATH="$ROOT/bin:$PATH"
 
-  # download_extract_install "autoconf"
-  # download_extract_install "automake"
-  # download_extract_install "pkgconfig"
+  download_extract_install "autoconf"
+  download_extract_install "automake"
+  download_extract_install "pkgconfig"
   
   # For some reason, this isn't being made and install of the PC files are failing
   # if ! [ -d $ROOT/lib/pkgconfig ]; then
   #   mkdir $ROOT/lib/pkgconfig
   # fi
 
+  download_extract_install "libtool"
   download_extract_install "zlib"
+  download_extract_install "libjpeg"
   download_extract_install "libpng"
 
   exit 1
-
-  # LIBTOOL -- https://www.gnu.org/software/libtool/
-  name=libtool-2.4.6
-  targz=$NAME.tar.gz
-
-  download_extract_install \
-    "http://ftp.gnu.org/gnu/libtool/$targz" \
-    "$name" \
-    "$targz" \
-    --ver-command "$ROOT/bin/libtool --version" \
-    --ver-pattern "2.4.6"
-
-  # LEPTONICA -- https://github.com/DanBloomberg/leptonica
-  name=leptonica-1.79.0
-  targz="$name.tar.gz"
-
-  download_extract_install \
-    "https://github.com/DanBloomberg/leptonica/releases/download/1.79.0/$targz" \
-    "$name" \
-    "$targz" \
-    --ver-pattern "lept >= 1.79.0"
-
-  # Optionally libpng, libjpeg, libtiff (Already exists on system?)
-  # LIBJPEG -- http://ijg.org/
-  name=jpegsrc.v9d
-  targz="$name.tar.gz"
-
-  download_extract_install \
-    "http://www.ijg.org/files/$targz" \
-    "$name" \
-    "$targz" \
-    --dir-name jpeg-9d \
-    --ver-pattern "libjpeg >= 9.4.0"
 
   # LIBTIFF -- https://gitlab.com/libtiff/libtiff
   name=tiff-4.1.0
@@ -311,15 +283,16 @@ main() {
     "$targz" \
     --ver-pattern "libtiff-4 >= 4.1.0"
 
-  # ZLIB --
-  name=zlib-1.2.11
+
+  # LEPTONICA -- https://github.com/DanBloomberg/leptonica
+  name=leptonica-1.79.0
   targz="$name.tar.gz"
 
   download_extract_install \
-    "https://sourceforge.net/projects/libpng/files/zlib/1.2.11/$targz/download" \
+    "https://github.com/DanBloomberg/leptonica/releases/download/1.79.0/$targz" \
     "$name" \
     "$targz" \
-    --ver-pattern "zlib >= 1.2.11"
+    --ver-pattern "lept >= 1.79.0"
 
   # TESSERACT OCR -- https://github.com/tesseract-ocr/tesseract
   name=tesseract-4.1.1
