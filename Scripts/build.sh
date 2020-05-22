@@ -103,6 +103,7 @@ parse_args() {
         return $ABORT_BUILD
         ;;
       -d)
+        DEBUG=true
         set -x
         ;;
       -t)
@@ -113,15 +114,21 @@ parse_args() {
         exit 0
         ;;
       clean)
-        if [[ -n "$2" ]]; then
-          find "$DOWNLOADS" -name "$2*.tar.gz" -exec rm -rf {} \;
-          find "$ROOT" -name "$2*" -prune -exec rm -rf {} \;
-          find "$ROOT/lib/pkgconfig" -name "*$2*" -prune -exec rm -rf {} \;
-          find "$SOURCES" -type d -name "$2*" -depth 1 -prune -exec rm -rf {} \;
+        if [ -n "$DEBUG" ]; then
+          printd='-print'
         else
-          find "$DOWNLOADS" -name '*.tar.gz' -prune -exec rm -rf {} \;
-          find "$ROOT" -type d -depth 1 -prune -exec rm -rf {} \;
-          find "$SOURCES" -type d -depth 1 -prune -exec rm -rf {} \;
+          printd=
+        fi
+
+        if [[ -n "$2" ]]; then
+          find "$DOWNLOADS" -name "$2*.tar.gz" $printd -exec rm -rf {} \;
+          find "$ROOT" -name "$2*" -prune $printd -exec rm -rf {} \;
+          find "$ROOT/lib/pkgconfig" -name "*$2*" -prune $printd -exec rm -rf {} \;
+          find "$SOURCES" -type d -name "$2*" -depth 1 -prune $printd -exec rm -rf {} \;
+        else
+          find "$DOWNLOADS" -name '*.tar.gz' -prune $printd -exec rm -rf {} \;
+          find "$ROOT" -type d -depth 1 -prune $printd -exec rm -rf {} \;
+          find "$SOURCES" -type d -depth 1 -prune $printd -exec rm -rf {} \;
         fi
         exit 0
         ;;
@@ -144,7 +151,7 @@ download_extract_install() {
   local TARGETS=
 
   # shellcheck source=/dev/null
-  source "${SCRIPTSDIR}/${1}.sh"
+  source "${SCRIPTSDIR}/configs/${1}.sh"
 
   local DOWNLOAD_TGZ="$DOWNLOADS/$TARGZ"
 
@@ -177,6 +184,13 @@ download_extract_install() {
   #   shift
   # done
 
+
+  if [ -z "$DIR_NAME" ]; then
+    DIR_NAME=$NAME
+  fi
+
+  pkg_dir="$SOURCES/$DIR_NAME"
+
   print "\n======== $NAME ========"
   if [[ -n "$VER_PATTERN" ]]; then
     # Try pkg-config first
@@ -200,18 +214,17 @@ download_extract_install() {
   else
     print -n "Downloading..."
     exec_and_log "${NAME}" "0_curl" curl -L -f "$URL" --output "$DOWNLOAD_TGZ"
-
-    print -n " extracting..."
-    exec_and_log "${NAME}" "1_tar" tar -zxf "$DOWNLOAD_TGZ" --directory "$SOURCES"
-
     print " done."
   fi
 
-  if [ -z "$DIR_NAME" ]; then
-    DIR_NAME=$NAME
+  if [ -d $pkg_dir ]; then
+    echo "Skipped extract of TGZ, using cached $pkg_dir in Sources."
+  else
+    print -n "Extracting..."
+    exec_and_log "${NAME}" "1_tar" tar -zxf "$DOWNLOAD_TGZ" --directory "$SOURCES"
+    print " done."
   fi
 
-  pkg_dir="$SOURCES/$DIR_NAME"
   cd  $pkg_dir || {
     err "Failed to cd to $pkg_dir"
     exit 1
