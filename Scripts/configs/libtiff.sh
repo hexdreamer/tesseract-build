@@ -1,19 +1,17 @@
 #!/bin/zsh -f
-export NAME='libpng-1.6.37'
-export TARGZ="$NAME.tar.gz"
-export URL="https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/$TARGZ/download"
-export VER_COMMAND='libpng-config --version'
-export VER_PATTERN='libpng >= 1.6.37'
-export TARGETS=('ios_arm64' 'ios_x86_64' 'macos_x86_64')
-
 common() {
   export CXXFLAGS=$CFLAGS
-  export CONFIG_CMD='../configure'
 
-  source "${SCRIPTSDIR}/configs/common.sh"
   common_all
 }
 ios_arm64() {
+  CONFIG_FLAGS=(
+    '--enable-fast-install'
+    "--with-jpeg-include-dir={ROOT}/jpeg-9c/$TARGET/include"
+    "--with-jpeg-lib-dir={ROOT}/jpeg-9c/$TARGET/lib"
+    '--without-x'
+  )
+
   export ARCH='arm64'
   export PLATFORM='iPhoneOS.platform/Developer/SDKs/iPhoneOS13.4.sdk'
   export PLATFORM_OS='ios'
@@ -23,6 +21,13 @@ ios_arm64() {
   common
 }
 ios_x86_64() {
+  CONFIG_FLAGS=(
+    '--enable-fast-install'
+    "--with-jpeg-include-dir={ROOT}/jpeg-9c/$TARGET/include"
+    "--with-jpeg-lib-dir={ROOT}/jpeg-9c/$TARGET/lib"
+    '--without-x'
+  )
+
   export ARCH='x86_64'
   export PLATFORM='iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.4.sdk'
   export PLATFORM_OS='ios'
