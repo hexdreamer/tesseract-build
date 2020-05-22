@@ -254,43 +254,19 @@ main() {
 
   export PATH="$ROOT/bin:$PATH"
 
+  # download_extract_install "autoconf"
+  # download_extract_install "automake"
+  # download_extract_install "pkgconfig"
+  
+  # For some reason, this isn't being made and install of the PC files are failing
+  # if ! [ -d $ROOT/lib/pkgconfig ]; then
+  #   mkdir $ROOT/lib/pkgconfig
+  # fi
+
+  download_extract_install "zlib"
   download_extract_install "libpng"
 
   exit 1
-
-  # PKG-CONFIG -- https://www.freedesktop.org/wiki/Software/pkg-config/
-  name=pkg-config-0.29.2
-  targz="$name.tar.gz"
-
-  download_extract_install \
-    "https://pkg-config.freedesktop.org/releases/$targz" \
-    "$name" \
-    "$targz" \
-    --flags "--with-internal-glib" \
-    --ver-command "$ROOT/bin/pkg-config --version" \
-    --ver-pattern 0.29.2
-
-  # AUTOCONF -- https://www.gnu.org/software/autoconf/
-  name=autoconf-2.69
-  targz=$name.tar.gz
-
-  download_extract_install \
-    "http://ftp.gnu.org/gnu/autoconf/$targz" \
-    "$name" \
-    "$targz" \
-    --ver-command "$ROOT/bin/autoconf --version" \
-    --ver-pattern "2.69"
-
-  # AUTOMAKE -- https://www.gnu.org/software/automake/
-  name=automake-1.16
-  targz="$name.tar.gz"
-
-  download_extract_install \
-    "http://ftp.gnu.org/gnu/automake/$targz" \
-    "$name" \
-    "$targz" \
-    --ver-command "$ROOT/bin/automake --version" \
-    --ver-pattern "1.16"
 
   # LIBTOOL -- https://www.gnu.org/software/libtool/
   name=libtool-2.4.6

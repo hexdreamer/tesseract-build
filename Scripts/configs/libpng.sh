@@ -1,8 +1,9 @@
 #!/bin/zsh -f
+
 export NAME='libpng-1.6.37'
 export TARGZ="$NAME.tar.gz"
 export URL="https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/$TARGZ/download"
-export VER_COMMAND='libpng-config --version'
+# export VER_COMMAND='libpng-config --version'
 export VER_PATTERN='libpng >= 1.6.37'
 export TARGETS=('ios_arm64' 'ios_x86_64' 'macos_x86_64')
 
