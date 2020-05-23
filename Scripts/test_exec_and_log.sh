@@ -12,7 +12,9 @@ readonly OUT="${TMP_DIR}/out"
 LOG_DIR="${TMP_DIR}/Logs"
 
 createTmpDir() {
-  mkdir "$TMP_DIR"
+  if ! [ -d "$TMP_DIR" ]; then
+    mkdir "$TMP_DIR"
+  fi
 }
 
 destroyTmpDir() {
