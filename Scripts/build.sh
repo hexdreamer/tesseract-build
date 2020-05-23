@@ -120,15 +120,16 @@ parse_args() {
           printd=
         fi
 
+        printd='-print'
         if [[ -n "$2" ]]; then
-          find "$DOWNLOADS" -name "$2*.tar.gz" $printd -exec rm -rf {} \;
-          find "$ROOT" -name "$2*" -prune $printd -exec rm -rf {} \;
-          find "$ROOT/lib/pkgconfig" -name "*$2*" -prune $printd -exec rm -rf {} \;
-          find "$SOURCES" -type d -name "$2*" -depth 1 -prune $printd -exec rm -rf {} \;
+          find $DOWNLOADS/* -maxdepth 0 -type f -name "*$2*" $printd -exec rm -rf {} \;
+          find $LOG_DIR/*$2* -maxdepth 0 -type d -exec rm -rf {} \;
+          find $ROOT -name "*$2*" -prune $printd -exec rm -rf {} \;
+          find $SOURCES/*$2* -type d \( -name 'ios_*' -o -name 'macos_*' \) -prune $printd -exec rm -rf {} \;
         else
-          find "$DOWNLOADS" -name '*.tar.gz' -prune $printd -exec rm -rf {} \;
-          find "$ROOT" -type d -depth 1 -prune $printd -exec rm -rf {} \;
-          find "$SOURCES" -type d -depth 1 -prune $printd -exec rm -rf {} \;
+          find $DOWNLOADS/* -maxdepth 0 \( -name '*.tar.gz' -o -name '*.zip' \) $printd -exec rm -rf {} \;
+          find $ROOT/* -maxdepth 0 -type d $printd -exec rm -rf {} \;
+          find $SOURCES/* -maxdepth 0 -type d $printd -exec rm -rf {} \;
         fi
         exit 0
         ;;
@@ -270,7 +271,7 @@ main() {
   download_extract_install "zlib"
   download_extract_install "libjpeg"
   download_extract_install "libpng"
-  download_extract_install "libtiff   "
+  download_extract_install "libtiff"
 
   exit 1
 
