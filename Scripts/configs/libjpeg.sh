@@ -14,7 +14,7 @@ common() {
   common_all
 
   CXXFLAGS_ARR=(
-    $CXXFLAGS_ARR
+    $CXXFLAGS
     $CFLAGS
   )
   export CXXFLAGS="$CXXFLAGS_ARR"
