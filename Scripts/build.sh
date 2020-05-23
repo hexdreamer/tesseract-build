@@ -122,7 +122,7 @@ parse_args() {
 
         printd='-print'
         if [[ -n "$2" ]]; then
-          find $DOWNLOADS/* -maxdepth 0 -type f -name "*$2*" $printd -exec rm -rf {} \;
+          # find $DOWNLOADS/* -maxdepth 0 -type f -name "*$2*" $printd -exec rm -rf {} \;
           find $LOG_DIR/*$2* -maxdepth 0 -type d -exec rm -rf {} \;
           find $ROOT -name "*$2*" -prune $printd -exec rm -rf {} \;
           find $SOURCES/*$2* -type d \( -name 'ios_*' -o -name 'macos_*' \) -prune $printd -exec rm -rf {} \;
@@ -241,11 +241,12 @@ download_extract_install() {
   fi
 
   for target in $TARGETS; do
-    $target
-  
     config_make_install $target
 
     cd $pkg_dir || exit
+
+    # source "${SCRIPTSDIR}/configs/common.sh"
+    # unset_build_configs
   done
 }
 

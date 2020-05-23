@@ -4,10 +4,13 @@
 
 export NAME='tiff-4.1.0'
 export TARGZ="$NAME.tar.gz"
-
 export URL="http://download.osgeo.org/libtiff/$TARGZ"
 export VER_PATTERN='libtiff-4 >= 4.1.0'
-export TARGETS=('ios_arm64' 'ios_x86_64' 'macos_x86_64')
+export TARGETS=(
+  'ios_arm64'
+  'ios_x86_64'
+  'macos_x86_64'
+)
 
 common() {
   source "${SCRIPTSDIR}/configs/common.sh"
@@ -17,7 +20,7 @@ common() {
     $CONFIG_FLAGS
     '--enable-fast-install'
     "--with-jpeg-include-dir=$ROOT/include"
-    "--with-jpeg-lib-dir=$ROOT/lib"
+    "--with-jpeg-lib-dir=$SOURCES/jpeg-9d/${PLATFORM_OS}_${ARCH}/.libs"
     '--without-x'
   )
 
