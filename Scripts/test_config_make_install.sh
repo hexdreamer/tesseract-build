@@ -41,7 +41,7 @@ testVarsDoNotAccumulateTargetValues() {
   # The solutiong was chaninging CXXFLAGS_ARR=(CXXFLAGS_ARR CFLAGS) to CXXFLAGS_ARR=(CXXFLAGS CFLAGS).
 
   ALL_ERR_MSGS=()
-  for target in libjpeg libpng libtiff
+  for target in libjpeg libpng libtiff leptonica
   do
     source configs/${target}.sh
 

@@ -23,7 +23,7 @@ common() {
   export LDFLAGS="$LDFLAGS_ARR"
 
   export LIBLEPT_HEADERSDIR={ROOT}/{PKG_NAME}/$PLATFORM_OS/$TARGET/
-  export LIBS=''-lz -lpng -ljpeg -ltiff''
+  export LIBS='-lz -lpng -ljpeg -ltiff'
   export PKG_CONFIG_PATH={ROOT}/leptonica-1.78.0/$PLATFORM_OS/$TARGET/
 
   common_all

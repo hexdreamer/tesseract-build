@@ -51,10 +51,30 @@ exec_and_log() {
 config_make_install() {
   local target=$1
 
-  print -n "$target "
-
   # Execute config-function to export variables
   $target
+
+  if [ -n "$VER_PATTERN" ]; then
+    # Try pkg-config first
+    if {
+      type pkg-config >/dev/null && 
+      pkg-config --exists "$VER_PATTERN"
+    }; then
+      echo "Skipped, already installed ${PLATFORM_OS}_${ARCH}"
+      return 0
+    fi
+
+    # Try parsing some version-y output directly from program
+    if [[ -n "$VER_COMMAND" ]]; then
+      s=$(eval "$VER_COMMAND 2>&1")
+      if [[ $s == *$VER_PATTERN* ]]; then
+        echo "Skipped, already installed"
+        return 0
+      fi
+    fi
+  fi
+
+  print -n "$target "
 
   if ! [ -d $target ]; then
     mkdir $target
@@ -67,7 +87,7 @@ config_make_install() {
     "3_${target}_config"
     $CONFIG_CMD
     $CONFIG_FLAGS
-    "--prefix=$ROOT"
+    "--prefix=$ROOT/${PLATFORM_OS}_${ARCH}"
   )
   exec_and_log $exec_args
 
@@ -193,25 +213,6 @@ download_extract_install() {
   pkg_dir="$SOURCES/$DIR_NAME"
 
   print "\n======== $NAME ========"
-  if [ -n "$VER_PATTERN" ]; then
-    # Try pkg-config first
-    if {
-      type pkg-config >/dev/null && 
-      pkg-config --exists "$VER_PATTERN"
-    }; then
-      echo "Skipped, already installed"
-      return 0
-    fi
-
-    # Try parsing some version-y output directly from program
-    if [[ -n "$VER_COMMAND" ]]; then
-      s=$(eval "$VER_COMMAND 2>&1")
-      if [[ $s == *$VER_PATTERN* ]]; then
-        echo "Skipped, already installed"
-        return 0
-      fi
-    fi
-  fi
 
   if [[ -e "$DOWNLOAD_TGZ" ]]; then
     echo "Skipped download, using cached $TARGZ in Downloads."
@@ -273,18 +274,9 @@ main() {
   download_extract_install "libjpeg"
   download_extract_install "libpng"
   download_extract_install "libtiff"
-
+  download_extract_install "leptonica"
   exit 1
 
-  # LEPTONICA -- https://github.com/DanBloomberg/leptonica
-  name=leptonica-1.79.0
-  targz="$name.tar.gz"
-
-  download_extract_install \
-    "https://github.com/DanBloomberg/leptonica/releases/download/1.79.0/$targz" \
-    "$name" \
-    "$targz" \
-    --ver-pattern "lept >= 1.79.0"
 
   # TESSERACT OCR -- https://github.com/tesseract-ocr/tesseract
   name=tesseract-4.1.1

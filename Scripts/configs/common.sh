@@ -3,6 +3,7 @@
 common_all() {
   export SDKROOT="/Applications/Xcode.app/Contents/Developer/Platforms/$PLATFORM"
   export LDFLAGS=-L$SDKROOT/usr/lib/
+  export PKG_CONFIG_PATH=${ROOT}/${PLATFORM_OS}_${ARCH}/lib/pkgconfig
 
   CONFIG_FLAGS=(
     CC="$(xcode-select -p)/usr/bin/gcc --target=$TARGET"

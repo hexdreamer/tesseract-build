@@ -1,4 +1,13 @@
 #!/bin/zsh -f
+
+# LEPTONICA -- https://github.com/DanBloomberg/leptonica
+
+export NAME='leptonica-1.79.0'
+export TARGZ="$NAME.tar.gz"
+export URL="https://github.com/DanBloomberg/leptonica/releases/download/1.79.0/$TARGZ"
+export VER_PATTERN='lept >= 1.79.0'
+export TARGETS=('ios_arm64' 'ios_x86_64' 'macos_x86_64')
+
 common() {
   source "${SCRIPTSDIR}/configs/common.sh"
   common_all
@@ -17,26 +26,38 @@ common() {
   export CC="$(xcode-select -p)/usr/bin/gcc --target=$TARGET"
   export CXX="$(xcode-select -p)/usr/bin/g++ --target=$TARGET"
   export CXX_FOR_BUILD="$(xcode-select -p)/usr/bin/g++ --target=$TARGET"
-  
+
   # Need to resolve $ROOT difference between this project and SwiftyTesseract
-  export CFLAGS=-I$ROOT/$PLATFORM_OS/include
+  CFLAGS_ARR=(
+    $CFLAGS
+    -I${ROOT}/${PLATFORM_OS}_${ARCH}/include
+  )
+  export CFLAGS="$CFLAGS_ARR"
 
   CXXFLAGS_ARR=(
+    $CXXFLAGS
     $PLATFORM_VERSION
     "-arch $ARCH"
     "-isysroot $SDKROOT"
-    "-I$ROOT/$PLATFORM_OS/include"
+    "-I${ROOT}/${PLATFORM_OS}_${ARCH}/include"
     '-no-cpp-precomp'
     '-O2'
     '-pipe'
   )
   export CXXFLAGS="$CXXFLAGS_ARR"
 
-  export LDFLAGS=-L$ROOT/$PLATFORM_OS/lib
+  export LDFLAGS_ARR=(
+    $LDFLAGS
+    -L$ROOT/${PLATFORM_OS}_${ARCH}/lib
+  )
+  export LDFLAGS="$LDFLAGS_ARR"
+
   export LIBS='-lz -lpng -ljpeg -ltiff'
 
   # Commenting out because previous experience w/PKG_CONFIG_PATH showed it was unnecessary
   # export PKG_CONFIG_PATH={ROOT}/libpng-1.6.36/$TARGET/:{ROOT}/jpeg-9c/$TARGET/:{ROOT}/tiff-4.0.10/$TARGET/
+
+  export CONFIG_CMD='../configure'
 }
 
 ios_arm64() {
