@@ -7,7 +7,10 @@ export NAME='jpegsrc.v9d'
 export TARGZ="$NAME.tar.gz"
 export URL="http://www.ijg.org/files/$TARGZ"
 export VER_PATTERN='libjpeg >= 9.4.0'
-export TARGETS=('ios_arm64' 'ios_x86_64' 'macos_x86_64')
+export LIBNAME='libjpeg'
+export IOS_TARGETS=('ios_arm64' 'ios_x86_64')
+export MACOS_TARGETS=('macos_x86_64')
+export TARGETS=($IOS_TARGETS $MACOS_TARGETS)
 
 common() {
   source "${SCRIPTSDIR}/configs/common.sh"

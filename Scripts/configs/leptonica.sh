@@ -6,7 +6,10 @@ export NAME='leptonica-1.79.0'
 export TARGZ="$NAME.tar.gz"
 export URL="https://github.com/DanBloomberg/leptonica/releases/download/1.79.0/$TARGZ"
 export VER_PATTERN='lept >= 1.79.0'
-export TARGETS=('ios_arm64' 'ios_x86_64' 'macos_x86_64')
+export LIBNAME='liblept'
+export IOS_TARGETS=('ios_arm64' 'ios_x86_64')
+export MACOS_TARGETS=('macos_x86_64')
+export TARGETS=($IOS_TARGETS $MACOS_TARGETS)
 
 common() {
   source "${SCRIPTSDIR}/configs/common.sh"
@@ -27,8 +30,7 @@ common() {
   export CXX="$(xcode-select -p)/usr/bin/g++ --target=$TARGET"
   export CXX_FOR_BUILD="$(xcode-select -p)/usr/bin/g++ --target=$TARGET"
 
-  # Need to resolve $ROOT difference between this project and SwiftyTesseract
-  CFLAGS_ARR=(
+    CFLAGS_ARR=(
     $CFLAGS
     -I${ROOT}/${PLATFORM_OS}_${ARCH}/include
   )
@@ -58,6 +60,7 @@ common() {
   # export PKG_CONFIG_PATH={ROOT}/libpng-1.6.36/$TARGET/:{ROOT}/jpeg-9c/$TARGET/:{ROOT}/tiff-4.0.10/$TARGET/
 
   export CONFIG_CMD='../configure'
+  export PRECONFIG='./autogen.sh'
 }
 
 ios_arm64() {

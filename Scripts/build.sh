@@ -74,6 +74,20 @@ config_make_install() {
     fi
   fi
 
+  if [ -v $PRECONFIG ]; then
+    if [ -f .preconfiged ]; then
+      echo 'Skipped, already preconfigured'
+    else
+      print -n "Preconfiguring..."
+      if ! exec_and_log ${NAME} '2_preconfig' $PRECONFIG; then
+        print 'aborting.'
+        exit 1
+      fi
+      print " done."
+      touch .preconfiged
+    fi
+  fi
+  
   print -n "$target "
 
   if ! [ -d $target ]; then
@@ -82,6 +96,7 @@ config_make_install() {
 
   cd $target || exit
 
+  print -n 'Configuring...'
   exec_args=(
     $NAME
     "3_${target}_config"
@@ -102,6 +117,58 @@ config_make_install() {
   print -n " installing..."
   exec_and_log "${NAME}" "5_${target}_install" make install
   print " done."
+
+  lipo_libs
+}
+
+lipo_libs() {
+  if [ -v IOS_TARGETS ]; then
+    cd $ROOT || exit
+    local libs=()
+    for ios_target in $IOS_TARGETS
+    do
+      libs=($libs $ios_target/lib/${LIBNAME}.a)
+    done
+
+    xcrun_args=(
+      $NAME
+      "6_ios_lipo"
+      xcrun
+      lipo
+      $libs
+      -create
+      -output
+      $ROOT/lib/${LIBNAME}.a
+    )
+
+    print -n 'Lipo-ing iOS libs...'
+    exec_and_log $xcrun_args
+    print ' done.'
+  fi
+
+  if [ -v MACOS_TARGETS ]; then
+    cd $ROOT || exit
+    local libs=()
+    for macos_target in $MACOS_TARGETS
+
+    do
+      libs=($libs $macos_target/lib/${LIBNAME}.a)
+    done
+
+    xcrun_args=(
+      $NAME
+      "6_macos_lipo"
+      lipo
+      $libs
+      -create
+      -output
+      $ROOT/lib/${LIBNAME}-macos.a
+    )
+
+    print -n 'Lipo-ing macOS libs...'
+    exec_and_log $xcrun_args
+    print ' done.'
+  fi
 }
 
 parse_args() {
@@ -160,51 +227,12 @@ parse_args() {
 }
 
 download_extract_install() {
-  local NAME=
-  local TARGZ=
-  local URL=
-  local VER_COMMAND=
-  local VER_PATTERN=
-  local DIR_NAME=
-  local PRE_CONFIG=
-  local CONFIG_CMD=
-  local CONFIG_FLAGS=
-  local TARGETS=
-
   # shellcheck source=/dev/null
   source "${SCRIPTSDIR}/configs/${1}.sh"
-
-  local DOWNLOAD_TGZ="$DOWNLOADS/$TARGZ"
-
-  # Default value
-
-  # while [[ $# -gt 0 ]]; do
-  #   case "$1" in
-  #     --ver-command)
-  #       local VER_COMMAND=$2
-  #       shift
-  #       ;;
-  #     --ver-pattern)
-  #       local VER_PATTERN=$2
-  #       shift
-  #       ;;
-  #     --flags)
-  #       local config_flags=$2
-  #       shift
-  #       ;;
-  #     --dir-name)
-  #       # Override default
-  #       local DIR_NAME=$2
-  #       shift
-  #       ;;
-  #     --pre-config)
-  #       local pre_config=$2
-  #       shift
-  #       ;;
-  #   esac
-  #   shift
-  # done
-
+  lipo_libs
+  return
+  local download_tgz=$DOWNLOADS/$TARGZ
+  local pkg_dir=
 
   if [ -z "$DIR_NAME" ]; then
     DIR_NAME=$NAME
@@ -214,11 +242,11 @@ download_extract_install() {
 
   print "\n======== $NAME ========"
 
-  if [[ -e "$DOWNLOAD_TGZ" ]]; then
+  if [[ -e "$download_tgz" ]]; then
     echo "Skipped download, using cached $TARGZ in Downloads."
   else
     print -n "Downloading..."
-    exec_and_log "${NAME}" "0_curl" curl -L -f "$URL" --output "$DOWNLOAD_TGZ"
+    exec_and_log "${NAME}" "0_curl" curl -L -f "$URL" --output "$download_tgz"
     print " done."
   fi
 
@@ -226,7 +254,7 @@ download_extract_install() {
     echo "Skipped extract of TGZ, using cached $pkg_dir in Sources."
   else
     print -n "Extracting..."
-    exec_and_log "${NAME}" "1_tar" tar -zxf "$DOWNLOAD_TGZ" --directory "$SOURCES"
+    exec_and_log "${NAME}" "1_tar" tar -zxf "$download_tgz" --directory "$SOURCES"
     print " done."
   fi
 
@@ -235,19 +263,11 @@ download_extract_install() {
     exit 1
   }
 
-  if [[ -n "$PRE_CONFIG" ]]; then
-    print -n "Preconfiguring..."
-    exec_and_log "${NAME}" "2_preconfig" "$PRE_CONFIG"
-    print " done."
-  fi
-
   for target in $TARGETS; do
     config_make_install $target
 
+    # Reset: cd back to pkg_dir before running next target
     cd $pkg_dir || exit
-
-    # source "${SCRIPTSDIR}/configs/common.sh"
-    # unset_build_configs
   done
 }
 
@@ -260,34 +280,18 @@ main() {
 
   export PATH="$ROOT/bin:$PATH"
 
-  download_extract_install "autoconf"
-  download_extract_install "automake"
-  download_extract_install "pkgconfig"
-  
-  # For some reason, this isn't being made and install of the PC files are failing
-  # if ! [ -d $ROOT/lib/pkgconfig ]; then
-  #   mkdir $ROOT/lib/pkgconfig
-  # fi
+  download_extract_install 'autoconf'
+  download_extract_install 'automake'
+  download_extract_install 'pkgconfig'
+  download_extract_install 'libtool'
+  download_extract_install 'zlib'
 
-  download_extract_install "libtool"
-  download_extract_install "zlib"
-  download_extract_install "libjpeg"
-  download_extract_install "libpng"
-  download_extract_install "libtiff"
-  download_extract_install "leptonica"
-  exit 1
+  download_extract_install 'libjpeg'
+  download_extract_install 'libpng'
+  download_extract_install 'libtiff'
 
-
-  # TESSERACT OCR -- https://github.com/tesseract-ocr/tesseract
-  name=tesseract-4.1.1
-  targz="$name.tar.gz"
-
-  download_extract_install \
-    "https://github.com/tesseract-ocr/tesseract/archive/4.1.1.tar.gz" \
-    "$name" \
-    "$targz" \
-    --pre-config "./autogen.sh" \
-    --ver-pattern "tesseract >= 4.1.1"
+  download_extract_install 'leptonica'
+  download_extract_install 'tesseract'
 }
 
 main

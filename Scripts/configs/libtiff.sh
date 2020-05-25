@@ -6,7 +6,10 @@ export NAME='tiff-4.1.0'
 export TARGZ="$NAME.tar.gz"
 export URL="http://download.osgeo.org/libtiff/$TARGZ"
 export VER_PATTERN='libtiff-4 >= 4.1.0'
-export TARGETS=('ios_arm64' 'ios_x86_64' 'macos_x86_64')
+export LIBNAME='libtiff'
+export IOS_TARGETS=('ios_arm64' 'ios_x86_64')
+export MACOS_TARGETS=('macos_x86_64')
+export TARGETS=($IOS_TARGETS $MACOS_TARGETS)
 
 common() {
   source "${SCRIPTSDIR}/configs/common.sh"
