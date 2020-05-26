@@ -241,7 +241,7 @@ download_extract_install() {
   local download_tgz=$DOWNLOADS/$TARGZ
   local pkg_dir=
 
-  if [ -v DIR_NAME ]; then
+  if ! [ -v DIR_NAME ]; then
     DIR_NAME=$NAME
   fi
 
@@ -282,14 +282,14 @@ download_extract_install() {
 
 main() {
   parse_args ${ARGS[@]}
-
   _status=$?
-  if [ $_status -eq $ABORT_BUILD ]; then
-    return 0
-  fi
-  exit 
+
   if [ -v DEBUG ]; then
     set -x
+  fi
+
+  if [ $_status -eq $ABORT_BUILD ]; then
+    return 0
   fi
 
   export PATH=$ROOT/bin:$PATH
