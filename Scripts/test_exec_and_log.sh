@@ -5,11 +5,11 @@
 # Include unittest positional arg so build.sh doesn't try to build anything
 source build.sh unittest
 
-readonly TMP_DIR=./tmp
-readonly ERR="${TMP_DIR}/err"
-readonly OUT="${TMP_DIR}/out"
+readonly TMP_DIR=./tmp\ dir
+readonly ERR=${TMP_DIR}/err
+readonly OUT=${TMP_DIR}/out
 
-LOG_DIR="${TMP_DIR}/Logs"
+LOG_DIR="${TMP_DIR}/Logs dir"
 
 createTmpDir() {
   if ! [ -d "$TMP_DIR" ]; then
@@ -18,17 +18,17 @@ createTmpDir() {
 }
 
 destroyTmpDir() {
-  if [[ -d "$TMP_DIR" ]]; then
+  if [ -d "$TMP_DIR" ]; then
     rm -rf "$TMP_DIR"
   fi
 }
 
 destroyErrOut() {
-  if [[ -f "$ERR" ]]; then
-    rm "$ERR"
+  if [ -f "$ERR" ]; then
+    rm $ERR
   fi
 
-  if [[ -f "$OUT" ]]; then
+  if [ -f "$OUT" ]; then
     rm "$OUT"
   fi
 }
@@ -46,35 +46,53 @@ testExecAndLogDirectories() {
   assertFalse "Did not expect to find $logdir" "[ -d $logdir ]"
 
   exec_and_log "pkg-foo" "1_touch_bar" touch "${TMP_DIR}/bar" >"$OUT" 2>"$ERR"
-  assertNull "$(cat <$ERR)"
-  assertNull "$(cat <$OUT)"
+  err=$(cat <"$ERR")
+  assertNull "$err"
+  out=$(cat <"$OUT")
+  assertNull "$out"
 
-  assertTrue "Expected to find $logdir" "[ -d $logdir ]"
+  assertTrue "Expected to find $logdir" "[ -d \"$logdir\" ]"
 }
 
 testExecAndLogFailure() {
   exec_and_log "pkg-foo" "2_list_bar" ls "${TMP_DIR}/bar" >"$OUT" 2>"$ERR"
   _status=$?
+  err=$(cat <"$ERR")
+  out=$(cat <"$OUT")
 
   assertEquals "checking return code for bad command;" 1 "$_status"
-  assertContains "$(cat <$ERR)" "ERROR"
-  assertNull "$(cat <$OUT)"
+  assertContains "$err" "ERROR"
+  assertNull "$out"
+
+  exec_err=$(cat "${logdir}/2_list_bar.err")
+  assertContains "checking stderr of bad command;" "$exec_err" "${TMP_DIR}/bar: No such file or directory"
 }
 
 testExecAndLogSuccess() {
   logdir="${LOG_DIR}/pkg-foo"
 
   exec_and_log "pkg-foo" "1_touch_bar" touch "${TMP_DIR}/bar" >"$OUT" 2>"$ERR"
+
   _status=$?
+  err=$(cat <"$ERR")
+  out=$(cat <"$OUT")
 
   assertEquals "checking return code for good command;" 0 "$_status"
-  assertNull "$(cat <$OUT)"
-  assertNull "$(cat <$ERR)"
+  assertNull "Err file for 1_touch_bar not empty" "$err"
+  assertNull "Out file for 1_touch_bar not empty" "$out"
 
   exec_and_log "pkg-foo" "2_list_bar" ls "${TMP_DIR}/bar" >"$OUT" 2>"$ERR"
+
   _status=$?
-  assertContains "$(cat <${logdir}/2_list_bar.out)" "${TMP_DIR}/bar"
-  assertNull "$(cat <$ERR)"
+  err=$(cat <"$ERR")
+  out=$(cat <"$OUT")
+
+  assertEquals "checking return code for good command;" 0 "$_status"
+  assertNull "Err file for 2_list_bar not empty" "$err"
+  assertNull "Out file for 2_list_bar not empty" "$out"
+  
+  exec_out=$(cat "${logdir}/2_list_bar.out")
+  assertContains "$exec_out" "${TMP_DIR}/bar"
 }
 
 setopt shwordsplit

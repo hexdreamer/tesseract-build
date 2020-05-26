@@ -41,9 +41,9 @@ testVarsDoNotAccumulateTargetValues() {
   # The solutiong was chaninging CXXFLAGS_ARR=(CXXFLAGS_ARR CFLAGS) to CXXFLAGS_ARR=(CXXFLAGS CFLAGS).
 
   ALL_ERR_MSGS=()
-  for target in libjpeg libpng libtiff leptonica tesseract
+  for package in libjpeg libpng libtiff leptonica tesseract
   do
-    source configs/${target}.sh
+    source configs/${package}.sh
 
     ERR_MSG=()
 
@@ -96,13 +96,12 @@ testVarsDoNotAccumulateTargetValues() {
     fi
 
     if [ -n "$ERR_MSG" ]; then
-      ERR_MSG=("\n\n$target" $ERR_MSG)
+      ERR_MSG=("\n\n$package" $ERR_MSG)
       ALL_ERR_MSGS=($ALL_ERR_MSGS $ERR_MSG)
     fi
   done
 
   if [ -n "$ALL_ERR_MSGS" ]; then
-
     fail "$ALL_ERR_MSGS\n"
   fi
 }

@@ -33,7 +33,9 @@ exec_and_log() {
 
   local _status=
 
-  if ! [[ -d ${LOG_DIR}/${pkgname} ]]; then
+  # Leaving this group of vars in quotes because shunit2 tests run with
+  # set shwordsplit set, which then requires zsh to quote all paths just like bash
+  if ! [ -d "${LOG_DIR}/${pkgname}" ]; then
     mkdir -p "${LOG_DIR}/${pkgname}"
   fi
 
@@ -54,18 +56,18 @@ config_make_install() {
   # Execute config-function to export variables
   $target
 
-  if [ -n "$VER_PATTERN" ]; then
+  if [ -v VER_PATTERN ]; then
     # Try pkg-config first
     if {
       type pkg-config >/dev/null && 
-      pkg-config --exists "$VER_PATTERN"
+      pkg-config --exists $VER_PATTERN
     }; then
       echo "Skipped, already installed ${PLATFORM_OS}_${ARCH}"
       return 0
     fi
 
     # Try parsing some version-y output directly from program
-    if [[ -n "$VER_COMMAND" ]]; then
+    if [ -v VER_COMMAND ]; then
       s=$(eval "$VER_COMMAND 2>&1")
       if [[ $s == *$VER_PATTERN* ]]; then
         echo "Skipped, already installed"
@@ -74,7 +76,7 @@ config_make_install() {
     fi
   fi
 
-  if [ -v $PRECONFIG ]; then
+  if [ -v PRECONFIG ]; then
     if [ -f .preconfiged ]; then
       echo 'Skipped, already preconfigured'
     else
@@ -96,13 +98,20 @@ config_make_install() {
 
   cd $target || exit
 
+  # Since GNU packages don't define these vars
+  if [[ -v PLATFORM_OS && -v ARCH ]]; then
+    prefix=$ROOT/${PLATFORM_OS}_${ARCH}
+  else
+    prefix=$ROOT
+  fi
+
   print -n 'Configuring...'
   exec_args=(
     $NAME
     "3_${target}_config"
     $CONFIG_CMD
     $CONFIG_FLAGS
-    "--prefix=$ROOT/${PLATFORM_OS}_${ARCH}"
+    "--prefix=$prefix"
   )
   exec_and_log $exec_args
 
@@ -117,11 +126,13 @@ config_make_install() {
   print -n " installing..."
   exec_and_log "${NAME}" "5_${target}_install" make install
   print " done."
-
-  lipo_libs
 }
 
 lipo_libs() {
+  if ! [ -d ${ROOT}/lib ]; then
+    mkdir -p ${ROOT}/lib
+  fi
+
   if [ -v IOS_TARGETS ]; then
     cd $ROOT || exit
     local libs=()
@@ -173,7 +184,7 @@ lipo_libs() {
 
 parse_args() {
   while [[ $# -gt 0 ]]; do
-    case "$1" in
+    case $1 in
       unittest)
         return $ABORT_BUILD
         ;;
@@ -196,20 +207,15 @@ parse_args() {
       -t)
         run_test=true
         ;;
-      build)
-        main
-        exit 0
-        ;;
       clean)
-        if [ -n "$DEBUG" ]; then
+        if [ -v DEBUG ]; then
           printd='-print'
         else
           printd=
         fi
 
-        printd='-print'
-        if [[ -n "$2" ]]; then
-          # find $DOWNLOADS/* -maxdepth 0 -type f -name "*$2*" $printd -exec rm -rf {} \;
+        if [[ -n $2 ]]; then
+          find $DOWNLOADS/* -maxdepth 0 -type f -name "*$2*" $printd -exec rm -rf {} \;
           find $LOG_DIR/*$2* -maxdepth 0 -type d -exec rm -rf {} \;
           find $ROOT -name "*$2*" -prune $printd -exec rm -rf {} \;
           find $SOURCES/*$2* -type d \( -name 'ios_*' -o -name 'macos_*' \) -prune $printd -exec rm -rf {} \;
@@ -228,21 +234,22 @@ parse_args() {
 
 download_extract_install() {
   # shellcheck source=/dev/null
-  source "${SCRIPTSDIR}/configs/${1}.sh"
-  lipo_libs
-  return
+  source ${SCRIPTSDIR}/configs/unset_all.sh
+  # shellcheck source=/dev/null
+  source ${SCRIPTSDIR}/configs/${1}.sh
+
   local download_tgz=$DOWNLOADS/$TARGZ
   local pkg_dir=
 
-  if [ -z "$DIR_NAME" ]; then
+  if [ -v DIR_NAME ]; then
     DIR_NAME=$NAME
   fi
 
-  pkg_dir="$SOURCES/$DIR_NAME"
+  pkg_dir=$SOURCES/$DIR_NAME
 
   print "\n======== $NAME ========"
 
-  if [[ -e "$download_tgz" ]]; then
+  if [ -e $download_tgz ]; then
     echo "Skipped download, using cached $TARGZ in Downloads."
   else
     print -n "Downloading..."
@@ -269,16 +276,23 @@ download_extract_install() {
     # Reset: cd back to pkg_dir before running next target
     cd $pkg_dir || exit
   done
+
+  lipo_libs
 }
 
 main() {
-  parse_args "${ARGS[@]}"
+  parse_args ${ARGS[@]}
+
   _status=$?
-  if [[ _status -eq $ABORT_BUILD ]]; then
+  if [ $_status -eq $ABORT_BUILD ]; then
     return 0
   fi
+  exit 
+  if [ -v DEBUG ]; then
+    set -x
+  fi
 
-  export PATH="$ROOT/bin:$PATH"
+  export PATH=$ROOT/bin:$PATH
 
   download_extract_install 'autoconf'
   download_extract_install 'automake'

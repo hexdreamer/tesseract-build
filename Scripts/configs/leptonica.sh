@@ -56,9 +56,6 @@ common() {
 
   export LIBS='-lz -lpng -ljpeg -ltiff'
 
-  # Commenting out because previous experience w/PKG_CONFIG_PATH showed it was unnecessary
-  # export PKG_CONFIG_PATH={ROOT}/libpng-1.6.36/$TARGET/:{ROOT}/jpeg-9c/$TARGET/:{ROOT}/tiff-4.0.10/$TARGET/
-
   export CONFIG_CMD='../configure'
   export PRECONFIG='./autogen.sh'
 }
