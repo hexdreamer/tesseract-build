@@ -18,6 +18,20 @@ err() {
   echo "ERROR $*" >&2
 }
 
+_exec() {
+  if ! [ -d "${LOG_DIR}" ]; then
+    mkdir -p "${LOG_DIR}"
+  fi
+
+  $@
+  _status=$?
+  if [ $_status -ne 0 ]; then
+    err "running" $@
+    return $_status
+  fi
+  echo $@ >> ${LOG_DIR}/commands.sh
+}
+
 exec_and_log() {
   # Try and execute a named step in the build process, and
   # log its stdout and stderr.
@@ -42,8 +56,8 @@ exec_and_log() {
   "${@:3}" >"$log_out" 2>"$log_err"
   _status=$?
   if [ $_status -ne 0 ]; then
-    err "runing" "${@:3}" >&2
-    err "see $log_err for more details" >&2
+    err "running" "${@:3}"
+    err "see $log_err for more details"
     return "$_status"
   fi
 

@@ -5,11 +5,11 @@
 # Include unittest positional arg so build.sh doesn't try to build anything
 source build.sh unittest
 
-readonly TMP_DIR=./tmp\ dir
+readonly TMP_DIR=./tmp
 readonly ERR=${TMP_DIR}/err
 readonly OUT=${TMP_DIR}/out
 
-LOG_DIR="${TMP_DIR}/Logs dir"
+LOG_DIR="${TMP_DIR}/Logs"
 
 createTmpDir() {
   if ! [ -d "$TMP_DIR" ]; then

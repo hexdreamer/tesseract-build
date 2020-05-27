@@ -1,17 +1,8 @@
-# Shells
+# Overview
 
-## TODOs
+Scripts are written for zsh.  The unittest framework **shunit2** is written in bash and has some specific requirements to integrate zsh scripts.  These requirements can be found at the bottom of the **test_*.sh** files.
 
-- [x] **Vet script with `-f` in shebang:**  make sure local env does not affect build; thinking specifically of how `find` might perform if someone has GNU find installed
-- [ ] **Add pre-commit hook:** to prevent committing build.sh with bash in the shebang
-- [x] **Post-build validation:** just realized my grand-it's-finally-building build and e-mail to Kenny was for a broken build of Tesseract, because I had passed the `export LEPTONICA...` flags quoted, along with `./autogen.sh`, so the entire config-install step silently failed
-  - [x] **Don't let steps silently fail!:** check exit status of every step along the way
-
-- [x] Convert to caps for Sources, Root, Scripts
-- [x] Log directory, logs for each component autoconf2.49-config.log, -make.log
-- [] iOS target for Leptonica and image libs, as well as Tesseract
-      .c --> .o linked into .a/exec; .so sharedlibrary (framework) not for us
-- [x] Thinking about unit tests
+Use **run_tests.sh** to run all tests.
 
 ## zsh
 
