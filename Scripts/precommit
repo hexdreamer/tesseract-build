@@ -70,6 +70,7 @@ main() {
     done
   done
 
+  export SHUNIT_COLOR=none
   _errs=$(${_SCRIPTSDIR}/run_tests.sh)
   _status=$?
   if [ $_status -ne 0 ]; then

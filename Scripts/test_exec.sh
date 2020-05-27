@@ -63,7 +63,6 @@ EOF
     assertEquals "$(tar -tf foo.tar.original)" "$(tar -tf foo.tar)"
     
     rm _commands.sh foo.tar foo.tar.original
-    fail
 }
 
 
