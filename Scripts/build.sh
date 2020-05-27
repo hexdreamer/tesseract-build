@@ -12,6 +12,7 @@ readonly ROOT=$PROJECTDIR/Root
 readonly SOURCES=$PROJECTDIR/Sources
 
 LOG_DIR="$PROJECTDIR/Logs"
+MASTER_CMDS="${LOG_DIR}/commands.sh"
 
 err() {
   # $(date +"%y/%m/%d-%H:%M:%S")
@@ -29,7 +30,15 @@ _exec() {
     err "running" $@
     return $_status
   fi
-  echo $@ >> ${LOG_DIR}/commands.sh
+
+  if [ ${@[1]} = 'source' ]; then
+    cat ${@[2]} >> $MASTER_CMDS
+    echo '' >> $MASTER_CMDS
+  else
+    echo $@ >> $MASTER_CMDS
+  fi
+
+  return 0
 }
 
 exec_and_log() {
@@ -60,7 +69,9 @@ exec_and_log() {
     err "see $log_err for more details"
     return "$_status"
   fi
-
+  
+  echo "${@:3}" >> $MASTER_CMDS
+  
   return 0
 }
 
@@ -68,7 +79,7 @@ config_make_install() {
   local target=$1
 
   # Execute config-function to export variables
-  $target
+  _exec $target
 
   if [ -v VER_PATTERN ]; then
     # Try pkg-config first
@@ -100,17 +111,17 @@ config_make_install() {
         exit 1
       fi
       print " done."
-      touch .preconfiged
+      _exec touch .preconfiged
     fi
   fi
   
   print -n "$target "
 
   if ! [ -d $target ]; then
-    mkdir $target
+    _exec mkdir $target
   fi
 
-  cd $target || exit
+  _exec cd $target
 
   # Since GNU packages don't define these vars
   if [[ -v PLATFORM_OS && -v ARCH ]]; then
@@ -232,7 +243,7 @@ parse_args() {
           find $DOWNLOADS/* -maxdepth 0 -type f -name "*$2*" $printd -exec rm -rf {} \;
           find $LOG_DIR/*$2* -maxdepth 0 -type d -exec rm -rf {} \;
           find $ROOT -name "*$2*" -prune $printd -exec rm -rf {} \;
-          find $SOURCES/*$2* -type d \( -name 'ios_*' -o -name 'macos_*' \) -prune $printd -exec rm -rf {} \;
+          find $SOURCES/*$2* -type d -prune $printd -exec rm -rf {} \;
         else
           find $DOWNLOADS/* -maxdepth 0 \( -name '*.tar.gz' -o -name '*.zip' \) $printd -exec rm -rf {} \;
           find $ROOT/* -maxdepth 0 -type d $printd -exec rm -rf {} \;
@@ -248,9 +259,9 @@ parse_args() {
 
 download_extract_install() {
   # shellcheck source=/dev/null
-  source ${SCRIPTSDIR}/configs/unset_all.sh
+  _exec source ${SCRIPTSDIR}/configs/unset_all.sh
   # shellcheck source=/dev/null
-  source ${SCRIPTSDIR}/configs/${1}.sh
+  _exec source ${SCRIPTSDIR}/configs/${1}.sh
 
   local download_tgz=$DOWNLOADS/$TARGZ
   local pkg_dir=
@@ -279,16 +290,13 @@ download_extract_install() {
     print " done."
   fi
 
-  cd  $pkg_dir || {
-    err "Failed to cd to $pkg_dir"
-    exit 1
-  }
+  _exec cd $pkg_dir
 
   for target in $TARGETS; do
     config_make_install $target
 
     # Reset: cd back to pkg_dir before running next target
-    cd $pkg_dir || exit
+    _exec cd $pkg_dir
   done
 
   lipo_libs
@@ -308,7 +316,12 @@ main() {
 
   export PATH=$ROOT/bin:$PATH
 
+  echo "# --- $(date +"%Y/%m/%d-%H:%M:%S") ---" > $MASTER_CMDS
+
   download_extract_install 'autoconf'
+
+  exit
+
   download_extract_install 'automake'
   download_extract_install 'pkgconfig'
   download_extract_install 'libtool'

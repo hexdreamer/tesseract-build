@@ -28,6 +28,15 @@ disable=SC2107
 #
 disable=SC2128
 
+# SC2198: zsh allows direct indexing of arrays
+#
+#  From the ZSH Guide:
+#
+#  > Try:
+#  > foo=(’first element’ ’second element’) print -- ${foo[2]}
+#
+disable=SC2198
+
 # SC2206: zsh has different array semantics
 #
 #  I use this to build up parameters with arrays:

@@ -9,6 +9,7 @@ readonly _PROGNAME=$0:A
 readonly _SCRIPTSDIR=${_PROGNAME%/test_exec.sh}
 readonly TMP_DIR=${_SCRIPTSDIR}/tmp
 LOG_DIR="${TMP_DIR}/Logs"
+MASTER_CMDS="${LOG_DIR}/master_commands.sh"
 
 createTmpDir() {
   if ! [ -d "$TMP_DIR" ]; then
@@ -55,10 +56,10 @@ EOF
     _exec tar -cf foo.tar foo
     _exec rm -rf foo
 
-    assertTrue "Commands are not equal" "cmp ${LOG_DIR}/commands.sh _commands.sh"
+    assertTrue "Commands are not equal" "cmp $MASTER_CMDS _commands.sh"
 
     mv foo.tar foo.tar.original
-    zsh ${LOG_DIR}/commands.sh
+    zsh $MASTER_CMDS
 
     assertEquals "$(tar -tf foo.tar.original)" "$(tar -tf foo.tar)"
     
