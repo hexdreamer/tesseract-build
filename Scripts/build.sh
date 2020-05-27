@@ -159,7 +159,6 @@ lipo_libs() {
   fi
 
   if [ -v IOS_TARGETS ]; then
-    cd $ROOT || exit
     local libs=()
     for ios_target in $IOS_TARGETS
     do
@@ -178,15 +177,14 @@ lipo_libs() {
     )
 
     print -n 'Lipo-ing iOS libs...'
+    _exec cd $ROOT
     exec_and_log $xcrun_args
     print ' done.'
   fi
 
   if [ -v MACOS_TARGETS ]; then
-    cd $ROOT || exit
     local libs=()
     for macos_target in $MACOS_TARGETS
-
     do
       libs=($libs $macos_target/lib/${LIBNAME}.a)
     done
@@ -202,6 +200,7 @@ lipo_libs() {
     )
 
     print -n 'Lipo-ing macOS libs...'
+    _exec cd $ROOT
     exec_and_log $xcrun_args
     print ' done.'
   fi
@@ -319,9 +318,6 @@ main() {
   echo "# --- $(date +"%Y/%m/%d-%H:%M:%S") ---" > $MASTER_CMDS
 
   download_extract_install 'autoconf'
-
-  exit
-
   download_extract_install 'automake'
   download_extract_install 'pkgconfig'
   download_extract_install 'libtool'
