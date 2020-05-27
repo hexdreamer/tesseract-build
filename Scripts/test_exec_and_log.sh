@@ -1,11 +1,12 @@
 #! /bin/zsh
 
-# Tried doing it the right way, `shellcheck source=build.sh`, but still got error
-# shellcheck disable=SC1091
-# Include unittest positional arg so build.sh doesn't try to build anything
-source build.sh unittest
+readonly _PROGNAME=$0:A
+readonly _SCRIPTSDIR=${_PROGNAME%/test_exec_and_log.sh}
+readonly TMP_DIR=${_SCRIPTSDIR}/tmp
 
-readonly TMP_DIR=./tmp
+# shellcheck disable=SC1091
+source ${_SCRIPTSDIR}/build.sh unittest
+
 readonly ERR=${TMP_DIR}/err
 readonly OUT=${TMP_DIR}/out
 
@@ -99,4 +100,4 @@ setopt shwordsplit
 export SHUNIT_PARENT=$0
 
 # shellcheck disable=SC1091
-source shunit2/shunit2
+source ${_SCRIPTSDIR}/shunit2/shunit2

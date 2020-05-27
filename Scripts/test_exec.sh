@@ -1,13 +1,12 @@
 #! /bin/zsh
 
-
-# shellcheck disable=SC1091
-# Include unittest positional arg so build.sh doesn't try to build anything
-source build.sh unittest
-
 readonly _PROGNAME=$0:A
 readonly _SCRIPTSDIR=${_PROGNAME%/test_exec.sh}
 readonly TMP_DIR=${_SCRIPTSDIR}/tmp
+
+# shellcheck disable=SC1091
+source ${_SCRIPTSDIR}/build.sh unittest
+
 LOG_DIR="${TMP_DIR}/Logs"
 MASTER_CMDS="${LOG_DIR}/master_commands.sh"
 
@@ -64,7 +63,6 @@ EOF
     assertEquals "$(tar -tf foo.tar.original)" "$(tar -tf foo.tar)"
     
     rm _commands.sh foo.tar foo.tar.original
-    fail
 }
 
 
@@ -72,4 +70,4 @@ setopt shwordsplit
 export SHUNIT_PARENT=$0
 
 # shellcheck disable=SC1091
-source shunit2/shunit2
+source ${_SCRIPTSDIR}/shunit2/shunit2

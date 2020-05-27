@@ -1,7 +1,7 @@
 #! /bin/zsh
 
-# readonly PROGNAME=$0:A
-# readonly SCRIPTSDIR=${PROGNAME%/precommit}
+readonly _PROGNAME=$0:A
+readonly _SCRIPTSDIR=${_PROGNAME%/precommit}
 
 checkFile() {
   local fname=$1
@@ -70,18 +70,17 @@ main() {
     done
   done
 
-  # cd $SCRIPTSDIR || echo "Couldn't cd to $SCRIPTSDIR" && exit 1
-  # _errs=$(./run_tests.sh)
-  # _status=$?
-  # if [ $_status -ne 0 ]; then
-  #   local msg=
-  #   msg=$(print_errors "$_errs")
-  #   if [ "$errs" = "" ]; then
-  #     errs="$msg"
-  #   else
-  #     errs="$errs\n$msg"
-  #   fi
-  # fi
+  _errs=$(${_SCRIPTSDIR}/run_tests.sh)
+  _status=$?
+  if [ $_status -ne 0 ]; then
+    local msg=
+    msg=$(print_errors "$_errs")
+    if [ "$errs" = "" ]; then
+      errs="$msg"
+    else
+      errs="$errs\n$msg"
+    fi
+  fi
 
   if [ "$errs" != "" ]; then
     echo "$errs"

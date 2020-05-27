@@ -1,9 +1,10 @@
 #! /bin/zsh
 
-# Tried doing it the right way, `shellcheck source=build.sh`, but still got error
+readonly _PROGNAME=$0:A
+readonly _SCRIPTSDIR=${_PROGNAME%/test_configs.sh}
+
 # shellcheck disable=SC1091
-# Include unittest positional arg so build.sh doesn't try to build anything
-source build.sh unittest
+source ${_SCRIPTSDIR}/build.sh unittest
 
 _assertContains() {
   if echo $1 |grep -F -- $2 >/dev/null; then
@@ -43,7 +44,7 @@ testVarsDoNotAccumulateTargetValues() {
   ALL_ERR_MSGS=()
   for package in libjpeg libpng libtiff leptonica tesseract
   do
-    source configs/${package}.sh
+    source ${_SCRIPTSDIR}/configs/${package}.sh
 
     ERR_MSG=()
 
@@ -110,4 +111,4 @@ setopt shwordsplit
 export SHUNIT_PARENT=$0
 
 # shellcheck disable=SC1091
-source shunit2/shunit2
+source ${_SCRIPTSDIR}/shunit2/shunit2
