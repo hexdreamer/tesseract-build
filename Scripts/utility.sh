@@ -137,3 +137,6 @@ is_installed() {
   fi
 
 }
+
+alias xc=_exec
+alias xl=exec_and_log

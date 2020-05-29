@@ -26,7 +26,7 @@ if [ -e $DOWNLOADS/$targz ]; then
 else
   print -n 'Downloading...'
   url="https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/$targz/download"
-  exec_and_log $name '0_curl' curl -L -f $url --output $DOWNLOADS/$targz
+  xl $name '0_curl' curl -L -f $url --output $DOWNLOADS/$targz
   print ' done.'
 fi
 
@@ -35,7 +35,7 @@ if [ -d $SOURCES/$name ]; then
   echo "Skipped extract of TGZ, using cached $name in Sources."
 else
   print -n 'Extracting...'
-  exec_and_log $name '1_untar' tar -zxf $DOWNLOADS/$targz --directory $SOURCES
+  xl $name '1_untar' tar -zxf $DOWNLOADS/$targz --directory $SOURCES
   print ' done.'
 fi
 
@@ -70,8 +70,8 @@ config_flags=(
   '--enable-shared=no'
 )
 
-_exec mkdir -p $SOURCES/$name/ios_arm64
-_exec cd $SOURCES/$name/ios_arm64
+xc mkdir -p $SOURCES/$name/ios_arm64
+xc cd $SOURCES/$name/ios_arm64
 
 print -n 'ios_arm64: '
 
@@ -81,15 +81,16 @@ configure=(
   $config_flags
   "--prefix=$ROOT/ios_arm64"
 )
-exec_and_log $name '2_config_ios_arm64' $configure || exit 1
+xl $name '2_config_ios_arm64' $configure || exit 1
 print -n 'done, '
 
 print -n 'making... '
-exec_and_log $name '3_make_ios_arm64' make || exit 1
+xl $name '3_clean_ios_arm64' make clean || exit 1
+xl $name '3_make_ios_arm64' make || exit 1
 print -n 'done, '
 
 print -n 'installing... '
-exec_and_log $name '4_install_ios_arm64' make install || exit 1
+xl $name '4_install_ios_arm64' make install || exit 1
 print 'done.'
 
 # --  ios_x86_64  --------------------------------------------------------------
@@ -123,8 +124,8 @@ config_flags=(
   '--enable-shared=no'
 )
 
-_exec mkdir -p $SOURCES/$name/ios_x86_64
-_exec cd $SOURCES/$name/ios_x86_64
+xc mkdir -p $SOURCES/$name/ios_x86_64
+xc cd $SOURCES/$name/ios_x86_64
 
 print -n 'ios_x86_64: '
 
@@ -134,15 +135,16 @@ configure=(
   $config_flags
   "--prefix=$ROOT/ios_x86_64"
 )
-exec_and_log $name '2_config_ios_x86_64' $configure || exit 1
+xl $name '2_config_ios_x86_64' $configure || exit 1
 print -n 'done, '
 
 print -n 'making... '
-exec_and_log $name '3_make_ios_x86_64' make || exit 1
+xl $name '3_clean_ios_x86_64' make clean || exit 1
+xl $name '3_make_ios_x86_64' make || exit 1
 print -n 'done, '
 
 print -n 'installing... '
-exec_and_log $name '4_install_ios_x86_64' make install || exit 1
+xl $name '4_install_ios_x86_64' make install || exit 1
 print 'done.'
 
 # --  macos_x86_64  --------------------------------------------------------------
@@ -169,15 +171,15 @@ config_flags=(
   CFLAGS="$cflags_arr"
   CPPFLAGS="$cflags_arr"
   CXXFLAGS="$cflags_arr -Wno-deprecated-register"
-  LDFLAGS=-L/Applications/Xcode.app/Contents/Developer/Platforms/$platform/usr/lib/
-  PKG_CONFIG_PATH=$ROOT/macos_x86_64/lib/pkgconfig
+  LDFLAGS="-L/Applications/Xcode.app/Contents/Developer/Platforms/$platform/usr/lib/"
+  PKG_CONFIG_PATH="$ROOT/macos_x86_64/lib/pkgconfig"
   \
   "--host=$target"
   '--enable-shared=no'
 )
 
-_exec mkdir -p $SOURCES/$name/macos_x86_64
-_exec cd $SOURCES/$name/macos_x86_64
+xc mkdir -p $SOURCES/$name/macos_x86_64
+xc cd $SOURCES/$name/macos_x86_64
 
 print -n 'macos_x86_64: '
 
@@ -187,35 +189,36 @@ configure=(
   $config_flags
   "--prefix=$ROOT/macos_x86_64"
 )
-exec_and_log $name '2_config_macos_x86_64' $configure || exit 1
+xl $name '2_config_macos_x86_64' $configure || exit 1
 print -n 'done, '
 
 print -n 'making... '
-exec_and_log $name '3_make_macos_x86_64' make || exit 1
+xl $name '3_clean_macos_x86_64' make clean || exit 1
+xl $name '3_make_macos_x86_64' make || exit 1
 print -n 'done, '
 
 print -n 'installing... '
-exec_and_log $name '4_install_macos_x86_64' make install || exit 1
+xl $name '4_install_macos_x86_64' make install || exit 1
 print 'done.'
 
 # --  Lipo  -------------------------------------------------------------------
-_exec mkdir -p $ROOT/lib
+xc mkdir -p $ROOT/lib
 
 print -n 'lipo: ios... '
-exec_and_log $name '6_ios_lipo' \
+xl $name '6_ios_lipo' \
   xcrun lipo $ROOT/ios_arm64/lib/libpng16.a $ROOT/ios_x86_64/lib/libpng16.a \
   -create -output $ROOT/lib/libpng16.a
 
-_exec cd $ROOT/lib
-_exec ln -fs libpng16.a libpng.a
+xc cd $ROOT/lib
+xc ln -fs libpng16.a libpng.a
 
 print 'done.'
 
 print -n 'lipo: macos... '
-exec_and_log $name '7_macos_lipo' \
+xl $name '7_macos_lipo' \
   xcrun lipo $ROOT/macos_x86_64/lib/libpng16.a \
   -create -output $ROOT/lib/libpng16-macos.a
 
-_exec cd $ROOT/lib
-_exec ln -fs libpng16-macos.a libpng-macos.a
+xc cd $ROOT/lib
+xc ln -fs libpng16-macos.a libpng-macos.a
 print 'done.'
