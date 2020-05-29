@@ -15,7 +15,6 @@ if ! source $SCRIPTSDIR/utility.sh; then
 fi
 
 local name='libpng-1.6.37'
-# local ver_pattern='libpng >= 1.6.37'
 
 print "\n======== $name ========"
 
@@ -210,3 +209,6 @@ xl $name '5_macos_lipo' \
 xc cd $ROOT/lib
 xc ln -fs libpng16-macos.a libpng-macos.a
 print 'done.'
+
+# For visually validating arch-target vars
+# grep -E ^arch=\|^target=\|^platform.\*= build_libpng.sh

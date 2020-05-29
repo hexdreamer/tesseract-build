@@ -17,8 +17,7 @@ scriptsdir=${scriptname%/build_all.sh}
 
 zsh $scriptsdir/build_libjpeg.sh
 zsh $scriptsdir/build_libpng.sh
-
-# download_extract_install 'libtiff'
+zsh $scriptsdir/build_libtiff.sh
 
 # download_extract_install 'leptonica'
 # download_extract_install 'tesseract'
