@@ -1,21 +1,21 @@
-#! /bin/zsh -f
+#!/bin/zsh -f
 
-# LIBPNG -- http://www.libpng.org/pub/png/libpng.html
+# LIBJPEG -- http://ijg.org/
 
 scriptname=$0:A
-parentdir=${scriptname%/build_libpng.sh}
+parentdir=${scriptname%/build_libjpeg.sh}
 if ! source $parentdir/project_environment.sh; then
-  echo "build_libpng.sh: error sourcing $parentdir/project_environment.sh"
+  echo "build_libjpeg.sh: error sourcing $parentdir/project_environment.sh"
   exit 1
 fi
 
 if ! source $SCRIPTSDIR/utility.sh; then
-  echo "build_libpng.sh: error sourcing $SCRIPTSDIR/project_environment.sh"
+  echo "build_libjpeg.sh: error sourcing $SCRIPTSDIR/project_environment.sh"
   exit 1
 fi
 
-local name='libpng-1.6.37'
-# local ver_pattern='libpng >= 1.6.37'
+local name='jpegsrc.v9d'
+# local ver_pattern='libjpeg >= 9.4.0'
 
 print "\n======== $name ========"
 
@@ -25,13 +25,16 @@ if [ -e $DOWNLOADS/$targz ]; then
   echo "Skipped download, using cached $targz in Downloads."
 else
   print -n 'Downloading...'
-  url="https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/$targz/download"
+  url="http://www.ijg.org/files/$targz"
   xl $name '0_curl' curl -L -f $url --output $DOWNLOADS/$targz
   print ' done.'
 fi
 
+# libjpeg is extracted to a directory named differently than its package name
+local dir_name='jpeg-9d'
+
 # Being respectful of any hacking/work done to get a package to build
-if [ -d $SOURCES/$name ]; then
+if [ -d $SOURCES/$dir_name ]; then
   echo "Skipped extract of TGZ, using cached $name in Sources."
 else
   print -n 'Extracting...'
@@ -71,8 +74,8 @@ config_flags=(
   "--prefix=$ROOT/ios_arm64"
 )
 
-xc mkdir -p $SOURCES/$name/ios_arm64
-xc cd $SOURCES/$name/ios_arm64
+xc mkdir -p $SOURCES/$dir_name/ios_arm64
+xc cd $SOURCES/$dir_name/ios_arm64
 
 print -n 'ios_arm64: '
 
@@ -121,8 +124,8 @@ config_flags=(
   "--prefix=$ROOT/ios_x86_64"
 )
 
-xc mkdir -p $SOURCES/$name/ios_x86_64
-xc cd $SOURCES/$name/ios_x86_64
+xc mkdir -p $SOURCES/$dir_name/ios_x86_64
+xc cd $SOURCES/$dir_name/ios_x86_64
 
 print -n 'ios_x86_64: '
 
@@ -171,8 +174,8 @@ config_flags=(
   "--prefix=$ROOT/macos_x86_64"
 )
 
-xc mkdir -p $SOURCES/$name/macos_x86_64
-xc cd $SOURCES/$name/macos_x86_64
+xc mkdir -p $SOURCES/$dir_name/macos_x86_64
+xc cd $SOURCES/$dir_name/macos_x86_64
 
 print -n 'macos_x86_64: '
 
@@ -194,19 +197,12 @@ xc mkdir -p $ROOT/lib
 
 print -n 'lipo: ios... '
 xl $name '5_ios_lipo' \
-  xcrun lipo $ROOT/ios_arm64/lib/libpng16.a $ROOT/ios_x86_64/lib/libpng16.a \
-    -create -output $ROOT/lib/libpng16.a
-
-xc cd $ROOT/lib
-xc ln -fs libpng16.a libpng.a
-
+  xcrun lipo $ROOT/ios_arm64/lib/libjpeg.a $ROOT/ios_x86_64/lib/libjpeg.a \
+    -create -output $ROOT/lib/libjpeg.a
 print 'done.'
 
 print -n 'lipo: macos... '
 xl $name '5_macos_lipo' \
-  xcrun lipo $ROOT/macos_x86_64/lib/libpng16.a \
-    -create -output $ROOT/lib/libpng16-macos.a
-
-xc cd $ROOT/lib
-xc ln -fs libpng16-macos.a libpng-macos.a
+  xcrun lipo $ROOT/macos_x86_64/lib/libjpeg.a \
+    -create -output $ROOT/lib/libjpeg-macos.a
 print 'done.'
