@@ -49,10 +49,18 @@ main() {
   # Redirect output to stderr.
   exec 1>&2
 
+  files_to_check=(
+    Scripts/build.sh
+    Scripts/test_configs.sh
+    Scripts/test_exec_and_log.sh
+    Scripts/test_exec.sh
+    Scripts/precommit
+  )
+
   local errs=
   for fname in $(git diff --cached --name-only "$against");
     do
-    for i in Scripts/build.sh Scripts/test.sh Scripts/precommit;
+    for i in $files_to_check;
       do
       if [ "$fname" = "$i" ]; then
         local _errs=
