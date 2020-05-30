@@ -1,21 +1,20 @@
 #!/bin/zsh -f
 
-# LIBTIFF -- https://gitlab.com/libtiff/libtiff
+# LEPTONICA -- https://github.com/DanBloomberg/leptonica
 
 scriptname=$0:A
-parentdir=${scriptname%/build_libtiff.sh}
+parentdir=${scriptname%/build_leptonica.sh}
 if ! source $parentdir/project_environment.sh; then
-  echo "build_libtiff.sh: error sourcing $parentdir/project_environment.sh"
+  echo "build_leptonica.sh: error sourcing $parentdir/project_environment.sh"
   exit 1
 fi
 
 if ! source $SCRIPTSDIR/utility.sh; then
-  echo "build_libtiff.sh: error sourcing $SCRIPTSDIR/utility.sh"
+  echo "build_leptonica.sh: error sourcing $SCRIPTSDIR/utility.sh"
   exit 1
 fi
 
-local name='tiff-4.1.0'
-
+local name='leptonica-1.79.0'
 print "\n======== $name ========"
 
 # Being respectful of hosts and their bandwidth
@@ -24,7 +23,7 @@ if [ -e $DOWNLOADS/$targz ]; then
   echo "Skipped download, using cached $targz in Downloads."
 else
   print -n 'Downloading...'
-  url="http://download.osgeo.org/libtiff/$targz"
+  url="https://github.com/danbloomberg/leptonica/releases/download/1.79.0/$targz"
   xl $name '0_curl' curl -L -f $url --output $DOWNLOADS/$targz
   print ' done.'
 fi
@@ -38,16 +37,20 @@ else
   print ' done.'
 fi
 
+xc cd $SOURCES/$name
+
+xl $name '2_preconfig' ./autogen.sh || exit 1
+
 # --  ios_arm64  --------------------------------------------------------------
 print -n 'ios_arm64: '
 
 export PKG_CONFIG_PATH=$ROOT/ios_arm64/lib/pkgconfig
 if {
-  pkg-config --exists --print-errors 'libtiff-4 >= 4.1.0' &&
-    [ -f $ROOT/ios_arm64/lib/libtiff.a ]
+  pkg-config --exists --print-errors 'lept >= 1.79.0' &&
+    [ -f $ROOT/ios_arm64/lib/liblept.a ]
 }; then
 
-  print 'skipped config/make/install, found ROOT/ios_arm64/lib/libtiff.a'
+  print 'skipped config/make/install, found ROOT/ios_arm64/lib/liblept.a'
 
 else
 
@@ -59,6 +62,7 @@ else
   cflags=(
     "-arch $arch"
     "-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/$platform"
+    "-I$ROOT/ios_arm64/include"
     $platform_min_version
     "--target=$target"
     \
@@ -71,35 +75,41 @@ else
   config_flags=(
     CC="$(xcode-select -p)/usr/bin/gcc"
     CXX="$(xcode-select -p)/usr/bin/g++"
+    CXX_FOR_BUILD="$(xcode-select -p)/usr/bin/g++"
     CFLAGS="$cflags"
     CPPFLAGS="$cflags"
     CXXFLAGS="$cflags -Wno-deprecated-register"
-    LDFLAGS="-L/Applications/Xcode.app/Contents/Developer/Platforms/$platform/usr/lib/"
+    LDFLAGS="-L$ROOT/ios_arm64/lib -L/Applications/Xcode.app/Contents/Developer/Platforms/$platform/usr/lib/"
+    LIBS='-lz -lpng -ljpeg -ltiff'
     PKG_CONFIG_PATH="$ROOT/ios_arm64/lib/pkgconfig"
     \
-    '--enable-fast-install'
-    '--enable-shared=no'
     "--host=$target"
     "--prefix=$ROOT/ios_arm64"
-    "--with-jpeg-include-dir=$ROOT/ios_arm64/include"
-    "--with-jpeg-lib-dir=$ROOT/ios_arm64/lib"
-    '--without-x'
+    \
+    '--disable-programs'
+    '--enable-shared=no'
+    '--with-jpeg'
+    '--with-libpng'
+    '--with-libtiff'
+    '--with-zlib'
+    '--without-giflib'
+    '--without-libwebp'
   )
 
   xc mkdir -p $SOURCES/$name/ios_arm64
   xc cd $SOURCES/$name/ios_arm64
 
   print -n 'configuring... '
-  xl $name '2_config_ios_arm64' ../configure $config_flags || exit 1
+  xl $name '3_config_ios_arm64' ../configure $config_flags || exit 1
   print -n 'done, '
 
   print -n 'making... '
-  xl $name '3_clean_ios_arm64' make clean || exit 1
-  xl $name '3_make_ios_arm64' make || exit 1
+  xl $name '4_clean_ios_arm64' make clean || exit 1
+  xl $name '4_make_ios_arm64' make || exit 1
   print -n 'done, '
 
   print -n 'installing... '
-  xl $name '4_install_ios_arm64' make install || exit 1
+  xl $name '5_install_ios_arm64' make install || exit 1
   print 'done.'
 fi
 
@@ -108,11 +118,11 @@ print -n 'ios_x86_64: '
 
 export PKG_CONFIG_PATH=$ROOT/ios_x86_64/lib/pkgconfig
 if {
-  pkg-config --exists --print-errors 'libtiff-4 >= 4.1.0' &&
-    [ -f $ROOT/ios_x86_64/lib/libtiff.a ]
+  pkg-config --exists --print-errors 'lept >= 1.79.0' &&
+    [ -f $ROOT/ios_x86_64/lib/liblept.a ]
 }; then
 
-  print 'skipped config/make/install, found ROOT/ios_x86_64/lib/libtiff.a'
+  print 'skipped config/make/install, found ROOT/ios_x86_64/lib/liblept.a'
 
 else
 
@@ -124,6 +134,7 @@ else
   cflags=(
     "-arch $arch"
     "-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/$platform"
+    "-I$ROOT/ios_x86_64/include"
     $platform_min_version
     "--target=$target"
     \
@@ -136,36 +147,41 @@ else
   config_flags=(
     CC="$(xcode-select -p)/usr/bin/gcc"
     CXX="$(xcode-select -p)/usr/bin/g++"
+    CXX_FOR_BUILD="$(xcode-select -p)/usr/bin/g++"
     CFLAGS="$cflags"
     CPPFLAGS="$cflags"
     CXXFLAGS="$cflags -Wno-deprecated-register"
-    LDFLAGS="-L/Applications/Xcode.app/Contents/Developer/Platforms/$platform/usr/lib/"
+    LDFLAGS="-L$ROOT/ios_x86_64/lib -L/Applications/Xcode.app/Contents/Developer/Platforms/$platform/usr/lib/"
+    LIBS='-lz -lpng -ljpeg -ltiff'
     PKG_CONFIG_PATH="$ROOT/ios_x86_64/lib/pkgconfig"
     \
-    '--enable-fast-install'
-    '--enable-shared=no'
     "--host=$target"
     "--prefix=$ROOT/ios_x86_64"
-    "--with-jpeg-include-dir=$ROOT/ios_x86_64/include"
-    "--with-jpeg-lib-dir=$ROOT/ios_x86_64/lib"
-    '--without-x'
+    \
+    '--disable-programs'
+    '--enable-shared=no'
+    '--with-jpeg'
+    '--with-libpng'
+    '--with-libtiff'
+    '--with-zlib'
+    '--without-giflib'
+    '--without-libwebp'
   )
 
   xc mkdir -p $SOURCES/$name/ios_x86_64
   xc cd $SOURCES/$name/ios_x86_64
 
-
   print -n 'configuring... '
-  xl $name '2_config_ios_x86_64' ../configure $config_flags || exit 1
+  xl $name '3_config_ios_x86_64' ../configure $config_flags || exit 1
   print -n 'done, '
 
   print -n 'making... '
-  xl $name '3_clean_ios_x86_64' make clean || exit 1
-  xl $name '3_make_ios_x86_64' make || exit 1
+  xl $name '4_clean_ios_x86_64' make clean || exit 1
+  xl $name '4_make_ios_x86_64' make || exit 1
   print -n 'done, '
 
   print -n 'installing... '
-  xl $name '4_install_ios_x86_64' make install || exit 1
+  xl $name '5_install_ios_x86_64' make install || exit 1
   print 'done.'
 fi
 
@@ -174,11 +190,11 @@ print -n 'macos_x86_64: '
 
 export PKG_CONFIG_PATH=$ROOT/macos_x86_64/lib/pkgconfig
 if {
-  pkg-config --exists --print-errors 'libtiff-4 >= 4.1.0' &&
-    [ -f $ROOT/macos_x86_64/lib/libtiff.a ]
+  pkg-config --exists --print-errors 'lept >= 1.79.0' &&
+    [ -f $ROOT/macos_x86_64/lib/liblept.a ]
 }; then
 
-  print 'skipped config/make/install, found ROOT/macos_x86_64/lib/libtiff.a'
+  print 'skipped config/make/install, found ROOT/macos_x86_64/lib/liblept.a'
 
 else
 
@@ -190,6 +206,7 @@ else
   cflags=(
     "-arch $arch"
     "-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/$platform"
+    "-I$ROOT/macos_x86_64/include"
     $platform_min_version
     "--target=$target"
     \
@@ -202,50 +219,57 @@ else
   config_flags=(
     CC="$(xcode-select -p)/usr/bin/gcc"
     CXX="$(xcode-select -p)/usr/bin/g++"
+    CXX_FOR_BUILD="$(xcode-select -p)/usr/bin/g++"
     CFLAGS="$cflags"
     CPPFLAGS="$cflags"
     CXXFLAGS="$cflags -Wno-deprecated-register"
-    LDFLAGS="-L/Applications/Xcode.app/Contents/Developer/Platforms/$platform/usr/lib/"
+    LDFLAGS="-L$ROOT/macos_x86_64/lib -L/Applications/Xcode.app/Contents/Developer/Platforms/$platform/usr/lib/"
+    LIBS='-lz -lpng -ljpeg -ltiff'
     PKG_CONFIG_PATH="$ROOT/macos_x86_64/lib/pkgconfig"
     \
-    '--enable-fast-install'
-    '--enable-shared=no'
     "--host=$target"
     "--prefix=$ROOT/macos_x86_64"
-    "--with-jpeg-include-dir=$ROOT/macos_x86_64/include"
-    "--with-jpeg-lib-dir=$ROOT/macos_x86_64/lib"
-    '--without-x'
+    \
+    '--disable-programs'
+    '--enable-shared=no'
+    '--with-jpeg'
+    '--with-libpng'
+    '--with-libtiff'
+    '--with-zlib'
+    '--without-giflib'
+    '--without-libwebp'
   )
 
   xc mkdir -p $SOURCES/$name/macos_x86_64
   xc cd $SOURCES/$name/macos_x86_64
 
-
   print -n 'configuring... '
-  xl $name '2_config_macos_x86_64' ../configure $config_flags || exit 1
+  xl $name '3_config_macos_x86_64' ../configure $config_flags || exit 1
   print -n 'done, '
 
   print -n 'making... '
-  xl $name '3_clean_macos_x86_64' make clean || exit 1
-  xl $name '3_make_macos_x86_64' make || exit 1
+  xl $name '4_clean_macos_x86_64' make clean || exit 1
+  xl $name '4_make_macos_x86_64' make || exit 1
   print -n 'done, '
 
   print -n 'installing... '
-  xl $name '4_install_macos_x86_64' make install || exit 1
+  xl $name '5_install_macos_x86_64' make install || exit 1
   print 'done.'
 fi
 
 # --  Lipo  -------------------------------------------------------------------
 xc mkdir -p $ROOT/lib
 
-print -n 'lipo: ios... '
-xl $name '5_ios_lipo' \
-  xcrun lipo $ROOT/ios_arm64/lib/libtiff.a $ROOT/ios_x86_64/lib/libtiff.a \
-  -create -output $ROOT/lib/libtiff.a
+print -n 'ios: lipo... '
+xl $name '6_lipo_ios' \
+  xcrun lipo $ROOT/ios_arm64/lib/liblept.a $ROOT/ios_x86_64/lib/liblept.a \
+  -create -output $ROOT/lib/liblept.a ||
+  exit 1
 print 'done.'
 
-print -n 'lipo: macos... '
-xl $name '5_macos_lipo' \
-  xcrun lipo $ROOT/macos_x86_64/lib/libtiff.a \
-  -create -output $ROOT/lib/libtiff-macos.a
+print -n 'macos: lipo... '
+xl $name '6_lipo_macos' \
+  xcrun lipo $ROOT/macos_x86_64/lib/liblept.a \
+  -create -output $ROOT/lib/liblept-macos.a ||
+  exit 1
 print 'done.'
