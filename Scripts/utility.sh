@@ -1,6 +1,16 @@
 #! /bin/zsh -f
 
-
+check_installed() {
+  # An idea for checking installations
+  filepath=$( find /Users/zyoung/dev/tesseract-build/Root/bin \( -newer /Users/zyoung/dev/tesseract-build/Sources/automake-1.16/x86_64/Makefile -a -name 'automake' \) )
+  version_str=$(/Users/zyoung/dev/tesseract-build/Root/bin/automake --version 2>&1)
+  if {
+      [[ $version_str == *'1.16'* ]] &&
+          [[ $filepath == /Users/zyoung/dev/tesseract-build/Root/bin/automake ]]
+  }; then
+      echo "Properly installed."
+  fi
+}
 
 _exec() {
   local _status
@@ -140,3 +150,4 @@ is_installed() {
 
 alias xc=_exec
 alias xl=exec_and_log
+
