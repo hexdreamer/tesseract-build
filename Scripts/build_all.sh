@@ -7,11 +7,9 @@
 scriptname=$0:A
 scriptsdir=${scriptname%/build_all.sh}
 
-
-
 zsh $scriptsdir/build_autoconf.sh
 zsh $scriptsdir/build_automake.sh
-# download_extract_install 'pkgconfig'
+zsh $scriptsdir/build_pkgconfig.sh
 # download_extract_install 'libtool'
 zsh $scriptsdir/build_zlib.sh
 

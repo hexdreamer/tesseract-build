@@ -10,7 +10,7 @@ if ! source $parentdir/project_environment.sh; then
 fi
 
 if ! source $SCRIPTSDIR/utility.sh; then
-  echo "build_libtiff.sh: error sourcing $SCRIPTSDIR/project_environment.sh"
+  echo "build_libtiff.sh: error sourcing $SCRIPTSDIR/utility.sh"
   exit 1
 fi
 
