@@ -9,14 +9,14 @@ scriptsdir=${scriptname%/build_all.sh}
 
 
 
-# download_extract_install 'autoconf'
+zsh $scriptsdir/build_autoconf.sh
 # download_extract_install 'automake'
 # download_extract_install 'pkgconfig'
 # download_extract_install 'libtool'
 # zsh $scriptsdir/build_zlib.sh
 
 # zsh $scriptsdir/build_libjpeg.sh
-zsh $scriptsdir/build_libpng.sh
+# zsh $scriptsdir/build_libpng.sh
 # zsh $scriptsdir/build_libtiff.sh
 
 # download_extract_install 'leptonica'
