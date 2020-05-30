@@ -17,18 +17,6 @@ fi
 local name='pkg-config-0.29.2'
 print "\n======== $name ========"
 
-# Uncomment to turn on skip-if-already-installed
-#
-# filepath=$(find $ROOT/bin \( -name 'pkg-config' -a -newer $SOURCES/$name/x86_64/Makefile \))
-# version_str=$($ROOT/bin/pkg-config --version --version 2>&1)
-# if {
-#     [[ $version_str == *'0.29.2'* ]] &&
-#         [[ $filepath == $ROOT/bin/pkg-config ]]
-# }; then
-#     echo "Skipped all steps, found $ROOT/bin/pkg-config with version 0.29.2"
-#     exit 0
-# fi
-
 # Being respectful of hosts and their bandwidth
 targz=$name.tar.gz
 if [ -e $DOWNLOADS/$targz ]; then
