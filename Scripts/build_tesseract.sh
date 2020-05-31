@@ -39,7 +39,11 @@ fi
 
 xc cd $SOURCES/$name
 
-xl $name '2_preconfig' ./autogen.sh || exit 1
+if [ -f configure ]; then
+  echo Skipped preconfig, found Sources/$name/configure
+else
+  xl $name '2_preconfig' ./autogen.sh || exit 1
+fi
 
 # --  ios_arm64  --------------------------------------------------------------
 print -n 'ios_arm64: '
@@ -118,18 +122,16 @@ else
   print 'done.'
 fi
 
-exit
-
 # --  ios_x86_64  --------------------------------------------------------------
 print -n 'ios_x86_64: '
 
 export PKG_CONFIG_PATH=$ROOT/ios_x86_64/lib/pkgconfig
 if {
-  pkg-config --exists --print-errors 'lept >= 1.79.0' &&
-    [ -f $ROOT/ios_x86_64/lib/liblept.a ]
+  pkg-config --exists --print-errors 'tesseract >= 4.1.1' &&
+    [ -f $ROOT/ios_x86_64/lib/libtesseract.a ]
 }; then
 
-  print 'skipped config/make/install, found ROOT/ios_x86_64/lib/liblept.a'
+  print 'skipped config/make/install, found ROOT/ios_x86_64/lib/libtesseract.a'
 
 else
 
@@ -139,16 +141,26 @@ else
   platform_min_version='-mios-simulator-version-min=11.0'
 
   cflags=(
+    "-I$ROOT/ios_x86_64/"
     "-arch $arch"
-    "-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/$platform"
-    "-I$ROOT/ios_x86_64/include"
-    $platform_min_version
-    "--target=$target"
-    \
-    '-fembed-bitcode'
-    '-no-cpp-precomp'
-    '-O2'
     '-pipe'
+    '-no-cpp-precomp'
+    "-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/$platform"
+    $platform_min_version
+    '-O2'
+    '-fembed-bitcode'
+    "--target=$target"
+  )
+
+  cxxflags=(
+    "-I$ROOT/ios_x86_64/"
+    "-arch $arch"
+    '-pipe'
+    '-no-cpp-precomp'
+    "-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/$platform"
+    $platform_min_version
+    '-O2'
+    "--target=$target"
   )
 
   config_flags=(
@@ -157,22 +169,17 @@ else
     CXX_FOR_BUILD="$(xcode-select -p)/usr/bin/g++"
     CFLAGS="$cflags"
     CPPFLAGS="$cflags"
-    CXXFLAGS="$cflags -Wno-deprecated-register"
+    CXXFLAGS="$cxxflags"
     LDFLAGS="-L$ROOT/ios_x86_64/lib -L/Applications/Xcode.app/Contents/Developer/Platforms/$platform/usr/lib/"
     LIBS='-lz -lpng -ljpeg -ltiff'
+    LIBLEPT_HEADERSDIR="$ROOT/ios_x86_64/include"
     PKG_CONFIG_PATH="$ROOT/ios_x86_64/lib/pkgconfig"
     \
     "--host=$target"
     "--prefix=$ROOT/ios_x86_64"
     \
-    '--disable-programs'
+    '--disable-graphics'
     '--enable-shared=no'
-    '--with-jpeg'
-    '--with-libpng'
-    '--with-libtiff'
-    '--with-zlib'
-    '--without-giflib'
-    '--without-libwebp'
   )
 
   xc mkdir -p $SOURCES/$name/ios_x86_64
@@ -197,11 +204,11 @@ print -n 'macos_x86_64: '
 
 export PKG_CONFIG_PATH=$ROOT/macos_x86_64/lib/pkgconfig
 if {
-  pkg-config --exists --print-errors 'lept >= 1.79.0' &&
-    [ -f $ROOT/macos_x86_64/lib/liblept.a ]
+  pkg-config --exists --print-errors 'tesseract >= 4.1.1' &&
+    [ -f $ROOT/macos_x86_64/lib/libtesseract.a ]
 }; then
 
-  print 'skipped config/make/install, found ROOT/macos_x86_64/lib/liblept.a'
+  print 'skipped config/make/install, found ROOT/macos_x86_64/lib/libtesseract.a'
 
 else
 
@@ -211,16 +218,26 @@ else
   platform_min_version='-mmacosx-version-min=10.13'
 
   cflags=(
+    "-I$ROOT/macos_x86_64/"
     "-arch $arch"
-    "-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/$platform"
-    "-I$ROOT/macos_x86_64/include"
-    $platform_min_version
-    "--target=$target"
-    \
-    '-fembed-bitcode'
-    '-no-cpp-precomp'
-    '-O2'
     '-pipe'
+    '-no-cpp-precomp'
+    "-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/$platform"
+    $platform_min_version
+    '-O2'
+    '-fembed-bitcode'
+    "--target=$target"
+  )
+
+  cxxflags=(
+    "-I$ROOT/macos_x86_64/"
+    "-arch $arch"
+    '-pipe'
+    '-no-cpp-precomp'
+    "-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/$platform"
+    $platform_min_version
+    '-O2'
+    "--target=$target"
   )
 
   config_flags=(
@@ -229,22 +246,17 @@ else
     CXX_FOR_BUILD="$(xcode-select -p)/usr/bin/g++"
     CFLAGS="$cflags"
     CPPFLAGS="$cflags"
-    CXXFLAGS="$cflags -Wno-deprecated-register"
+    CXXFLAGS="$cxxflags"
     LDFLAGS="-L$ROOT/macos_x86_64/lib -L/Applications/Xcode.app/Contents/Developer/Platforms/$platform/usr/lib/"
     LIBS='-lz -lpng -ljpeg -ltiff'
+    LIBLEPT_HEADERSDIR="$ROOT/macos_x86_64/include"
     PKG_CONFIG_PATH="$ROOT/macos_x86_64/lib/pkgconfig"
     \
     "--host=$target"
     "--prefix=$ROOT/macos_x86_64"
     \
-    '--disable-programs'
+    '--disable-graphics'
     '--enable-shared=no'
-    '--with-jpeg'
-    '--with-libpng'
-    '--with-libtiff'
-    '--with-zlib'
-    '--without-giflib'
-    '--without-libwebp'
   )
 
   xc mkdir -p $SOURCES/$name/macos_x86_64
@@ -269,14 +281,14 @@ xc mkdir -p $ROOT/lib
 
 print -n 'ios: lipo... '
 xl $name '6_lipo_ios' \
-  xcrun lipo $ROOT/ios_arm64/lib/liblept.a $ROOT/ios_x86_64/lib/liblept.a \
-  -create -output $ROOT/lib/liblept.a ||
+  xcrun lipo $ROOT/ios_arm64/lib/libtesseract.a $ROOT/ios_x86_64/lib/libtesseract.a \
+  -create -output $ROOT/lib/libtesseract.a ||
   exit 1
 print 'done.'
 
 print -n 'macos: lipo... '
 xl $name '6_lipo_macos' \
-  xcrun lipo $ROOT/macos_x86_64/lib/liblept.a \
-  -create -output $ROOT/lib/liblept-macos.a ||
+  xcrun lipo $ROOT/macos_x86_64/lib/libtesseract.a \
+  -create -output $ROOT/lib/libtesseract-macos.a ||
   exit 1
 print 'done.'

@@ -7,15 +7,21 @@
 scriptname=$0:A
 scriptsdir=${scriptname%/build_all.sh}
 
-zsh $scriptsdir/build_autoconf.sh
-zsh $scriptsdir/build_automake.sh
-zsh $scriptsdir/build_pkgconfig.sh
-zsh $scriptsdir/build_libtool.sh
-zsh $scriptsdir/build_zlib.sh
+if [[ $1 == '-t' ]]; then
+    cmd=(time zsh)
+else
+    cmd=(zsh)
+fi
 
-zsh $scriptsdir/build_libjpeg.sh
-zsh $scriptsdir/build_libpng.sh
-zsh $scriptsdir/build_libtiff.sh
+$cmd $scriptsdir/build_autoconf.sh
+$cmd $scriptsdir/build_automake.sh
+$cmd $scriptsdir/build_pkgconfig.sh
+$cmd $scriptsdir/build_libtool.sh
+$cmd $scriptsdir/build_zlib.sh
 
-zsh $scriptsdir/build_leptonica.sh
-# download_extract_install 'tesseract'
+$cmd $scriptsdir/build_libjpeg.sh
+$cmd $scriptsdir/build_libpng.sh
+$cmd $scriptsdir/build_libtiff.sh
+
+$cmd $scriptsdir/build_leptonica.sh
+$cmd $scriptsdir/build_tesseract.sh
