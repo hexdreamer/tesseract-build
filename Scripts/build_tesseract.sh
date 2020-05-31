@@ -71,8 +71,16 @@ else
     "--target=$target"
   )
 
-
-
+  cxxflags=(
+    "-I$ROOT/ios_arm64/"
+    "-arch $arch"
+    '-pipe'
+    '-no-cpp-precomp'
+    "-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/$platform"
+    $platform_min_version
+    '-O2'
+    "--target=$target"
+  )
 
   config_flags=(
     CC="$(xcode-select -p)/usr/bin/gcc"
@@ -80,7 +88,7 @@ else
     CXX_FOR_BUILD="$(xcode-select -p)/usr/bin/g++"
     CFLAGS="$cflags"
     CPPFLAGS="$cflags"
-    CXXFLAGS="$cflags"
+    CXXFLAGS="$cxxflags"
     LDFLAGS="-L$ROOT/ios_arm64/lib -L/Applications/Xcode.app/Contents/Developer/Platforms/$platform/usr/lib/"
     LIBS='-lz -lpng -ljpeg -ltiff'
     LIBLEPT_HEADERSDIR="$ROOT/ios_arm64/include"
@@ -89,14 +97,8 @@ else
     "--host=$target"
     "--prefix=$ROOT/ios_arm64"
     \
-    '--disable-programs'
+    '--disable-graphics'
     '--enable-shared=no'
-    '--with-jpeg'
-    '--with-libpng'
-    '--with-libtiff'
-    '--with-zlib'
-    '--without-giflib'
-    '--without-libwebp'
   )
 
   xc mkdir -p $SOURCES/$name/ios_arm64
@@ -115,6 +117,8 @@ else
   xl $name '5_install_ios_arm64' make install || exit 1
   print 'done.'
 fi
+
+exit
 
 # --  ios_x86_64  --------------------------------------------------------------
 print -n 'ios_x86_64: '

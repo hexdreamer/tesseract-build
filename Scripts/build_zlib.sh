@@ -39,22 +39,20 @@ else
     print ' done.'
 fi
 
-xc mkdir -p $SOURCES/$name/x86_64
-xc cd $SOURCES/$name/x86_64
+xc mkdir -p $SOURCES/$name/x86
+xc cd $SOURCES/$name/x86
 
-print -n 'x86_64: '
+print -n 'x86: '
 
 print -n 'configuring... '
-export CFLAGS='--target=x86_64-apple-darwin'
-config_flags=('--64' "--prefix=$ROOT")
-xl $name '2_config_x86_64' ../configure $config_flags || exit 1
+xl $name '2_config_x86' ../configure --prefix=$ROOT || exit 1
 print -n 'done, '
 
 print -n 'making... '
-xl $name '3_clean_x86_64' make clean || exit 1
-xl $name '3_make_x86_64' make || exit 1
+xl $name '3_clean_x86' make clean || exit 1
+xl $name '3_make_x86' make || exit 1
 print -n 'done, '
 
 print -n 'installing... '
-xl $name '4_install_x86_64' make install || exit 1
+xl $name '4_install_x86' make install || exit 1
 print 'done.'
