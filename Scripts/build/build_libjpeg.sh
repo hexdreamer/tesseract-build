@@ -15,9 +15,9 @@ print "\n======== $name ========"
 
 # --  Download / Extract  -----------------------------------------------------
 
-dirname='jpeg-9d'
 targz=$name.tar.gz
 url="http://www.ijg.org/files/$targz"
+dirname='jpeg-9d'
 
 zsh $parentdir/_download.sh $name $url $targz
 zsh $parentdir/_extract.sh $name $targz $dirname

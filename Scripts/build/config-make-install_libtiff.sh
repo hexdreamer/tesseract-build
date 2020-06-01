@@ -1,7 +1,7 @@
 #! /bin/zsh
 
 scriptname=$0:A
-parentdir=${scriptname%/config-make-install_libpng.sh}
+parentdir=${scriptname%/config-make-install_libtiff.sh}
 source $parentdir/project_environment.sh -u || { echo Error sourcing $parentdir/project_environment.sh; exit 1 }
 
 # ARCH='arm64'
@@ -9,19 +9,19 @@ source $parentdir/project_environment.sh -u || { echo Error sourcing $parentdir/
 # PLATFORM='iPhoneOS.platform/Developer/SDKs/iPhoneOS13.5.sdk'
 # PLATFORM_MIN_VERSION='-miphoneos-version-min=11.0'
 
-name=$1     # libpng-1.6.37
+name=$1     # tiff-4.1.0
 os_arch=$2  # ios_arm64
 
 print -n "$os_arch: "
 
-pkg_lib=$ROOT/$os_arch/lib/libpng.a
+pkg_lib=$ROOT/$os_arch/lib/libtiff.a
 if {
     [ -f $pkg_lib ] &&
     info=$(lipo -info $pkg_lib)  &&
     [[ $info =~ 'Non-fat file' ]]  &&
     [[ $info =~ $ARCH ]]
 }; then
-  print "skipped config/make/install, found valid single $ARCH arch $pkg_lib"
+  print "skipped config/make/install, found valid single-$ARCH-arch $pkg_lib"
   exit 0
 fi
 
@@ -46,9 +46,13 @@ config_flags=(
   LDFLAGS="-L/Applications/Xcode.app/Contents/Developer/Platforms/$PLATFORM/usr/lib/"
   PKG_CONFIG_PATH="$ROOT/$os_arch/lib/pkgconfig"
   \
+  '--enable-fast-install'
   '--enable-shared=no'
   "--host=$TARGET"
   "--prefix=$ROOT/$os_arch"
+  "--with-jpeg-include-dir=$ROOT/$os_arch/include"
+  "--with-jpeg-lib-dir=$ROOT/$os_arch/lib"
+  '--without-x'
 )
 
 xc mkdir -p $SOURCES/$name/$os_arch
