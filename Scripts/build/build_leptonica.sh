@@ -4,7 +4,7 @@
 
 scriptname=$0:A
 parentdir=${scriptname%/build_leptonica.sh}
-if ! source $parentdir/project_environment.sh -u ; then
+if ! source $parentdir/project_environment.sh -u; then
   echo "build_leptonica.sh: error sourcing $parentdir/project_environment.sh"
   exit 1
 fi
@@ -18,15 +18,17 @@ print "\n======== $name ========"
 targz=$name.tar.gz
 url="https://github.com/danbloomberg/leptonica/releases/download/1.79.0/$targz"
 
-zsh $parentdir/_download.sh $name $url $targz
-zsh $parentdir/_extract.sh $name $targz
+zsh $parentdir/_download.sh $name $url $targz || exit 1
+zsh $parentdir/_extract.sh $name $targz || exit 1
 
-xc cd $SOURCES/$name || { echo "Couldn't cd to $SOURCES/$name"; exit 1 }
-if [ -f ./configure ]; then
+# --  Preconfigure  -----------------------------------------------------------
+
+if [ -f $SOURCES/$name/configure ]; then
   print "Skipped preconfigure, found $SOURCES/$name/configure"
 else
   print -n 'Preconfiguring... '
-  xl $name '2_preconfig' ./autogen.sh
+  xc cd $SOURCES/$name || exit 1
+  xl $name '2_preconfig' ./autogen.sh || exit 1
   print 'done.'
 fi
 
@@ -38,7 +40,7 @@ export TARGET='arm-apple-darwin64'
 export PLATFORM='iPhoneOS.platform/Developer/SDKs/iPhoneOS13.5.sdk'
 export PLATFORM_MIN_VERSION='-miphoneos-version-min=11.0'
 
-zsh $parentdir/config-make-install_leptonica.sh $name 'ios_arm64'
+zsh $parentdir/config-make-install_leptonica.sh $name 'ios_arm64' || exit 1
 
 # ios_x86_64
 export ARCH='x86_64'
@@ -46,7 +48,7 @@ export TARGET='x86_64-apple-darwin'
 export PLATFORM='iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.5.sdk'
 export PLATFORM_MIN_VERSION='-mios-simulator-version-min=11.0'
 
-zsh $parentdir/config-make-install_leptonica.sh $name 'ios_x86_64'
+zsh $parentdir/config-make-install_leptonica.sh $name 'ios_x86_64' || exit 1
 
 # macos_x86_64
 export ARCH='x86_64'
@@ -54,8 +56,10 @@ export TARGET='x86_64-apple-darwin'
 export PLATFORM='MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk'
 export PLATFORM_MIN_VERSION='-mmacosx-version-min=10.13'
 
-zsh $parentdir/config-make-install_leptonica.sh $name 'macos_x86_64'
+zsh $parentdir/config-make-install_leptonica.sh $name 'macos_x86_64' || exit 1
+
 # --  Lipo  -------------------------------------------------------------------
+
 xc mkdir -p $ROOT/lib
 
 print -n 'ios: lipo... '

@@ -1,4 +1,4 @@
-#! /bin/zsh -f
+#! /bin/bash -f
 
 # `set -x` turns on debugging, `set +x` turns it off 
 # set -x
