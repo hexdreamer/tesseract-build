@@ -4,8 +4,8 @@
 
 scriptname=$0:A
 parentdir=${scriptname%/build_libpng.sh}
-if ! source $parentdir/project_environment.sh -u ; then
-  echo "build_libpng.sh: error sourcing $parentdir/project_environment.sh -u"
+if ! source $parentdir/project_environment.sh ; then
+  echo "build_libpng.sh: error sourcing $parentdir/project_environment.sh"
   exit 1
 fi
 
@@ -24,8 +24,8 @@ print "\n======== $name ========"
 targz=$name.tar.gz
 url="https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/$targz/download"
 
-zsh $parentdir/_download.sh $name $url $targz
-zsh $parentdir/_extract.sh $name $targz
+download $name $url $targz
+extract $name $targz
 
 # --  Config / Make / Install  ------------------------------------------------
 

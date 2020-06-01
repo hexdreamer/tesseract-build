@@ -4,7 +4,7 @@
 
 scriptname=$0:A
 parentdir=${scriptname%/build_libjpeg.sh}
-if ! source $parentdir/project_environment.sh -u ; then
+if ! source $parentdir/project_environment.sh ; then
   echo "build_libjpeg.sh: error sourcing $parentdir/project_environment.sh"
   exit 1
 fi
@@ -25,8 +25,8 @@ targz=$name.tar.gz
 url="http://www.ijg.org/files/$targz"
 dirname='jpeg-9d'
 
-zsh $parentdir/_download.sh $name $url $targz
-zsh $parentdir/_extract.sh $name $targz $dirname
+download $name $url $targz
+extract $name $targz $dirname
 
 # --  Config / Make / Install  ------------------------------------------------
 

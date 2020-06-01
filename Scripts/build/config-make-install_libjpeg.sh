@@ -2,7 +2,7 @@
 
 scriptname=$0:A
 parentdir=${scriptname%/config-make-install_libjpeg.sh}
-source $parentdir/project_environment.sh -u || { echo Error sourcing $parentdir/project_environment.sh; exit 1 }
+source $parentdir/project_environment.sh || { echo Error sourcing $parentdir/project_environment.sh; exit 1 }
 
 # ARCH='arm64'
 # TARGET='arm-apple-darwin64'

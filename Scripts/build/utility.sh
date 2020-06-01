@@ -14,8 +14,8 @@ _exec() {
     echo 'ERROR running' $@ >&2
     return $_status
   fi
- 
-  echo $@ >> $MASTER_CMDS
+
+  echo $@ >>$MASTER_CMDS
   return 0
 }
 
@@ -41,15 +41,49 @@ _exec_and_log() {
 
   _status=$?
   if [ $_status -ne 0 ]; then
-    echo 'ERROR running' ${@:3} >&2 
+    echo 'ERROR running' ${@:3} >&2
     echo "ERROR see $log_err for more details" >&2
     return "$_status"
   fi
-  
-  echo ${@:3} >> $MASTER_CMDS
+
+  echo ${@:3} >>$MASTER_CMDS
   return 0
 }
 
 alias xc=_exec
 alias xl=_exec_and_log
 
+download() {
+  local name=$1
+  local url=$2
+  local targz=$3
+
+  if [ -e $DOWNLOADS/$targz ]; then
+    echo "Skipped download, found $DOWNLOADS/$targz"
+    return 0
+  fi
+
+  print -n 'Downloading...'
+  xl $name '0_curl' curl -L -f $url --output $DOWNLOADS/$targz
+  print ' done.'
+}
+
+extract() {
+  local name=$1
+  local targz=$2
+
+  if [[ -n $3 ]]; then
+    local dirname=$3
+  else
+    local dirname=$name
+  fi
+
+  if [ -d $SOURCES/$dirname ]; then
+    echo "Skipped extract of TGZ, found $SOURCES/$dirname"
+    return 0
+  fi
+
+  print -n 'Extracting...'
+  xl $name '1_untar' tar -zxf $DOWNLOADS/$targz --directory $SOURCES
+  print ' done.'
+}

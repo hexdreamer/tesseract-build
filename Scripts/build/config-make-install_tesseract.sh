@@ -2,7 +2,7 @@
 
 scriptname=$0:A
 parentdir=${scriptname%/config-make-install_tesseract.sh}
-if ! source $parentdir/project_environment.sh -u; then
+if ! source $parentdir/project_environment.sh; then
   echo Error sourcing $parentdir/project_environment.sh
   exit 1
 fi

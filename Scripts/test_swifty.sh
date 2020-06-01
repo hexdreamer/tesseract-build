@@ -1,6 +1,6 @@
 #! /bin/zsh -f
 
-cp \
+cp -v \
   ~/dev/tesseract-build/Root/lib/*.a \
   ~/dev/SwiftyTesseract/SwiftyTesseract/SwiftyTesseract/dependencies/lib
 

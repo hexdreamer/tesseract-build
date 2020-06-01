@@ -4,7 +4,7 @@
 
 scriptname=$0:A
 parentdir=${scriptname%/build_tesseract.sh}
-if ! source $parentdir/project_environment.sh -u; then
+if ! source $parentdir/project_environment.sh; then
   echo "build_tesseract.sh: error sourcing $parentdir/project_environment.sh"
   exit 1
 fi
@@ -24,8 +24,8 @@ print "\n======== $name ========"
 targz='4.1.1.tar.gz'
 url="https://github.com/tesseract-ocr/tesseract/archive/$targz"
 
-zsh $parentdir/_download.sh $name $url $targz || exit 1
-zsh $parentdir/_extract.sh $name $targz || exit 1
+download $name $url $targz || exit 1
+extract $name $targz || exit 1
 
 # --  Preconfigure  -----------------------------------------------------------
 

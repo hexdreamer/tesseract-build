@@ -4,7 +4,7 @@
 
 scriptname=$0:A
 parentdir=${scriptname%/build_libtiff.sh}
-if ! source $parentdir/project_environment.sh -u ; then
+if ! source $parentdir/project_environment.sh ; then
   echo "build_libtiff.sh: error sourcing $parentdir/project_environment.sh"
   exit 1
 fi
@@ -24,8 +24,8 @@ print "\n======== $name ========"
 targz=$name.tar.gz
 url="http://download.osgeo.org/libtiff/$targz"
 
-zsh $parentdir/_download.sh $name $url $targz
-zsh $parentdir/_extract.sh $name $targz
+download $name $url $targz
+extract $name $targz
 
 # --  Config / Make / Install  ------------------------------------------------
 

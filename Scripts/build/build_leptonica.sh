@@ -4,7 +4,7 @@
 
 scriptname=$0:A
 parentdir=${scriptname%/build_leptonica.sh}
-if ! source $parentdir/project_environment.sh -u; then
+if ! source $parentdir/project_environment.sh; then
   echo "build_leptonica.sh: error sourcing $parentdir/project_environment.sh"
   exit 1
 fi
@@ -24,8 +24,8 @@ print "\n======== $name ========"
 targz=$name.tar.gz
 url="https://github.com/danbloomberg/leptonica/releases/download/1.79.0/$targz"
 
-zsh $parentdir/_download.sh $name $url $targz || exit 1
-zsh $parentdir/_extract.sh $name $targz || exit 1
+download $name $url $targz || exit 1
+extract $name $targz || exit 1
 
 # --  Preconfigure  -----------------------------------------------------------
 

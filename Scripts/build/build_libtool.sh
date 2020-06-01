@@ -4,7 +4,7 @@
 
 scriptname=$0:A
 parentdir=${scriptname%/build_libtool.sh}
-if ! source $parentdir/project_environment.sh -u; then
+if ! source $parentdir/project_environment.sh; then
   echo "build_libtool.sh: error sourcing $parentdir/project_environment.sh"
   exit 1
 fi
@@ -33,8 +33,8 @@ fi
 targz=$name.tar.gz
 url="http://ftp.gnu.org/gnu/libtool/$targz"
 
-zsh $parentdir/_download.sh $name $url $targz
-zsh $parentdir/_extract.sh $name $targz
+download $name $url $targz
+extract $name $targz
 
 # --  Config / Make / Install  ------------------------------------------------
 
