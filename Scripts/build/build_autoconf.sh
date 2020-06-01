@@ -7,6 +7,22 @@ if ! source $parentdir/project_environment.sh -u; then
   exit 1
 fi
 
+if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
+  echo 'Deleting...'
+  find $ROOT/bin \
+    \( \
+    -name 'autoconf' -o \
+    -name 'autoheader' -o \
+    -name 'autom4te' -o \
+    -name 'autoreconf' -o \
+    -name 'autoscan' -o \
+    -name 'autoupdate' -o \
+    -name 'ifnames' \
+    \) \
+    -print -exec rm -rf {} \; | sort
+  exit 0
+fi
+
 local name='autoconf-2.69'
 
 print "\n======== $name ========"

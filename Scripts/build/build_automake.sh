@@ -9,6 +9,17 @@ if ! source $parentdir/project_environment.sh -u; then
   exit 1
 fi
 
+if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
+  echo 'Deleting...'
+  find $ROOT/bin \
+    \( \
+    -name 'aclocal*' -o \
+    -name 'automake*' \
+    \) \
+    -print -exec rm -rf {} \; | sort
+  exit 0
+fi
+
 local name='automake-1.16'
 
 print "\n======== $name ========"

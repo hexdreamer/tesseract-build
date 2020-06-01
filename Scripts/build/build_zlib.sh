@@ -9,6 +9,12 @@ if ! source $parentdir/project_environment.sh -u; then
   exit 1
 fi
 
+if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
+  echo 'Deleting...'
+  find $ROOT \( -name '*libz*' -o -name '*zlib*' \) -prune -print -exec rm -rf {} \;
+  exit 0
+fi
+
 local name='zlib-1.2.11'
 
 print "\n======== $name ========"
@@ -34,6 +40,7 @@ xc cd $SOURCES/$name/x86 || exit 1
 print -n 'x86: '
 
 print -n 'configuring... '
+export CFLAGS="--target=x86_64-apple-darwin"
 xl $name '2_config_x86' ../configure "--prefix=$ROOT" || exit 1
 print -n 'done, '
 

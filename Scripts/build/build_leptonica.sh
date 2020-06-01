@@ -9,6 +9,12 @@ if ! source $parentdir/project_environment.sh -u; then
   exit 1
 fi
 
+if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
+  echo 'Deleting...'
+  find $ROOT -name '*lept*' -prune -print -exec rm -rf {} \;
+  exit 0
+fi
+
 local name='leptonica-1.79.0'
 
 print "\n======== $name ========"
