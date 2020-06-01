@@ -2,57 +2,48 @@
 
 scriptname=$0:A
 parentdir=${scriptname%/build_autoconf.sh}
-if ! source $parentdir/project_environment.sh; then
+if ! source $parentdir/project_environment.sh -u; then
     echo "build_autoconf.sh: error sourcing $parentdir/project_environment.sh"
     exit 1
 fi
 
-if ! source $SCRIPTSDIR/utility.sh; then
-    echo "build_autoconf.sh: error sourcing $SCRIPTSDIR/project_environment.sh"
-    exit 1
-fi
-
 local name='autoconf-2.69'
-# ver_command="$ROOT/bin/autoconf --version"
-# ver_pattern='2.69'
 
 print "\n======== $name ========"
 
-# Being respectful of hosts and their bandwidth
+if {
+    [ -f $ROOT/bin/autoconf ] &&
+    version=$($ROOT/bin/autoconf --version) &&
+    [[ $version =~ '2.69' ]]
+}; then
+    print "Skipped build, found $ROOT/bin/autoconf w/version 2.69"
+    exit 0
+fi
+
+# --  Download / Extract  -----------------------------------------------------
+
 targz=$name.tar.gz
-if [ -e $DOWNLOADS/$targz ]; then
-    echo "Skipped download, using cached $targz in Downloads."
-else
-    print -n 'Downloading...'
-    url="http://ftp.gnu.org/gnu/autoconf/$targz"
-    xl $name '0_curl' curl -L -f $url --output $DOWNLOADS/$targz
-    print ' done.'
-fi
+url="http://ftp.gnu.org/gnu/autoconf/$targz"
 
-# Being respectful of any hacking/work done to get a package to build
-if [ -d $SOURCES/$name ]; then
-    echo "Skipped extract of TGZ, using cached $name in Sources."
-else
-    print -n 'Extracting...'
-    xl $name '1_untar' tar -zxf $DOWNLOADS/$targz --directory $SOURCES
-    print ' done.'
-fi
+zsh $parentdir/_download.sh $name $url $targz
+zsh $parentdir/_extract.sh $name $targz
 
-xc mkdir -p $SOURCES/$name/x86_64
-xc cd $SOURCES/$name/x86_64
+# --  Config / Make / Install  ------------------------------------------------
 
-print -n 'x86_64: '
+xc mkdir -p $SOURCES/$name/x86
+xc cd $SOURCES/$name/x86
+
+print -n 'x86: '
 
 print -n 'configuring... '
-export CFLAGS='--target=x86_64-apple-darwin'
-xl $name '2_config_x86_64' ../configure "--prefix=$ROOT" || exit 1
+xl $name '2_config_x86' ../configure "--prefix=$ROOT" || exit 1
 print -n 'done, '
 
 print -n 'making... '
-xl $name '3_clean_x86_64' make clean || exit 1
-xl $name '3_make_x86_64' make || exit 1
+xl $name '3_clean_x86' make clean || exit 1
+xl $name '3_make_x86' make || exit 1
 print -n 'done, '
 
 print -n 'installing... '
-xl $name '4_install_x86_64' make install || exit 1
+xl $name '4_install_x86' make install || exit 1
 print 'done.'
