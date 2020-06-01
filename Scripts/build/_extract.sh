@@ -3,10 +3,10 @@
 name=$1
 targz=$2
 
-if [ -v $3 ]; then
+if [[ -n $3 ]]; then
     dirname=$3
 else
-    direname=$name
+    dirname=$name
 fi
 
 scriptname=$0:A
