@@ -2,23 +2,26 @@
 
 scriptname=$0:A
 parentdir=${scriptname%/config-make-install_libtiff.sh}
-source $parentdir/project_environment.sh || { echo Error sourcing $parentdir/project_environment.sh; exit 1 }
+if ! source $parentdir/project_environment.sh; then
+  echo "config-make-install_libtiff.sh: error sourcing $parentdir/project_environment.sh"
+  exit 1
+fi
 
 # ARCH='arm64'
 # TARGET='arm-apple-darwin64'
 # PLATFORM='iPhoneOS.platform/Developer/SDKs/iPhoneOS13.5.sdk'
 # PLATFORM_MIN_VERSION='-miphoneos-version-min=11.0'
 
-name=$1     # tiff-4.1.0
-os_arch=$2  # ios_arm64
+name=$1    # tiff-4.1.0
+os_arch=$2 # ios_arm64
 
 print -n "$os_arch: "
 
 pkg_lib=$ROOT/$os_arch/lib/libtiff.a
 if {
-    [ -f $pkg_lib ] &&
-    info=$(lipo -info $pkg_lib)  &&
-    [[ $info =~ 'Non-fat file' ]]  &&
+  [ -f $pkg_lib ] &&
+    info=$(lipo -info $pkg_lib) &&
+    [[ $info =~ 'Non-fat file' ]] &&
     [[ $info =~ $ARCH ]]
 }; then
   print "skipped config/make/install, found valid single-$ARCH-arch $pkg_lib"
@@ -30,7 +33,7 @@ cflags=(
   "-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/$PLATFORM"
   $PLATFORM_MIN_VERSION
   "--target=$TARGET"
-  \
+
   '-fembed-bitcode'
   '-no-cpp-precomp'
   '-O2'
@@ -45,7 +48,7 @@ config_flags=(
   CXXFLAGS="$cflags -Wno-deprecated-register"
   LDFLAGS="-L/Applications/Xcode.app/Contents/Developer/Platforms/$PLATFORM/usr/lib/"
   PKG_CONFIG_PATH="$ROOT/$os_arch/lib/pkgconfig"
-  \
+
   '--enable-fast-install'
   '--enable-shared=no'
   "--host=$TARGET"

@@ -15,7 +15,7 @@ if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
   exit 0
 fi
 
-local name='leptonica-1.79.0'
+name='leptonica-1.79.0'
 
 print "\n======== $name ========"
 

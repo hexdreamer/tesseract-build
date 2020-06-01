@@ -4,7 +4,7 @@
 
 scriptname=$0:A
 parentdir=${scriptname%/build_libtiff.sh}
-if ! source $parentdir/project_environment.sh ; then
+if ! source $parentdir/project_environment.sh; then
   echo "build_libtiff.sh: error sourcing $parentdir/project_environment.sh"
   exit 1
 fi
@@ -15,7 +15,7 @@ if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
   exit 0
 fi
 
-local name='tiff-4.1.0'
+name='tiff-4.1.0'
 
 print "\n======== $name ========"
 

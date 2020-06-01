@@ -15,7 +15,7 @@ if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
   exit 0
 fi
 
-local name='tesseract-4.1.1'
+name='tesseract-4.1.1'
 
 print "\n======== $name ========"
 

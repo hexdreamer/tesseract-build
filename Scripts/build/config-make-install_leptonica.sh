@@ -34,7 +34,7 @@ cflags=(
   "-I$ROOT/$os_arch/include"
   $PLATFORM_MIN_VERSION
   "--target=$TARGET"
-  \
+
   '-fembed-bitcode'
   '-no-cpp-precomp'
   '-O2'
@@ -51,7 +51,7 @@ config_flags=(
   LDFLAGS="-L$ROOT/$os_arch/lib -L/Applications/Xcode.app/Contents/Developer/Platforms/$PLATFORM/usr/lib/"
   LIBS='-lz -lpng -ljpeg -ltiff'
   PKG_CONFIG_PATH="$ROOT/$os_arch/lib/pkgconfig"
-  \
+
   '--disable-programs'
   '--enable-shared=no'
   "--host=$TARGET"

@@ -4,7 +4,7 @@
 
 scriptname=$0:A
 parentdir=${scriptname%/build_libjpeg.sh}
-if ! source $parentdir/project_environment.sh ; then
+if ! source $parentdir/project_environment.sh; then
   echo "build_libjpeg.sh: error sourcing $parentdir/project_environment.sh"
   exit 1
 fi
@@ -15,7 +15,7 @@ if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
   exit 0
 fi
 
-local name='jpegsrc.v9d'
+name='jpegsrc.v9d'
 
 print "\n======== $name ========"
 
@@ -60,11 +60,11 @@ xc mkdir -p $ROOT/lib
 print -n 'lipo: ios... '
 xl $name '5_ios_lipo' \
   xcrun lipo $ROOT/ios_arm64/lib/libjpeg.a $ROOT/ios_x86_64/lib/libjpeg.a \
-    -create -output $ROOT/lib/libjpeg.a
+  -create -output $ROOT/lib/libjpeg.a
 print 'done.'
 
 print -n 'lipo: macos... '
 xl $name '5_macos_lipo' \
   xcrun lipo $ROOT/macos_x86_64/lib/libjpeg.a \
-    -create -output $ROOT/lib/libjpeg-macos.a
+  -create -output $ROOT/lib/libjpeg-macos.a
 print 'done.'

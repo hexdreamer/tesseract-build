@@ -15,7 +15,7 @@ if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
   exit 0
 fi
 
-local name='zlib-1.2.11'
+name='zlib-1.2.11'
 
 print "\n======== $name ========"
 

@@ -15,14 +15,14 @@ if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
   exit 0
 fi
 
-local name='libtool-2.4.6'
+name='libtool-2.4.6'
 
 print "\n======== $name ========"
 
 if {
   [ -f $ROOT/bin/libtool ] &&
     version=$($ROOT/bin/libtool --version) &&
-    [[ $version =~ '2.4.6' ]]
+    [[ $version == *'2.4.6'* ]]
 }; then
   echo "Skipped build, found $ROOT/bin/libtool w/version 2.4.6"
   exit 0

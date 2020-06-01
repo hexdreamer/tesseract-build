@@ -15,14 +15,14 @@ if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
   exit 0
 fi
 
-local name='pkg-config-0.29.2'
+name='pkg-config-0.29.2'
 
 print "\n======== $name ========"
 
 if {
   [ -f $ROOT/bin/pkg-config ] &&
     version=$($ROOT/bin/pkg-config --version) &&
-    [[ $version =~ '0.29.2' ]]
+    [[ $version == *'0.29.2'* ]]
 }; then
   print "Skipped build, found $ROOT/bin/pkg-config w/version 0.29.2"
   exit 0

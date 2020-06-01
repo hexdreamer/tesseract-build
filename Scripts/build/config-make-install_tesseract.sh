@@ -34,7 +34,7 @@ cflags=(
   "-I$ROOT/$os_arch/"
   $PLATFORM_MIN_VERSION
   "--target=$TARGET"
-  \
+
   '-fembed-bitcode'
   '-no-cpp-precomp'
   '-O2'
@@ -48,7 +48,7 @@ cxxflags=(
   "-I$ROOT/$os_arch/"
   $PLATFORM_MIN_VERSION
   "--target=$TARGET"
-  \
+
   '-no-cpp-precomp'
   '-O2'
   '-pipe'
@@ -65,7 +65,7 @@ config_flags=(
   LIBLEPT_HEADERSDIR="$ROOT/$os_arch/include"
   LIBS='-lz -lpng -ljpeg -ltiff'
   PKG_CONFIG_PATH="$ROOT/$os_arch/lib/pkgconfig"
-  \
+
   '--disable-graphics'
   '--enable-shared=no'
   "--host=$TARGET"

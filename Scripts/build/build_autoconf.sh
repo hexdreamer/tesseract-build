@@ -23,14 +23,14 @@ if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
   exit 0
 fi
 
-local name='autoconf-2.69'
+name='autoconf-2.69'
 
 print "\n======== $name ========"
 
 if {
   [ -f $ROOT/bin/autoconf ] &&
     version=$($ROOT/bin/autoconf --version) &&
-    [[ $version =~ '2.69' ]]
+    [[ $version == *'2.69'* ]]
 }; then
   print "Skipped build, found $ROOT/bin/autoconf w/version 2.69"
   exit 0

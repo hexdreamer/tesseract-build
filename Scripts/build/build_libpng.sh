@@ -4,7 +4,7 @@
 
 scriptname=$0:A
 parentdir=${scriptname%/build_libpng.sh}
-if ! source $parentdir/project_environment.sh ; then
+if ! source $parentdir/project_environment.sh; then
   echo "build_libpng.sh: error sourcing $parentdir/project_environment.sh"
   exit 1
 fi
@@ -15,7 +15,7 @@ if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
   exit 0
 fi
 
-local name='libpng-1.6.37'
+name='libpng-1.6.37'
 
 print "\n======== $name ========"
 
