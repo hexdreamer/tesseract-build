@@ -31,7 +31,7 @@ zsh $parentdir/_extract.sh $name $targz
 # --  Config / Make / Install  ------------------------------------------------
 
 xc mkdir -p $SOURCES/$name/x86
-xc cd $SOURCES/$name/x86
+xc cd $SOURCES/$name/x86 || exit 1
 
 print -n 'x86: '
 
