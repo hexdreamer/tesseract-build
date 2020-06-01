@@ -11,7 +11,10 @@ fi
 
 scriptname=$0:A
 parentdir=${scriptname%/_extract.sh}
-source $parentdir/project_environment.sh -u || { echo Error sourcing $parentdir/project_environment.sh; exit 1 }
+if ! source $parentdir/project_environment.sh -u; then
+  echo "_extract.sh: error sourcing $parentdir/project_environment.sh"
+  exit 1
+fi
 
 if [ -d $SOURCES/$dirname ]; then
     echo "Skipped extract of TGZ, found $SOURCES/$dirname"

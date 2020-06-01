@@ -6,7 +6,10 @@ targz=$3
 
 scriptname=$0:A
 parentdir=${scriptname%/_download.sh}
-source $parentdir/project_environment.sh -u || { echo Error sourcing $parentdir/project_environment.sh; exit 1 }
+if ! source $parentdir/project_environment.sh -u; then
+  echo "_download.sh: error sourcing $parentdir/project_environment.sh"
+  exit 1
+fi
 
 if [ -e $DOWNLOADS/$targz ]; then
   echo "Skipped download, found $DOWNLOADS/$targz"
