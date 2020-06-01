@@ -9,6 +9,12 @@ if ! source $parentdir/project_environment.sh -u; then
   exit 1
 fi
 
+if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
+  echo 'Deleting...'
+  find $ROOT -name 'libtool*' -prune -print -exec rm -rf {} \;
+  exit 0
+fi
+
 local name='libtool-2.4.6'
 
 print "\n======== $name ========"

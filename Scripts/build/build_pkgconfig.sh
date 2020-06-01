@@ -9,6 +9,12 @@ if ! source $parentdir/project_environment.sh -u; then
   exit 1
 fi
 
+if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
+  echo 'Deleting...'
+  find $ROOT -name '*pkg*' -prune -print -exec rm -rf {} \;
+  exit 0
+fi
+
 local name='pkg-config-0.29.2'
 
 print "\n======== $name ========"
