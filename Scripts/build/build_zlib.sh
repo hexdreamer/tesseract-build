@@ -4,48 +4,37 @@
 
 scriptname=$0:A
 parentdir=${scriptname%/build_zlib.sh}
-if ! source $parentdir/project_environment.sh; then
-    echo "build_zlib.sh: error sourcing $parentdir/project_environment.sh"
-    exit 1
-fi
-
-if ! source $SCRIPTSDIR/utility.sh; then
-    echo "build_zlib.sh: error sourcing $SCRIPTSDIR/utility.sh"
-    exit 1
+if ! source $parentdir/project_environment.sh -u; then
+  echo "build_zlib.sh: error sourcing $parentdir/project_environment.sh"
+  exit 1
 fi
 
 local name='zlib-1.2.11'
-# ver_pattern='zlib >= 1.2.11'
 
 print "\n======== $name ========"
 
-# Being respectful of hosts and their bandwidth
-targz=$name.tar.gz
-if [ -e $DOWNLOADS/$targz ]; then
-    echo "Skipped download, using cached $targz in Downloads."
-else
-    print -n 'Downloading...'
-    url="https://sourceforge.net/projects/libpng/files/zlib/1.2.11/$targz/download"
-    xl $name '0_curl' curl -L -f $url --output $DOWNLOADS/$targz
-    print ' done.'
+if [ -f $ROOT/lib/libz.a ]; then
+  print "Skipped build, found $ROOT/lib/libz.a"
+  exit 0
 fi
 
-# Being respectful of any hacking/work done to get a package to build
-if [ -d $SOURCES/$name ]; then
-    echo "Skipped extract of TGZ, using cached $name in Sources."
-else
-    print -n 'Extracting...'
-    xl $name '1_untar' tar -zxf $DOWNLOADS/$targz --directory $SOURCES
-    print ' done.'
-fi
+# --  Download / Extract  -----------------------------------------------------
+
+targz=$name.tar.gz
+url="https://sourceforge.net/projects/libpng/files/zlib/1.2.11/$targz/download"
+
+zsh $parentdir/_download.sh $name $url $targz
+zsh $parentdir/_extract.sh $name $targz
+
+# --  Config / Make / Install  ------------------------------------------------
 
 xc mkdir -p $SOURCES/$name/x86
-xc cd $SOURCES/$name/x86
+xc cd $SOURCES/$name/x86 || exit 1
 
 print -n 'x86: '
 
 print -n 'configuring... '
-xl $name '2_config_x86' ../configure --prefix=$ROOT || exit 1
+xl $name '2_config_x86' ../configure "--prefix=$ROOT" || exit 1
 print -n 'done, '
 
 print -n 'making... '
