@@ -3,8 +3,8 @@
 scriptname=$0:A
 parentdir=${scriptname%/build_autoconf.sh}
 if ! source $parentdir/project_environment.sh -u; then
-    echo "build_autoconf.sh: error sourcing $parentdir/project_environment.sh"
-    exit 1
+  echo "build_autoconf.sh: error sourcing $parentdir/project_environment.sh"
+  exit 1
 fi
 
 local name='autoconf-2.69'
@@ -12,12 +12,12 @@ local name='autoconf-2.69'
 print "\n======== $name ========"
 
 if {
-    [ -f $ROOT/bin/autoconf ] &&
+  [ -f $ROOT/bin/autoconf ] &&
     version=$($ROOT/bin/autoconf --version) &&
     [[ $version =~ '2.69' ]]
 }; then
-    print "Skipped build, found $ROOT/bin/autoconf w/version 2.69"
-    exit 0
+  print "Skipped build, found $ROOT/bin/autoconf w/version 2.69"
+  exit 0
 fi
 
 # --  Download / Extract  -----------------------------------------------------

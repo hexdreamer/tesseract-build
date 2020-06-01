@@ -5,8 +5,8 @@
 scriptname=$0:A
 parentdir=${scriptname%/build_automake.sh}
 if ! source $parentdir/project_environment.sh -u; then
-    echo "build_automake.sh: error sourcing $parentdir/project_environment.sh"
-    exit 1
+  echo "build_automake.sh: error sourcing $parentdir/project_environment.sh"
+  exit 1
 fi
 
 local name='automake-1.16'
@@ -14,14 +14,13 @@ local name='automake-1.16'
 print "\n======== $name ========"
 
 if {
-    [ -f $ROOT/bin/automake ] &&
+  [ -f $ROOT/bin/automake ] &&
     version=$($ROOT/bin/automake --version) &&
     [[ $version =~ '1.16' ]]
 }; then
-    print "Skipped build, found $ROOT/bin/automake w/version 1.16"
-    exit 0
+  print "Skipped build, found $ROOT/bin/automake w/version 1.16"
+  exit 0
 fi
-
 
 # --  Download / Extract  -----------------------------------------------------
 
