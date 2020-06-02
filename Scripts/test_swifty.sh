@@ -1,4 +1,4 @@
-#! /bin/zsh -f
+#!/bin/zsh -f
 
 cp -v \
   ~/dev/tesseract-build/Root/lib/*.a \

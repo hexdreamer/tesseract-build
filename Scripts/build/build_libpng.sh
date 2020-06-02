@@ -1,4 +1,4 @@
-#! /bin/zsh -f
+#!/bin/zsh -f
 
 # LIBPNG -- http://www.libpng.org/pub/png/libpng.html
 

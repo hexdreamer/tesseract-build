@@ -1,4 +1,4 @@
-#! /bin/zsh
+#!/bin/zsh
 
 local scriptname=$0:A
 local parentdir=${scriptname%/precommit}

@@ -1,103 +1,116 @@
-#! /bin/zsh
+#!/bin/zsh
 
-readonly _PROGNAME=$0:A
-readonly _SCRIPTSDIR=${_PROGNAME%/precommit}
+# readonly scriptname=$0:A
+# readonly parentdir=${scriptname%/precommit}
 
-checkFile() {
-  local fname=$1
-  local tmpfile=
+build_scripts=()
+while IFS='' read -r line; do
+  build_scripts+=($line)
+done < <(find build -name '*.sh')
 
-  tmpfile=.precommit-tmp-file
+readonly FILES_TO_CHECK=(
+  $build_scripts
+  precommit
 
-  # :0:FNAME means 'stage 0 entry', or just "staged"
-  git cat-file -p :0:"$fname" > $tmpfile
+  # Scripts/test_configs.sh
+  # Scripts/test_exec_and_log.sh
+  # Scripts/test_exec.sh
+)
 
-  shebang=$(head -n1 "$tmpfile")
-  if [[ $shebang != */bin/zsh* ]]; then
-    echo "ERROR $fname: wanted shebang == */bin/zsh*, got '$shebang'"
-  fi
+check_shebang() {
+  local files=($@)
 
-  # Even though using Bash rules, Zsh is similar enough.
-  # Any Zsh-specific irregularities will have accompanying
-  # `shellcheck disable` statements inline, or in the .shellcheckrc file
-  shellcheck -f gcc -s bash "$tmpfile" | awk '{print "ERROR " $0; }'
-
-  # Format scripts for whitespace and indents
-  # shFmt -i 2 -ci -w "$fname"
-
-  rm "$tmpfile"
-}
-
-print_errors() {
-  echo
-  echo "- precommit errors with $fname"
-  for i in "$@"; do
-    echo "  - $i"
-  done
-}
-
-main() {
-  local fname=
-
-  if git rev-parse --verify HEAD >/dev/null 2>&1; then
-    against=HEAD
-  else
-    # Initial commit: diff against an empty tree object
-    against=$(git hash-object -t tree /dev/null)
-  fi
-
-  # Redirect output to stderr.
-  exec 1>&2
-
-  files_to_check=(
-    Scripts/build.sh
-    Scripts/test_configs.sh
-    Scripts/test_exec_and_log.sh
-    Scripts/test_exec.sh
-    Scripts/precommit
-  )
-
-  local errs=
-  for fname in $(git diff --cached --name-only "$against");
-    do
-    for i in $files_to_check;
-      do
-      if [ "$fname" = "$i" ]; then
-        local _errs=
-        _errs=$(checkFile "$fname")
-        if [ "$_errs" != "" ]; then
-          local msg=
-          msg=$(print_errors "$_errs")
-          if [ "$errs" = "" ]; then
-            errs="$msg"
-          else
-            errs="$errs\n$msg"
-          fi
-        fi
-      fi
-    done
-  done
-
-  export SHUNIT_COLOR=none
-  _errs=$(${_SCRIPTSDIR}/run_tests.sh)
-  _status=$?
-  if [ $_status -ne 0 ]; then
-    local msg=
-    msg=$(print_errors "$_errs")
-    if [ "$errs" = "" ]; then
-      errs="$msg"
-    else
-      errs="$errs\n$msg"
+  for _file in $files; do
+    shebang=$(head -n1 $_file)
+    if [[ ! $shebang =~ '#! ?/bin/zsh' ]]; then
+      echo "$_file: wanted shebang '#!/bin/zsh -f', got '$shebang'"
     fi
-  fi
-
-  if [ "$errs" != "" ]; then
-    echo "$errs"
-    echo
-    exit 1
-  fi
-
-
+  done
 }
 
-main
+errors=$(shellcheck -f gcc -s bash $FILES_TO_CHECK) # | awk '{print "ERROR " $0; }'
+if [[ -n $errors ]]; then
+  echo The following errors need to be resolved before checkin
+  echo $errors
+fi
+
+formatted_files=$(shFmt -l -i 2 -ci -w $FILES_TO_CHECK)
+if [[ -n $formatted_files ]]; then
+  echo The following files were formatted by shFmt
+  echo $formatted_files
+fi
+
+shebangs=$(check_shebang $FILES_TO_CHECK)
+if [[ -n $shebangs ]]; then
+  echo The following shebangs need to be corrected
+  echo $shebangs
+fi
+
+# main() {
+#   local fname=$1
+
+#   # Redirect output to stderr.
+#   exec 1>&2
+
+#   local errs=
+#   # Loop over cached/staged files
+#   for fname in $(git diff --cached --name-only "$against"); do
+#     # Loop over files that should be checked
+#     for i in $files_to_check; do
+#       if [ "$fname" = "$i" ]; then
+#         local _errs=
+#         _errs=$(checkFile "$fname")
+#         if [ "$_errs" != "" ]; then
+#           local msg=
+#           msg=$(print_errors "$_errs")
+#           if [ "$errs" = "" ]; then
+#             errs="$msg"
+#           else
+#             errs="$errs\n$msg"
+#           fi
+#         fi
+#       fi
+#     done
+#   done
+
+#   export SHUNIT_COLOR=none
+#   _errs=$(${_SCRIPTSDIR}/run_tests.sh)
+#   _status=$?
+#   if [ $_status -ne 0 ]; then
+#     local msg=
+#     msg=$(print_errors "$_errs")
+#     if [ "$errs" = "" ]; then
+#       errs="$msg"
+#     else
+#       errs="$errs\n$msg"
+#     fi
+#   fi
+
+#   if [ "$errs" != "" ]; then
+#     echo "$errs"
+#     echo
+#     exit 1
+#   fi
+
+# }
+
+# if git rev-parse --verify HEAD >/dev/null 2>&1; then
+#   against=HEAD
+# else
+#   # Initial commit: diff against an empty tree object
+#   against=$(git hash-object -t tree /dev/null)
+# fi
+
+# local tmpfile=
+
+# tmpfile=.precommit-tmp-file
+
+# :0:FNAME means 'stage 0 entry', or just "staged"
+# git cat-file -p :0:"$fname" > $tmpfile
+
+# for fname in $(git diff --cached --name-only "$against");
+#   do
+#   for i in $files_to_check;
+#     do
+
+# main

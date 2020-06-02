@@ -1,4 +1,4 @@
-#! /bin/zsh -f
+#!/bin/zsh -f
 
 _exec() {
   local _status

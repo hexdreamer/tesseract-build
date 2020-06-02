@@ -1,4 +1,4 @@
-#! /bin/zsh
+#!/bin/zsh
 
 scriptname=$0:A
 parentdir=${scriptname%/config-make-install_libtiff.sh}

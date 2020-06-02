@@ -1,4 +1,4 @@
-#! /bin/zsh -f
+#!/bin/zsh -f
 
 scriptname=$0:A
 parentdir=${scriptname%/config-make-install_tesseract.sh}

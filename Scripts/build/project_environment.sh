@@ -1,4 +1,4 @@
-#! /bin/zsh -f
+#!/bin/zsh -f
 # shellcheck disable=SC2034
 
 # Relative to this running script named 'project_environment.sh'...

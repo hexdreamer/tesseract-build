@@ -22,7 +22,7 @@ From the man page,
 
 So, even though I thought I was doing some generic "sh" scripting, there's really no thing.
 
-Still coming to terms with choosing zsh.  After reading more in <https://wiki.ubuntu.com/DashAsBinSh> and <https://google.github.io/styleguide/shellguide.html#s2.1-file-extensions>, the script will be `build`, and its shebang will be `#! /bin/zsh -f`.
+Still coming to terms with choosing zsh.  After reading more in <https://wiki.ubuntu.com/DashAsBinSh> and <https://google.github.io/styleguide/shellguide.html#s2.1-file-extensions>, the script will be `build`, and its shebang will be `#!/bin/zsh -f`.
 
 ## Robustness: "correctness", linting
 

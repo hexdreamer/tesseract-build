@@ -1,4 +1,4 @@
-#! /bin/zsh
+#!/bin/zsh
 
 readonly _PROGNAME=$0:A
 readonly _SCRIPTSDIR=${_PROGNAME%/test_exec_and_log.sh}
