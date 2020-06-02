@@ -59,71 +59,46 @@ if [ $_status -eq 1 ]; then
   exit 1
 fi
 
-# main() {
-#   local fname=$1
+exit 0
 
-#   # Redirect output to stderr.
-#   exec 1>&2
-
-#   local errs=
-#   # Loop over cached/staged files
-#   for fname in $(git diff --cached --name-only "$against"); do
-#     # Loop over files that should be checked
-#     for i in $files_to_check; do
-#       if [ "$fname" = "$i" ]; then
-#         local _errs=
-#         _errs=$(checkFile "$fname")
-#         if [ "$_errs" != "" ]; then
-#           local msg=
-#           msg=$(print_errors "$_errs")
-#           if [ "$errs" = "" ]; then
-#             errs="$msg"
-#           else
-#             errs="$errs\n$msg"
-#           fi
-#         fi
-#       fi
-#     done
-#   done
-
-#   export SHUNIT_COLOR=none
-#   _errs=$(${_SCRIPTSDIR}/run_tests.sh)
-#   _status=$?
-#   if [ $_status -ne 0 ]; then
-#     local msg=
-#     msg=$(print_errors "$_errs")
-#     if [ "$errs" = "" ]; then
-#       errs="$msg"
-#     else
-#       errs="$errs\n$msg"
-#     fi
-#   fi
-
-#   if [ "$errs" != "" ]; then
-#     echo "$errs"
-#     echo
-#     exit 1
-#   fi
-
-# }
-
-# if git rev-parse --verify HEAD >/dev/null 2>&1; then
-#   against=HEAD
-# else
-#   # Initial commit: diff against an empty tree object
-#   against=$(git hash-object -t tree /dev/null)
-# fi
-
-# local tmpfile=
-
-# tmpfile=.precommit-tmp-file
+# How to work with staged files during pre-commit
+if git rev-parse --verify HEAD >/dev/null 2>&1; then
+  against=HEAD
+else
+  # Initial commit: diff against an empty tree object
+  against=$(git hash-object -t tree /dev/null)
+fi
 
 # :0:FNAME means 'stage 0 entry', or just "staged"
-# git cat-file -p :0:"$fname" > $tmpfile
+for fname in $(git diff --cached --name-only $against); do
+  git cat-file -p :0:$fname > tmpfile
+  # check $tmpfile || echo Problem w/$fname
 
-# for fname in $(git diff --cached --name-only "$against");
-#   do
-#   for i in $files_to_check;
-#     do
+  # not sure about running shFmt because not sure
+  # how to get change staged... other than simply
+  # doing it and seeing how I like precommit changing
+  # stuff on me
+  # expect, if there's an edit and no unstaged changes for
+  # file, then
+  # mv tmpfile $fname
+done
 
-# main
+# export SHUNIT_COLOR=none
+# _errs=$(${_SCRIPTSDIR}/run_tests.sh)
+# _status=$?
+# if [ $_status -ne 0 ]; then
+#   local msg=
+#   msg=$_errs"
+#   if [ "$errs" = "" ]; then
+#     errs="$msg"
+#   else
+#     errs="$errs\n$msg"
+#   fi
+# fi
+#
+# if [ "$errs" != "" ]; then
+#   echo "$errs"
+#   echo
+#   exit 1
+# fi
+
