@@ -61,7 +61,12 @@ fi
 
 exit 0
 
-# How to work with staged files during pre-commit
+# For future reference...
+
+#
+# How to work with git and staged files during pre-commit
+#
+
 if git rev-parse --verify HEAD >/dev/null 2>&1; then
   against=HEAD
 else
@@ -83,22 +88,26 @@ for fname in $(git diff --cached --name-only $against); do
   # mv tmpfile $fname
 done
 
-# export SHUNIT_COLOR=none
-# _errs=$(${_SCRIPTSDIR}/run_tests.sh)
-# _status=$?
-# if [ $_status -ne 0 ]; then
-#   local msg=
-#   msg=$_errs"
-#   if [ "$errs" = "" ]; then
-#     errs="$msg"
-#   else
-#     errs="$errs\n$msg"
-#   fi
-# fi
 #
-# if [ "$errs" != "" ]; then
-#   echo "$errs"
-#   echo
-#   exit 1
-# fi
+# Working with shunit2
+#
+
+export SHUNIT_COLOR=none
+_errs=$(${_SCRIPTSDIR}/run_tests.sh)
+_status=$?
+if [ $_status -ne 0 ]; then
+  local msg=
+  msg=$_errs"
+  if [ "$errs" = "" ]; then
+    errs="$msg"
+  else
+    errs="$errs\n$msg"
+  fi
+fi
+
+if [ "$errs" != "" ]; then
+  echo "$errs"
+  echo
+  exit 1
+fi
 
