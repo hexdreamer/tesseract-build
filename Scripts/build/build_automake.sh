@@ -10,13 +10,18 @@ if ! source $parentdir/project_environment.sh; then
 fi
 
 if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
-  echo 'Deleting...'
-  find $ROOT/bin \
-    \( \
-    -name 'aclocal*' -o \
-    -name 'automake*' \
-    \) \
-    -print -exec rm -rf {} \; | sort
+  deleted=$(
+    find $ROOT/bin \
+      \( \
+      -name 'aclocal*' -o \
+      -name 'automake*' \
+      \) \
+      -print -exec rm -rf {} + | sort
+  )
+  if [[ -n $deleted ]]; then
+    echo "${scriptname/$PROJECTDIR\//}: deleting..."
+    echo $deleted | sed -- "s|$PROJECTDIR\/|  |g"
+  fi
   exit 0
 fi
 
