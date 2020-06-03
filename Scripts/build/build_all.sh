@@ -13,26 +13,28 @@ if [[ -n $1 ]] && [[ $1 == 'clean-all' ]]; then
   zsh $parentdir/build_pkgconfig.sh clean
   zsh $parentdir/build_libtool.sh clean
   zsh $parentdir/build_zlib.sh clean
-
   zsh $parentdir/build_libjpeg.sh clean
   zsh $parentdir/build_libpng.sh clean
   zsh $parentdir/build_libtiff.sh clean
-
   zsh $parentdir/build_leptonica.sh clean
   zsh $parentdir/build_tesseract.sh clean
-
   exit 0
 fi
 
+# Config/build prereqs for Leptonica & Tesseract
 zsh $parentdir/build_autoconf.sh
 zsh $parentdir/build_automake.sh
 zsh $parentdir/build_pkgconfig.sh
 zsh $parentdir/build_libtool.sh
-zsh $parentdir/build_zlib.sh
 
+# Libraries for Leptonica & Tesseract
+zsh $parentdir/build_zlib.sh
 zsh $parentdir/build_libjpeg.sh
 zsh $parentdir/build_libpng.sh
 zsh $parentdir/build_libtiff.sh
 
+# Final dependency for Tesseract
 zsh $parentdir/build_leptonica.sh
+
+# The last library you need for Xcode
 zsh $parentdir/build_tesseract.sh
