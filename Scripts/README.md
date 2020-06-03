@@ -4,6 +4,8 @@ Welcome to the heart of building Tesseract-OCR!  We're glad you're checking out 
 
 The most simple and most reliable thing you should be able to do is run **build_all.sh**  Located in `$SCRIPTSDIR/build`, this script arranges the sequence and orders the getting-and-installing of the build tools and libraries required to produce Tesseract-OCR.  And then it finally makes the drag-and-drop Tesseract library, and its dependent libraries, that you need for Xcode.
 
+## build_all
+
 Inside **build_all.sh** you'll see:
 
 1. an option for `clean-all` (delete installed products)
@@ -63,7 +65,7 @@ xc mkdir -p Root/include/tesseract
 cp Root/ios_arm64/tesseract/* Root/include/tesseract
 ```
 
-## libtiff header
+### libtiff header
 
 **tiffconf.h** one value with two different definitions between **arm64** and **x86_64**:
 
@@ -96,7 +98,6 @@ From, <http://www.libtiff.org/internals.html>:
 > Native CPU byte order is determined on the fly by the library and does not need to be specified. The HOST_FILLORDER and HOST_BIGENDIAN definitions are not currently used, but may be employed by codecs for optimization purposes.
 
 As **ios_arm64** seems the more important library, by default those headers will be used.  If you are making a macOS app and have problems linking/referencing the API, consider adjusting this final copy.
-
 
 ## Packages, dependencies, prerequisites
 
