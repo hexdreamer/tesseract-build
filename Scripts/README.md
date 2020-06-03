@@ -11,6 +11,19 @@ Inside **build_all.sh** you'll see:
 1. an option for `clean-all` (delete installed products)
 1. all the packages/libraries and the order of the build sequence
 
+All build and config-make-install scripts set their environment by calling **project_environment.sh**:
+
+```zsh
+project_environment.sh
+
+build_all.sh
+
+  build_autoconf.sh
+
+  build_tesseract.sh
+    config-make-install_tesseract.sh
+```
+
 Comments have been added to explain some ordering and dependencies.
 
 The build environment is created in each **build_\<package\>.sh** script; any individual package script can be run by itself.  Each package script describes the flow of:
@@ -22,20 +35,6 @@ The build environment is created in each **build_\<package\>.sh** script; any in
 
 The imaging libraries can have many different compiler flags and configuration options.  For each package, these variables are defined in a separate **config-make-install_\<package\>.sh** script.  The script also works to build the same package for different combinations of architecture, platform, and target and is called repeatedly from its **build_\<package\>.sh** script.  It looks something like this in practice:
 
-```zsh
-build_all.sh
-
-  build_autoconf.sh
-    project_environment.sh
-      utility.sh
-
-  build_tesseract.sh
-    project_environment.sh
-      utility.sh
-    config-make-install_tesseract.sh
-      project_environment.sh
-        utility.sh
-```
 
 The last line in that example, `lipo macos...`, hints at the arrangement of files when a build is done.  The build products for the libraries end up in `$ROOT` grouped by the three *platform architectures*, **ios_arm64**, **ios_x86_64**, and **macos_x86_64**, like:
 
