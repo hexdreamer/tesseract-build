@@ -79,4 +79,4 @@ print 'done.'
 # --  Copy headers  -----------------------------------------------------------
 
 xc mkdir -p $ROOT/include
-xc cp $ROOT/ios_arm64/j*.h $ROOT/include
+xc cp $ROOT/ios_arm64/include/j*.h $ROOT/include

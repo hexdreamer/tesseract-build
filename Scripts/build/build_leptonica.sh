@@ -86,4 +86,4 @@ print 'done.'
 # --  Copy headers  -----------------------------------------------------------
 
 xc mkdir -p $ROOT/include/leptonica
-xc cp $ROOT/ios_arm64/leptonica/* $ROOT/include/leptonica
+xc cp $ROOT/ios_arm64/include/leptonica/* $ROOT/include/leptonica

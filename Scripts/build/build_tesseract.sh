@@ -6,10 +6,10 @@ scriptpath=$0:A
 parentdir=${scriptpath%/*}
 scriptname=${scriptpath##*/}
 
-if ! source $parentdir/project_environment.sh; then
+source $parentdir/project_environment.sh || {
   echo "build_tesseract.sh: error sourcing $parentdir/project_environment.sh"
   exit 1
-fi
+}
 
 if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
   deleted=$(find $ROOT -name '*tess*' -prune -print -exec rm -rf {} \;)
@@ -88,4 +88,4 @@ print 'done.'
 # --  Copy headers  -----------------------------------------------------------
 
 xc mkdir -p $ROOT/include/tesseract
-xc cp $ROOT/ios_arm64/tesseract/* $ROOT/include/tesseract
+xc cp $ROOT/ios_arm64/include/tesseract/* $ROOT/include/tesseract

@@ -83,5 +83,5 @@ print 'done.'
 # --  Copy headers  -----------------------------------------------------------
 
 xc mkdir -p $ROOT/include/libpng16
-xc cp $ROOT/ios_arm64/libpng16/* $ROOT/include/libpng16
-xc cp $ROOT/ios_arm64/png*.h $ROOT/include
+xc cp $ROOT/ios_arm64/include/libpng16/* $ROOT/include/libpng16
+xc cp $ROOT/ios_arm64/include/png*.h     $ROOT/include

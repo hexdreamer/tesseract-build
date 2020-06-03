@@ -78,4 +78,4 @@ print 'done.'
 # --  Copy headers  -----------------------------------------------------------
 
 xc mkdir -p $ROOT/include
-xc cp $ROOT/ios_arm64/tiff*.h $ROOT/include
+xc cp $ROOT/ios_arm64/include/tiff*.h $ROOT/include

@@ -23,14 +23,18 @@ The build environment is created in each **build_\<package\>.sh** script; any in
 The imaging libraries can have many different compiler flags and configuration options.  For each package, these variables are defined in a separate **config-make-install_\<package\>.sh** script.  The script also works to build the same package for different combinations of architecture, platform, and target and is called repeatedly from its **build_\<package\>.sh** script.  It looks something like this in practice:
 
 ```zsh
-% build_all.sh
-    ...
-    zsh build_libjpeg.sh
-        download; extract
-        ...
-        config-make-install_tesseract.sh 'macos_x86_64'
-        ...
-        lipo Root/macos_x86_64/lib/tesseract.a -create -output Root/lib/tesseract-macos.a
+build_all.sh
+
+  build_autoconf.sh
+    project_environment.sh
+      utility.sh
+
+  build_tesseract.sh
+    project_environment.sh
+      utility.sh
+    config-make-install_tesseract.sh
+      project_environment.sh
+        utility.sh
 ```
 
 The last line in that example, `lipo macos...`, hints at the arrangement of files when a build is done.  The build products for the libraries end up in `$ROOT` grouped by the three *platform architectures*, **ios_arm64**, **ios_x86_64**, and **macos_x86_64**, like:
