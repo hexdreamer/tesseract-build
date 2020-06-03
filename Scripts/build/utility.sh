@@ -70,7 +70,8 @@ download() {
   fi
 
   print -n 'Downloading...'
-  xl $name '0_curl' curl -L -f $url --output $DOWNLOADS/$targz
+  xc mkdir -p $DOWNLOADS || exit 1
+  xl $name '0_curl' curl -L -f $url --output $DOWNLOADS/$targz || exit 1
   print ' done.'
 }
 
@@ -92,6 +93,7 @@ extract() {
   fi
 
   print -n 'Extracting...'
-  xl $name '1_untar' tar -zxf $DOWNLOADS/$targz --directory $SOURCES
+  xc mkdir -p $SOURCES || exit 1
+  xl $name '1_untar' tar -zxf $DOWNLOADS/$targz --directory $SOURCES || exit 1
   print ' done.'
 }
