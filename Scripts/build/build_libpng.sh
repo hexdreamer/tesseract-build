@@ -79,3 +79,9 @@ xl $name '5_macos_lipo' \
 xc cd $ROOT/lib
 xc ln -fs libpng16-macos.a libpng-macos.a
 print 'done.'
+
+# --  Copy headers  -----------------------------------------------------------
+
+xc mkdir -p $ROOT/include/libpng16
+xc cp $ROOT/ios_arm64/libpng16/* $ROOT/include/libpng16
+xc cp $ROOT/ios_arm64/png*.h $ROOT/include

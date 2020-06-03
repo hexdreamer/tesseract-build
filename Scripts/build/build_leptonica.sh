@@ -82,3 +82,8 @@ xl leptonica-1.79.0 '6_lipo_macos' \
   -create -output $ROOT/lib/liblept-macos.a ||
   exit 1
 print 'done.'
+
+# --  Copy headers  -----------------------------------------------------------
+
+xc mkdir -p $ROOT/include/leptonica
+xc cp $ROOT/ios_arm64/leptonica/* $ROOT/include/leptonica

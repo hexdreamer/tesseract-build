@@ -84,3 +84,8 @@ xl $name '6_lipo_macos' \
   -create -output $ROOT/lib/libtesseract-macos.a ||
   exit 1
 print 'done.'
+
+# --  Copy headers  -----------------------------------------------------------
+
+xc mkdir -p $ROOT/include/tesseract
+xc cp $ROOT/ios_arm64/tesseract/* $ROOT/include/tesseract

@@ -7,7 +7,7 @@ The most simple and most reliable thing you should be able to do is run **build_
 Inside **build_all.sh** you'll see:
 
 1. an option for `clean-all` (delete installed products)
-1. the steps to **build all**
+1. all the packages/libraries and the order of the build sequence
 
 Comments have been added to explain some ordering and dependencies.
 
@@ -18,7 +18,85 @@ The build environment is created in each **build_\<package\>.sh** script; any in
 - make and install
 - create the final `lipo`-ed library that Xcode will use (for the multi-architecture imaging libraries)
 
-The imaging libraries can have many different compiler flags and configuration options.  For each package, these variables are defined in a separate **config-make-install_\<package\>.sh** script.  The script also works to build the same package for different combinations of architecture, platform, and target.
+The imaging libraries can have many different compiler flags and configuration options.  For each package, these variables are defined in a separate **config-make-install_\<package\>.sh** script.  The script also works to build the same package for different combinations of architecture, platform, and target and is called repeatedly from its **build_\<package\>.sh** script.  It looks something like this in practice:
+
+```zsh
+% build_all.sh
+    ...
+    zsh build_libjpeg.sh
+        download; extract
+        ...
+        config-make-install_tesseract.sh 'macos_x86_64'
+        ...
+        lipo Root/macos_x86_64/lib/tesseract.a -create -output Root/lib/tesseract-macos.a
+```
+
+The last line in that example, `lipo macos...`, hints at the arrangement of files when a build is done.  The build products for the libraries end up in `$ROOT` grouped by the three *platform architectures*, **ios_arm64**, **ios_x86_64**, and **macos_x86_64**, like:
+
+```zsh
+Root/
+  ios_arm64/
+    include/
+      tesseract/
+        capi.h
+    lib/
+      tesseract.a
+  ios_x86_64/
+    lib/
+      tesseract.a
+  macos_x86_64/
+    lib/
+      tesseract.a
+```
+
+**ios** binaries are lipoed together into a multi-arch binary, while the **macos** binary is just renamed, like:
+
+```zsh
+lipo Root/ios_arm64/lib/tesseract.a Root/ios_x86_64/lib/tesseract.a -create -output Root/lib/tesserarct.a
+lipo Root/macos_x86_64/lib/tesseract.a -create -output Root/lib/tesserarct-macos.a
+```
+
+Header files are also copied into the final structure:
+
+```zsh
+xc mkdir -p Root/include/tesseract
+cp Root/ios_arm64/tesseract/* Root/include/tesseract
+```
+
+## libtiff header
+
+**tiffconf.h** one value with two different definitions between **arm64** and **x86_64**:
+
+```zsh
+% diff -r Root/ios_arm64/include Root/macos_x86_64/include
+diff -r Root/ios_arm64/include/tiffconf.h Root/macos_x86_64/include/tiffconf.h
+48c48
+< #define HOST_FILLORDER FILLORDER_MSB2LSB
+---
+> #define HOST_FILLORDER FILLORDER_LSB2MSB
+```
+
+as **ios_x86_64** and **macos_x86_64** are identical:
+
+```zsh
+% diff -r Root/ios_x86_64/include Root/macos_x86_64/include
+```
+
+From, <https://www.awaresystems.be/imaging/tiff/tifftags/fillorder.html>:
+
+> LibTiff defines these values:
+>
+> FILLORDER_MSB2LSB = 1;
+> FILLORDER_LSB2MSB = 2;
+>
+> In practice, the use of FillOrder=2 is very uncommon, and is not recommended.
+
+From, <http://www.libtiff.org/internals.html>:
+
+> Native CPU byte order is determined on the fly by the library and does not need to be specified. The HOST_FILLORDER and HOST_BIGENDIAN definitions are not currently used, but may be employed by codecs for optimization purposes.
+
+As **ios_arm64** seems the more important library, by default those headers will be used.  If you are making a macOS app and have problems linking/referencing the API, consider adjusting this final copy.
+
 
 ## Packages, dependencies, prerequisites
 
@@ -30,7 +108,7 @@ The image libraries **libjpeg**, **libpng**, and **libtiff**, and the **zlib** c
 
 ## zsh
 
-The scripts are written in the best zsh we know.  And, if you're curious, a StackOverflow perspective on popularity: [Bash vs. Zsh][2].
+The scripts are written in the best zsh I know.  I set upon writing these scripts in zsh after years of getting by with bash.  To shore up my lack of knowledge around shell scripting, I started using Shellcheck in bash-mode on the zsh scripts for any insight into better coding practices and new concepts.  Trying to embrace the zsh-y way, I've started disabling some checks where I've seen clear examples from the author of zsh on how zsh does something differently than bash.
 
 ### Considerations for Shell Script style
 

@@ -25,30 +25,30 @@ check_shebang() {
   return $_status
 }
 
-status=0
+_status=0
 # bash is close enough; disable specific checks in $PROJECTDIR/.shellcheckrc
 errors=$(shellcheck -f gcc -s bash $FILES_TO_CHECK)
 if [[ -n $errors ]]; then
   echo The following errors need to be resolved before checkin
   echo $errors
-  status=1
+  _status=1
 fi
 
 formatted_files=$(shFmt -l -i 2 -ci -w $FILES_TO_CHECK)
 if [[ -n $formatted_files ]]; then
   echo The following files were formatted by shFmt
   echo $formatted_files
-  status=1
+  _status=1
 fi
 
 shebangs=$(check_shebang $FILES_TO_CHECK)
 if [[ -n $shebangs ]]; then
   echo The following shebangs need to be corrected
   echo $shebangs
-  status=1
+  _status=1
 fi
 
-if [ $status -eq 1 ]; then
+if [ $_status -eq 1 ]; then
   exit 1
 fi
 

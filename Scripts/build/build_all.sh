@@ -20,7 +20,7 @@ if [[ -n $1 ]] && [[ $1 == 'clean-all' ]]; then
   exit 0
 fi
 
-# Config/build prereqs for Leptonica & Tesseract
+# Prereqs for configuring/building Leptonica & Tesseract
 zsh $parentdir/build_autoconf.sh
 zsh $parentdir/build_automake.sh
 zsh $parentdir/build_pkgconfig.sh
@@ -32,7 +32,7 @@ zsh $parentdir/build_libjpeg.sh
 zsh $parentdir/build_libpng.sh
 zsh $parentdir/build_libtiff.sh
 
-# Final dependency for Tesseract
+# Leptonica is final dependency for Tesseract
 zsh $parentdir/build_leptonica.sh
 
 # The last library you need for Xcode

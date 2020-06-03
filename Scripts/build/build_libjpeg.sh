@@ -75,3 +75,8 @@ xl $name '5_macos_lipo' \
   xcrun lipo $ROOT/macos_x86_64/lib/libjpeg.a \
   -create -output $ROOT/lib/libjpeg-macos.a
 print 'done.'
+
+# --  Copy headers  -----------------------------------------------------------
+
+xc mkdir -p $ROOT/include
+xc cp $ROOT/ios_arm64/j*.h $ROOT/include

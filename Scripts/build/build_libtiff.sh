@@ -74,3 +74,8 @@ xl $name '5_macos_lipo' \
   xcrun lipo $ROOT/macos_x86_64/lib/libtiff.a \
   -create -output $ROOT/lib/libtiff-macos.a
 print 'done.'
+
+# --  Copy headers  -----------------------------------------------------------
+
+xc mkdir -p $ROOT/include
+xc cp $ROOT/ios_arm64/tiff*.h $ROOT/include
