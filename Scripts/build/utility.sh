@@ -59,7 +59,12 @@ download() {
   local targz=$3
 
   if [ -e $DOWNLOADS/$targz ]; then
-    echo "Skipped download, found $DOWNLOADS/$targz"
+    # Substring replacement,
+    #  '/Users/name/dev/project_root/SomePath/WeCareAbout'
+    #  -->
+    #                   '$PROJECTDIR/SomePath/WeCareAbout'
+    local _downloads=${DOWNLOADS/$PROJECTDIR/'$PROJECTDIR'}
+    echo "Skipped download, found $_downloads/$targz"
     return 0
   fi
 
@@ -79,7 +84,8 @@ extract() {
   fi
 
   if [ -d $SOURCES/$dirname ]; then
-    echo "Skipped extract of TGZ, found $SOURCES/$dirname"
+    local _sources=${SOURCES/$PROJECTDIR/'$PROJECTDIR'}
+    echo "Skipped extract of TGZ, found $_sources/$dirname"
     return 0
   fi
 

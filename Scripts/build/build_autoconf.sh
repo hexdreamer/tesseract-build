@@ -1,15 +1,17 @@
 #!/bin/zsh -f
 
-scriptname=$0:A
-parentdir=${scriptname%/build_autoconf.sh}
+scriptpath=$0:A
+parentdir=${scriptpath%/*}
+scriptname=${scriptpath##*/}
+
 if ! source $parentdir/project_environment.sh; then
   echo "build_autoconf.sh: error sourcing $parentdir/project_environment.sh"
   exit 1
 fi
 
 if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
-  echo 'Deleting...'
-  find $ROOT/bin \
+  deleted=$(
+    find $ROOT/bin \
     \( \
     -name 'autoconf' -o \
     -name 'autoheader' -o \
@@ -20,6 +22,11 @@ if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
     -name 'ifnames' \
     \) \
     -print -exec rm -rf {} \; | sort
+    )
+  if [[ -n $deleted ]]; then
+    echo "$scriptname: deleting..."
+    echo $deleted
+  fi
   exit 0
 fi
 
