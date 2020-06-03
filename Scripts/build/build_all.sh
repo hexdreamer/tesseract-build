@@ -3,9 +3,8 @@
 # `set -x` turns on debugging, `set +x` turns it off
 # set -x
 
-# Relative to this running script named 'build_all.sh'...
-scriptname=$0:A
-parentdir=${scriptname%/build_all.sh}
+scriptpath=$0:A
+parentdir=${scriptpath%/*}
 
 if [[ -n $1 ]] && [[ $1 == 'clean-all' ]]; then
   zsh $parentdir/build_autoconf.sh clean

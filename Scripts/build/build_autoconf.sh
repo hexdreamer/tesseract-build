@@ -12,20 +12,22 @@ fi
 if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
   deleted=$(
     find $ROOT/bin \
-    \( \
-    -name 'autoconf' -o \
-    -name 'autoheader' -o \
-    -name 'autom4te' -o \
-    -name 'autoreconf' -o \
-    -name 'autoscan' -o \
-    -name 'autoupdate' -o \
-    -name 'ifnames' \
-    \) \
-    -print -exec rm -rf {} \; | sort
-    )
+      \( \
+      -name 'autoconf' -o \
+      -name 'autoheader' -o \
+      -name 'autom4te' -o \
+      -name 'autoreconf' -o \
+      -name 'autoscan' -o \
+      -name 'autoupdate' -o \
+      -name 'ifnames' \
+      \) \
+      -print -exec rm -rf {} \; | sort
+  )
   if [[ -n $deleted ]]; then
     echo "$scriptname: deleting..."
     echo $deleted
+  else
+    echo "$scriptname: clean"
   fi
   exit 0
 fi

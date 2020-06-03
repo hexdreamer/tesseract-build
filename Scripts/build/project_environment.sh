@@ -4,9 +4,11 @@
 # Relative to this running script named 'project_environment.sh'...
 SCRIPTNAME=$0:A
 readonly BUILDDIR=${SCRIPTNAME%/project_environment.sh}
+
+# Scripts is one dir up
 readonly SCRIPTSDIR=${BUILDDIR%/build}
 
-# set paths one dir-level up from this directory named 'Scripts'
+# And the root of the project is one dir above scripts
 readonly PROJECTDIR=${SCRIPTSDIR%/Scripts}
 
 readonly DOWNLOADS=$PROJECTDIR/Downloads

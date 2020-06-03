@@ -2,16 +2,23 @@
 
 # TESSERACT OCR -- https://github.com/tesseract-ocr/tesseract
 
-scriptname=$0:A
-parentdir=${scriptname%/build_tesseract.sh}
+scriptpath=$0:A
+parentdir=${scriptpath%/*}
+scriptname=${scriptpath##*/}
+
 if ! source $parentdir/project_environment.sh; then
   echo "build_tesseract.sh: error sourcing $parentdir/project_environment.sh"
   exit 1
 fi
 
 if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
-  echo 'Deleting...'
-  find $ROOT -name '*tess*' -prune -print -exec rm -rf {} \;
+  deleted=$(find $ROOT -name '*tess*' -prune -print -exec rm -rf {} \;)
+  if [[ -n $deleted ]]; then
+    echo "$scriptname: deleting..."
+    echo $deleted
+  else
+    echo "$scriptname: clean"
+  fi
   exit 0
 fi
 
@@ -29,14 +36,10 @@ extract $name $targz || exit 1
 
 # --  Preconfigure  -----------------------------------------------------------
 
-if [ -f $SOURCES/$name/configure ]; then
-  print "Skipped preconfigure, found $SOURCES/$name/configure"
-else
-  print -n 'Preconfiguring... '
-  xc cd $SOURCES/$name || exit 1
-  xl $name '2_preconfig' ./autogen.sh || exit 1
-  print 'done.'
-fi
+print -n 'Preconfiguring... '
+xc cd $SOURCES/$name || exit 1
+xl $name '2_preconfig' ./autogen.sh || exit 1
+print 'done.'
 
 # --  Config / Make / Install  ------------------------------------------------
 

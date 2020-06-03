@@ -2,16 +2,23 @@
 
 # LIBPNG -- http://www.libpng.org/pub/png/libpng.html
 
-scriptname=$0:A
-parentdir=${scriptname%/build_libpng.sh}
+scriptpath=$0:A
+parentdir=${scriptpath%/*}
+scriptname=${scriptpath##*/}
+
 if ! source $parentdir/project_environment.sh; then
   echo "build_libpng.sh: error sourcing $parentdir/project_environment.sh"
   exit 1
 fi
 
 if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
-  echo 'Deleting...'
-  find $ROOT -name '*png*' -prune -print -exec rm -rf {} \;
+  deleted=$(find $ROOT -name '*png*' -prune -print -exec rm -rf {} \;)
+  if [[ -n $deleted ]]; then
+    echo "$scriptname: deleting..."
+    echo $deleted
+  else
+    echo "$scriptname: clean"
+  fi
   exit 0
 fi
 

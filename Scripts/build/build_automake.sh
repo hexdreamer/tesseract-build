@@ -2,8 +2,10 @@
 
 # AUTOMAKE -- https://www.gnu.org/software/automake/
 
-scriptname=$0:A
-parentdir=${scriptname%/build_automake.sh}
+scriptpath=$0:A
+parentdir=${scriptpath%/*}
+scriptname=${scriptpath##*/}
+
 if ! source $parentdir/project_environment.sh; then
   echo "build_automake.sh: error sourcing $parentdir/project_environment.sh"
   exit 1
@@ -19,8 +21,10 @@ if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
       -print -exec rm -rf {} + | sort
   )
   if [[ -n $deleted ]]; then
-    echo "${scriptname/$PROJECTDIR\//}: deleting..."
-    echo $deleted | sed -- "s|$PROJECTDIR\/|  |g"
+    echo "$scriptname: deleting..."
+    echo $deleted
+  else
+    echo "$scriptname: clean"
   fi
   exit 0
 fi

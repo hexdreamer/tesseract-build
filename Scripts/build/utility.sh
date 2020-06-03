@@ -63,6 +63,7 @@ download() {
     #  '/Users/name/dev/project_root/SomePath/WeCareAbout'
     #  -->
     #                   '$PROJECTDIR/SomePath/WeCareAbout'
+    # shellcheck disable=SC2016
     local _downloads=${DOWNLOADS/$PROJECTDIR/'$PROJECTDIR'}
     echo "Skipped download, found $_downloads/$targz"
     return 0
@@ -84,6 +85,7 @@ extract() {
   fi
 
   if [ -d $SOURCES/$dirname ]; then
+    # shellcheck disable=SC2016
     local _sources=${SOURCES/$PROJECTDIR/'$PROJECTDIR'}
     echo "Skipped extract of TGZ, found $_sources/$dirname"
     return 0

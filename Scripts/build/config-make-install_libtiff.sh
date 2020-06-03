@@ -1,7 +1,8 @@
 #!/bin/zsh
 
-scriptname=$0:A
-parentdir=${scriptname%/config-make-install_libtiff.sh}
+scriptpath=$0:A
+parentdir=${scriptpath%/*}
+
 if ! source $parentdir/project_environment.sh; then
   echo "config-make-install_libtiff.sh: error sourcing $parentdir/project_environment.sh"
   exit 1

@@ -2,8 +2,9 @@
 
 # LEPTONICA -- https://github.com/DanBloomberg/leptonica
 
-scriptname=$0:A
-parentdir=${scriptname%/build_leptonica.sh}
+scriptpath=$0:A
+parentdir=${scriptpath%/*}
+scriptname=${scriptpath##*/}
 
 if ! source $parentdir/project_environment.sh; then
   echo "build_leptonica.sh: error sourcing $parentdir/project_environment.sh"
@@ -11,12 +12,15 @@ if ! source $parentdir/project_environment.sh; then
 fi
 
 if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
-  echo 'Deleting...'
-  find $ROOT -name '*lept*' -prune -print -exec rm -rf {} \;
+  deleted=$(find $ROOT -name '*lept*' -prune -print -exec rm -rf {} \;)
+  if [[ -n $deleted ]]; then
+    echo "$scriptname: deleting..."
+    echo $deleted
+  else
+    echo "$scriptname: clean"
+  fi
   exit 0
 fi
-
-name='leptonica-1.79.0'
 
 print "\n======== leptonica-1.79.0 ========"
 
@@ -30,14 +34,10 @@ extract leptonica-1.79.0 $targz || exit 1
 
 # --  Preconfigure  -----------------------------------------------------------
 
-if [ -f $SOURCES/leptonica-1.79.0/configure ]; then
-  print "Skipped preconfigure, found $SOURCES/leptonica-1.79.0/configure"
-else
-  print -n 'Preconfiguring... '
-  xc cd $SOURCES/leptonica-1.79.0 || exit 1
-  xl leptonica-1.79.0 '2_preconfig' ./autogen.sh || exit 1
-  print 'done.'
-fi
+print -n 'Preconfiguring... '
+xc cd $SOURCES/leptonica-1.79.0 || exit 1
+xl leptonica-1.79.0 '2_preconfig' ./autogen.sh || exit 1
+print 'done.'
 
 # --  Config / Make / Install  ------------------------------------------------
 
