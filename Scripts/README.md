@@ -87,7 +87,7 @@ Root
 
 ### libtiff header
 
-**tiffconf.h** one value with two different definitions between **arm64** and **x86_64**:
+**tiffconf.h** has one value with two different definitions between **arm64** and **x86_64**:
 
 ```zsh
 % diff -r Root/ios_arm64/include Root/macos_x86_64/include
@@ -117,7 +117,9 @@ From, <http://www.libtiff.org/internals.html>:
 
 > Native CPU byte order is determined on the fly by the library and does not need to be specified. The HOST_FILLORDER and HOST_BIGENDIAN definitions are not currently used, but may be employed by codecs for optimization purposes.
 
-As **ios_arm64** seems the more important library, by default those headers will be used.  If you are making a macOS app and have problems linking/referencing the API, consider adjusting this final copy.
+As **ios_arm64** seems the more important library, by default those headers will be used.
+
+*If you are making a macOS app and have problems linking/referencing the API, consider adjusting this final copy.*
 
 ## Packages, dependencies, prerequisites
 
