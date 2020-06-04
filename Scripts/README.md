@@ -4,68 +4,85 @@ Welcome to the heart of building Tesseract-OCR!  We're glad you're checking out 
 
 The most simple and most reliable thing you should be able to do is run **build_all.sh**  Located in `$SCRIPTSDIR/build`, this script arranges the sequence and orders the getting-and-installing of the build tools and libraries required to produce Tesseract-OCR.  And then it finally makes the drag-and-drop Tesseract library, and its dependent libraries, that you need for Xcode.
 
-## build_all
+## Building
 
-Inside **build_all.sh** you'll see:
-
-1. an option for `clean-all` (delete installed products)
-1. all the packages/libraries and the order of the build sequence
-
-All build and config-make-install scripts set their environment by calling **project_environment.sh**:
+Looking inside the build directory, you'll see build_all.sh, a number of package scripts for building and configuration, and project_environment.sh, like:
 
 ```zsh
-project_environment.sh
-
 build_all.sh
-
-  build_autoconf.sh
-
-  build_tesseract.sh
-    config-make-install_tesseract.sh
+build_autoconf.sh
+...
+build_tesseract.sh
+...
+config-make-install_tesseract.sh
+...
+project_environment.sh
 ```
 
-Comments have been added to explain some ordering and dependencies.
+Inside build_all.sh are:
 
-The build environment is created in each **build_\<package\>.sh** script; any individual package script can be run by itself.  Each package script describes the flow of:
+1. an option to **clean-all** (delete installed products)
+1. all the packages/libraries in a build order that is correct
 
-- download and extract
-- preconfigure and configure
-- make and install
-- create the final `lipo`-ed library that Xcode will use (for the multi-architecture imaging libraries)
+Inside each **build_\<package\>.sh** script is the sequence of events for getting, building, and installing that package:
 
-The imaging libraries can have many different compiler flags and configuration options.  For each package, these variables are defined in a separate **config-make-install_\<package\>.sh** script.  The script also works to build the same package for different combinations of architecture, platform, and target and is called repeatedly from its **build_\<package\>.sh** script.  It looks something like this in practice:
+1. download and extract
+1. preconfigure and configure
+1. make and install
+1. create the final `lipo`-ed library that Xcode will use (for the multi-architecture imaging libraries) and copy over included header files
 
+The imaging libraries can have many different compiler flags and configuration options.  These variables are defined in a separate **config-make-install_\<package\>.sh** script.  The script also works to build the same package for different combinations of architecture, platform, and target and is called repeatedly from its build_\<package\>.sh script.
 
-The last line in that example, `lipo macos...`, hints at the arrangement of files when a build is done.  The build products for the libraries end up in `$ROOT` grouped by the three *platform architectures*, **ios_arm64**, **ios_x86_64**, and **macos_x86_64**, like:
+The build environment is created in each build_\<package\>.sh and config-make-install_\<package\>.sh script by sourcing **project_environment.sh**.
+
+## Installing
+
+The image libraries are configured to install their products in $ROOT, grouped into the three *platform architectures*: **ios_arm64**, **ios_x86_64**, **macos_x86_64**.  For some of the key components of the tesseract build, it would look like this on disc:
 
 ```zsh
-Root/
-  ios_arm64/
-    include/
-      tesseract/
-        capi.h
-    lib/
-      tesseract.a
-  ios_x86_64/
-    lib/
-      tesseract.a
-  macos_x86_64/
-    lib/
-      tesseract.a
+Root
+├── ios_arm64
+│   ├── include
+│   │   └── tesseract
+│   │       └── capi.h
+│   └── lib
+│       └── tesseract.a
+├── ios_x86_64
+│   ├── include...
+│   └── lib
+│       └── tesseract.a
+└── macos_x86_64
+    ├── include...
+    └── lib
+        └── tesseract.a
 ```
 
-**ios** binaries are lipoed together into a multi-arch binary, while the **macos** binary is just renamed, like:
+From this structure:
+
+1. **ios** binaries are lipoed together into a multi-arch binary, while the **macos** binary is just renamed, like:
+
+    ```zsh
+    lipo Root/ios_arm64/lib/tesseract.a Root/ios_x86_64/lib/tesseract.a -create -output Root/lib/tesserarct.a
+    lipo Root/macos_x86_64/lib/tesseract.a -create -output Root/lib/tesserarct-macos.a
+    ```
+
+1. the header files are copied from ios_arm64
+
+    ```zsh
+    xc mkdir -p Root/include/tesseract
+    cp Root/ios_arm64/tesseract/* Root/include/tesseract
+    ```
+
+and the final Xcode-ready structure is complete:
 
 ```zsh
-lipo Root/ios_arm64/lib/tesseract.a Root/ios_x86_64/lib/tesseract.a -create -output Root/lib/tesserarct.a
-lipo Root/macos_x86_64/lib/tesseract.a -create -output Root/lib/tesserarct-macos.a
-```
-
-Header files are also copied into the final structure:
-
-```zsh
-xc mkdir -p Root/include/tesseract
-cp Root/ios_arm64/tesseract/* Root/include/tesseract
+Root
+├── include
+│   └── tesseract
+│       └── capi.h
+└── lib
+    ├── tesseract-macos.a
+    └── tesseract.a
 ```
 
 ### libtiff header
