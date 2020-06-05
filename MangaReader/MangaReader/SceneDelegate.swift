@@ -8,6 +8,10 @@
 
 import UIKit
 import SwiftUI
+import libleptonica
+import libtesseract
+
+typealias Pix = UnsafeMutablePointer<PIX>?
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -21,6 +25,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Create the SwiftUI view that provides the window contents.
         let contentView = ContentView()
+        
+        let image = UIImage(named: "ScreenShot");
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
@@ -29,6 +35,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             self.window = window
             window.makeKeyAndVisible()
         }
+    }
+    
+    private func createPix(from image: UIImage) throws -> Pix {
+      guard let data = image.pngData() else { throw SwiftyTesseract.Error.imageConversionError }
+      let rawPointer = (data as NSData).bytes
+      let uint8Pointer = rawPointer.assumingMemoryBound(to: UInt8.self)
+      return pixReadMem(uint8Pointer, data.count)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F48A7E7C248AD10D00D0848D /* lib in Resources */ = {isa = PBXBuildFile; fileRef = F48A7E7A248AD10D00D0848D /* lib */; };
+		F48A7E7D248AD10D00D0848D /* include in Resources */ = {isa = PBXBuildFile; fileRef = F48A7E7B248AD10D00D0848D /* include */; };
 		F4D56A952489B2E300E303C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D56A942489B2E300E303C4 /* AppDelegate.swift */; };
 		F4D56A972489B2E300E303C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D56A962489B2E300E303C4 /* SceneDelegate.swift */; };
 		F4D56A992489B2E300E303C4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D56A982489B2E300E303C4 /* ContentView.swift */; };
@@ -35,6 +37,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F48A7E7A248AD10D00D0848D /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lib; sourceTree = "<group>"; };
+		F48A7E7B248AD10D00D0848D /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; path = include; sourceTree = "<group>"; };
+		F48A7E7E248AD4D600D0848D /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		F4D56A912489B2E300E303C4 /* MangaReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MangaReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4D56A942489B2E300E303C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F4D56A962489B2E300E303C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -99,6 +104,8 @@
 		F4D56A932489B2E300E303C4 /* MangaReader */ = {
 			isa = PBXGroup;
 			children = (
+				F48A7E7B248AD10D00D0848D /* include */,
+				F48A7E7A248AD10D00D0848D /* lib */,
 				F4D56A942489B2E300E303C4 /* AppDelegate.swift */,
 				F4D56A962489B2E300E303C4 /* SceneDelegate.swift */,
 				F4D56A982489B2E300E303C4 /* ContentView.swift */,
@@ -106,6 +113,7 @@
 				F4D56A9F2489B2E500E303C4 /* LaunchScreen.storyboard */,
 				F4D56AA22489B2E500E303C4 /* Info.plist */,
 				F4D56A9C2489B2E500E303C4 /* Preview Content */,
+				F48A7E7E248AD4D600D0848D /* module.modulemap */,
 			);
 			path = MangaReader;
 			sourceTree = "<group>";
@@ -242,6 +250,8 @@
 			files = (
 				F4D56AA12489B2E500E303C4 /* LaunchScreen.storyboard in Resources */,
 				F4D56A9E2489B2E500E303C4 /* Preview Assets.xcassets in Resources */,
+				F48A7E7C248AD10D00D0848D /* lib in Resources */,
+				F48A7E7D248AD10D00D0848D /* include in Resources */,
 				F4D56A9B2489B2E500E303C4 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -442,8 +452,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				"LIBRARY_SEARCH_PATHS[arch=*]" = "$(PROJECT_DIR)/MangaReader/lib/**";
 				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.MangaReader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"SWIFT_INCLUDE_PATHS[arch=*]" = "$(PROJECT_DIR)/MangaReader/include/**";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -461,8 +473,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				"LIBRARY_SEARCH_PATHS[arch=*]" = "$(PROJECT_DIR)/MangaReader/lib/**";
 				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.MangaReader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"SWIFT_INCLUDE_PATHS[arch=*]" = "$(PROJECT_DIR)/MangaReader/include/**";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
