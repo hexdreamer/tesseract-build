@@ -19,3 +19,10 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
+private func createPix(from image: UIImage) -> Pix {
+    let data = image.pngData()!
+    let rawPointer = (data as NSData).bytes
+    let uint8Pointer = rawPointer.assumingMemoryBound(to: UInt8.self)
+    return pixReadMem(uint8Pointer, data.count)
+}
