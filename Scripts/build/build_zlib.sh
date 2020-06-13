@@ -45,21 +45,40 @@ extract $name $targz
 
 # --  Config / Make / Install  ------------------------------------------------
 
-xc mkdir -p $SOURCES/$name/x86
-xc cd $SOURCES/$name/x86 || exit 1
+xc mkdir -p $SOURCES/$name/arm64
+xc cd $SOURCES/$name/arm64 || exit 1
 
-print -n 'x86: '
+print -n 'arm64: '
 
 print -n 'configuring... '
-export CFLAGS="--target=x86_64-apple-darwin"
-xl $name '2_config_x86' ../configure "--prefix=$ROOT" || exit 1
+export CFLAGS="--target=arm-apple-darwin64"
+xl $name '2_config_arm64' ../configure "--prefix=$ROOT" || exit 1
 print -n 'done, '
 
 print -n 'making... '
-xl $name '3_clean_x86' make clean || exit 1
-xl $name '3_make_x86' make || exit 1
+xl $name '3_clean_arm64' make clean || exit 1
+xl $name '3_make_arm64' make || exit 1
 print -n 'done, '
 
 print -n 'installing... '
-xl $name '4_install_x86' make install || exit 1
+xl $name '4_install_arm64' make install || exit 1
+print 'done.'
+
+xc mkdir -p $SOURCES/$name/x86_64
+xc cd $SOURCES/$name/x86_64 || exit 1
+
+print -n 'x86_64: '
+
+print -n 'configuring... '
+export CFLAGS="--target=x86_64_64-apple-darwin"
+xl $name '2_config_x86_64' ../configure "--prefix=$ROOT" || exit 1
+print -n 'done, '
+
+print -n 'making... '
+xl $name '3_clean_x86_64' make clean || exit 1
+xl $name '3_make_x86_64' make || exit 1
+print -n 'done, '
+
+print -n 'installing... '
+xl $name '4_install_x86_64' make install || exit 1
 print 'done.'

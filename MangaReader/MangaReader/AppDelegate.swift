@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     // MARK: UISceneSession Lifecycle
-
+    
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.
         // Use this method to select a configuration to create the new scene with.
@@ -35,3 +35,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+func cgImage(uiImage:UIImage) -> CGImage {
+    // http://wiki.hawkguide.com/wiki/Swift:_Convert_between_CGImage,_CIImage_and_UIImage
+    //let uiImage = UIImage(named:named)!
+    let ciImage = CIImage(image:uiImage)!
+    let ciContext = CIContext()
+    let cgImage = ciContext.createCGImage(ciImage, from:ciImage.extent)
+    return cgImage!
+}

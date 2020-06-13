@@ -67,7 +67,7 @@ export PLATFORM_MIN_VERSION='-mmacosx-version-min=10.13'
 
 zsh $parentdir/config-make-install_tesseract.sh $name 'macos_x86_64' || exit 1
 
-# --  Lipo  -------------------------------------------------------------------
+# --  Lipo libs  --------------------------------------------------------------
 
 xc mkdir -p $ROOT/lib
 
@@ -87,5 +87,8 @@ print 'done.'
 
 # --  Copy headers  -----------------------------------------------------------
 
-xc mkdir -p $ROOT/include/tesseract
-xc cp $ROOT/ios_arm64/include/tesseract/* $ROOT/include/tesseract
+xc ditto $ROOT/ios_arm64/include/tesseract $ROOT/include/tesseract
+
+# --  Copy training/initialization data  --------------------------------------
+
+xc ditto $ROOT/ios_arm64/share/tessdata $ROOT/share/tessdata

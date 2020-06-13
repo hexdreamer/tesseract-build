@@ -1,23 +1,50 @@
-# Welcome
+# Making an OCR app for iOS or macOS, from scratch
 
-This project presents you, running macOS, with a single-source-and-run script to:
+Welcome to our project on building and using Tesseract OCR in your Xcode projects.  We started this project with the very strong philosophy that it should be easy to learn how to build a C or C++ library from source and then build an app on top of that.
 
-1. download, build, and locally install all build tools required to build Tesseract OCR
-2. download Tesseract OCR, target iOS, and build libraries that you can add to your XCode projects without the need for a dependency/package manager
+As the person tasked with creating this guide, I didn't know, and still don't know how to do a lot of what this guide requires.  C is familiar, but I don't know it.  I've used Xcode before, but that was like 10 years ago and I didn't have to deal with libraries, targets, and most of the details that go into making this project.  And if that sounds familiar and your unsure, it's our desire to show you how to move forward.
 
-*Locally install* means that all build artifacts (binaries, libs, etc...) are installed under a single directory, Root.  **su** privileges and mucking with your system are avoided.
+## Building from source
 
-## Pre-requisites
+The final Tesseract OCR library that we're going to use depends on the Leptonica library to manage the common image file formats.  And Leptonica is built upon the individual libraries for the different image formats.  In building the image libraries, Leptonica, an then Tesseract, we found that some parts of those builds required additional tools like autoconf and automake, from GNU.  The final arrangement of the tools and libraries that we found looks like:
 
-Achieving the single-source-and-run goal does require some pre-requisite work on your part.  You must have Xcode 11 and the command-line tools already installed.
+1. autoconf
+1. automake
+1. pkgconfig
+1. libtool
+1. zlib
+1. libjpeg
+1. libpng
+1. libtiff
+1. leptonica
+1. tesseract
 
-### Existing tooling, brew
+and that exact list is taken straight out of **Scripts/build/build_all.sh**.  Just calling that one script will produce all the files we need for Xcode.
 
-This project does not attempt to be compatible with any existing tooling you may have installed.  I do not know if brew precludes any of the directions/build-steps, or vice-versa; we do not use brew.
+For the libraries we are concerned about, we'll build them with the following 3 formats: **ios_arm64**, **ios_x86_64**, **macos_x86_64**.  During installation these three files are modified and result in one iOS lib, **libname.a**, and one macOS lib, **libname-macos.a**.
 
-## Kicking it off (Installing)
+The build steps and these concepts are explained in more detail in [Building](Scripts/README.md#Building).
 
-1. `cd` into the directory that will host the project
-2. Clone this repo
-       git clone <https://github.com/zacharysyoung/tesseract-build.git> .
-3. `cd tesseract-build && Scripts/build.sh`
+## Creating an Xcode project
+
+1. **File** &rarr; **New Project**
+1. I don't know what kind of application it should, so I just pick the first which also happens to seem the most generic
+1. Only change **Product Name**
+1. Create the project at the base of this entire project, `$PROJECTDIR`
+1. We need a measure for getting the libraries properly added to the project.  I've cribbed this function from SwiftyTesseract:
+
+    ```swift
+    private func createPix(from image: UIImage) -> Pix {
+        let data = image.pngData()!
+        let rawPointer = (data as NSData).bytes
+        let uint8Pointer = rawPointer.assumingMemoryBound(to: UInt8.self)
+        return pixReadMem(uint8Pointer, data.count)
+    }
+    ```
+
+    I'm dropping this in **ContentView.swift**.
+1. Save that file and I get my first error:
+
+    ```Use of undeclared type 'Pix'```
+
+1. To add the libraries we need 

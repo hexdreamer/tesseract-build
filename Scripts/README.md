@@ -2,7 +2,7 @@
 
 Welcome to the heart of building Tesseract-OCR!  We're glad you're checking out our project and hope we can help you integrate multi-lingual OCR into your iOS/macOS app.
 
-The most simple and most reliable thing you should be able to do is run **build_all.sh**  Located in `$SCRIPTSDIR/build`, this script arranges the sequence and orders the getting-and-installing of the build tools and libraries required to produce Tesseract-OCR.  And then it finally makes the drag-and-drop Tesseract library, and its dependent libraries, that you need for Xcode.
+The most simple and most reliable thing you should be able to do is run **build_all.sh**  Located in `Scripts/build`, this script arranges the getting-and-installing of the build tools and libraries required to produce Tesseract-OCR.  The final products of this build will be used by Xcode.
 
 ## Building
 

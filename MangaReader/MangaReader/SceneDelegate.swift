@@ -8,25 +8,42 @@
 
 import UIKit
 import SwiftUI
-import libleptonica
-import libtesseract
+//import libleptonica
+//import libtesseract
 
-typealias Pix = UnsafeMutablePointer<PIX>?
+//typealias Pix = UnsafeMutablePointer<PIX>?
+//typealias TessBaseAPI = OpaquePointer
+
+//private let tesseract: TessBaseAPI = TessBaseAPICreate()
+
+//enum MyError: Error {
+//    case runtimeError(String)
+//    case unableToExtractTextFromImage
+//    case unableToInitializeTesseract(String)
+//}
+//
+//public protocol LanguageModelDataSource {
+//  var pathToTrainedData: String { get }
+//}
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
         // Create the SwiftUI view that provides the window contents.
-        let contentView = ContentView()
-        
-        let image = UIImage(named: "ScreenShot");
+        let image = getImage(named: "Cropped")
+  
+//        guard case let .success(extractedTxt) = performOCR(on: image) else { return }
+        let contentView = ContentView(
+            cgImage: cgImage(uiImage:image),
+            uiImage: image,
+            text: "")
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
@@ -37,12 +54,39 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
     
-    private func createPix(from image: UIImage) throws -> Pix {
-      guard let data = image.pngData() else { throw SwiftyTesseract.Error.imageConversionError }
-      let rawPointer = (data as NSData).bytes
-      let uint8Pointer = rawPointer.assumingMemoryBound(to: UInt8.self)
-      return pixReadMem(uint8Pointer, data.count)
+    private func getImage(named name: String) -> UIImage {
+      UIImage(named: name, in: Bundle(for: self.classForCoder), compatibleWith: nil)!
     }
+    
+//    private func performOCR(on: UIImage) -> Result<String, MyError> {
+//        let pix = try! createPix(from: on)
+//
+//        let engineMode = UInt32(1)
+//        let languageString = "eng"
+//
+//        let path = Bundle.main.path(forResource: "tessdata", ofType: nil, inDirectory: "share")
+//
+//        setenv("TESSDATA_PREFIX", path, 1)
+//        guard TessBaseAPIInit2(tesseract,
+//                               path,
+//                               languageString,
+//                               TessOcrEngineMode(rawValue: engineMode)) == 0
+//            else { return .failure(MyError.unableToInitializeTesseract("Initialization error")) }
+//
+//        TessBaseAPISetImage2(tesseract, pix)
+//        print(TessBaseAPIGetSourceYResolution(tesseract))
+//        guard let extractedTxt = TessBaseAPIGetUTF8Text(tesseract)
+//            else { return .failure(MyError.unableToExtractTextFromImage) }
+//
+//        return .success(String(cString: extractedTxt))
+//    }
+//
+//    private func createPix(from image: UIImage) throws -> Pix {
+//        guard let data = image.pngData() else { throw MyError.runtimeError("oops") }
+//        let rawPointer = (data as NSData).bytes
+//        let uint8Pointer = rawPointer.assumingMemoryBound(to: UInt8.self)
+//        return pixReadMem(uint8Pointer, data.count)
+//    }
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
