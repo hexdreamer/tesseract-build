@@ -31,44 +31,68 @@ struct ContentView: View {
     var uiImage:UIImage;
     var text:String;
     
-    let textBox1 = CGRect(origin: CGPoint(x:140,y:60), size: CGSize(width:70,height:500))
+    let textBox1 = CGRect(origin: CGPoint(x:60,y:60), size: CGSize(width:320,height:500))
+    let textBox2 = CGRect(origin: CGPoint(x:0,y:0), size: CGSize(width:450,height:600))
+    let textBox3 = CGRect(origin: CGPoint(x:0,y:0), size: CGSize(width:500,height:700))
     
     var body: some View {
-        //        let _cgImage = cgImage.cropping(to: self.textBox1)!
-        //        let _image = UIImage.init(cgImage:_cgImage)
+        var _cgImage = cgImage.cropping(to: self.textBox1)!
+        var _image = UIImage.init(cgImage:_cgImage)
         
-        let txt = doOCR(on: uiImage)
-        let blocks = doBlocks()
-        print(txt)
+        let txt1 = doOCR(on: _image)
+        let blocks1 = doBlocks()
+        
+        _cgImage = cgImage.cropping(to: self.textBox2)!
+        _image = UIImage.init(cgImage:_cgImage)
+        
+        let txt2 = doOCR(on: _image)
+        let blocks2 = doBlocks()
+        
+        _cgImage = cgImage.cropping(to: self.textBox3)!
+        _image = UIImage.init(cgImage:_cgImage)
+        
+        let txt3 = doOCR(on: _image)
+        let blocks3 = doBlocks()
+        
         return VStack(alignment: .leading) {
-                HStack{
-                    ZStack {
-                        //                    .frame(width:1000, height: 500)
-                        //                    .aspectRatio(contentMode:.fit)
-                        //                    .clipShape(RoundedRectangle(cornerRadius:20, style:.circular))
+            ZStack {
+                GeometryReader { geometry in
+                    Image(uiImage:self.uiImage)
+                        .aspectRatio(contentMode: ContentMode.fit)
                         
-                        GeometryReader { geometry in
-                            Image(uiImage:self.uiImage)
-                            
-                            //                    drawOriginRegistration().stroke(Color.red, lineWidth: 4)
-                            //                    drawGrid(size: geometry.size, spacing: 20).stroke(Color.purple, lineWidth:1)
-                            //                    drawGrid(size: geometry.size, spacing: 100).stroke(Color.red, lineWidth:2)
-                            
-                            ForEach(0 ..< blocks.count) { i in
-                                Path { path in path.addRect(blocks[i].boundingBox) }.stroke(Color.yellow, lineWidth: 3)
-                                
-                            }
-                            
-                        }
+                    
+                    drawOriginRegistration().stroke(Color.red, lineWidth: 4)
+//                    drawGrid(size: geometry.size, spacing: 20).stroke(Color.purple, lineWidth:1)
+//                    drawGrid(size: geometry.size, spacing: 100).stroke(Color.red, lineWidth:2)
+                    
+//                    Path { path in path.addRect(self.textBox1) }.stroke(Color.yellow, lineWidth: 3)
+//                    ForEach(0 ..< blocks1.count) { i in
+//                        Path { path in path.addRect(blocks1[i].boundingBox) }.stroke(Color.yellow, lineWidth: 3)
+//
+//                    }
+                    
+                    Path { path in path.addRect(self.textBox2) }.stroke(Color.red, lineWidth: 3)
+                    ForEach(0 ..< blocks2.count) { i in
+                        Path { path in path.addRect(blocks2[i].boundingBox) }.stroke(Color.red, lineWidth: 3)
+
                     }
-                    VStack{
-                        ForEach(0 ..< blocks.count) { i in
-                            Text("\(blocks[i].text) \(blocks[i].confidence, specifier: "%.2f")")
-                        }
-                    }
+
+//                    Path { path in path.addRect(self.textBox3) }.stroke(Color.purple, lineWidth: 3)
+//                    ForEach(0 ..< blocks3.count) { i in
+//                        Path { path in path.addRect(blocks3[i].boundingBox) }.stroke(Color.purple, lineWidth: 3)
+//
+//                    }
                     
                 }
-            Text(txt)
+            }.frame(height:710, alignment: .topLeading)
+            
+//            Text(txt1).border(Color.yellow).font(.system(size: 30))
+            Text(txt2).border(Color.red).font(.system(size: 30))
+//            Text(txt3).border(Color.purple).font(.system(size: 30))
+            ForEach(0 ..< blocks2.count) { i in
+                Text("\(blocks2[i].text) \(blocks2[i].confidence) \(blocks2[i].boundingBox.height)").font(.system(size:20))
+            }
+            
         }
     }
 }
@@ -76,14 +100,14 @@ struct ContentView: View {
     func doOCR(on:UIImage) -> String {
         switch performOCR(on: on) {
         case .success(let extractedTxt):
-            return extractedTxt
+            return extractedTxt.trimmingCharacters(in: .whitespacesAndNewlines)
         default:
             return "OCR unsuccessful"
         }
     }
     
     func doBlocks() -> [RecognizedBlock] {
-        switch recognizedBlocks(for: ResultIteratorLevel.word) {
+        switch recognizedBlocks(for: ResultIteratorLevel.textline) {
         case .success(let blocks):
             return blocks
         default:

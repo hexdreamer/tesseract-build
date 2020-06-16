@@ -25,6 +25,47 @@ For the libraries we are concerned about, we'll build them with the following 3 
 
 The build steps and these concepts are explained in more detail in [Building](Scripts/README.md#Building).
 
+## Verifying Tesseract
+
+With everything looking like it was built and installed, we can quickly check Tesseract itself using the **tesseract** command-line program.  First, we need to get some language training data.
+
+1. Go to <https://github.com/tesseract-ocr/tessdata_best> and download **eng.traineddata**, **jpn.traineddata**, **jpn_vert.traineddata**.
+1. The tesseract binary is located at $ROOT/macos_x86_64/bin, so download the traineddata files to $ROOT/macos_x86_64/share/tessdata.
+1. We included a sample image that contains some very simply English and Japanese text
+    ![Hello, world](hello-world.png)
+1. The tesseract command takes a language (traineddata) name, the path to the image, and `stdout` to print to the shell
+
+    ```zsh
+    % cd to $ROOT/macos_x86_64/bin
+    % ./tesseract -l eng ../../../hello-world.png stdout
+    ```
+
+    and you should see something like the following where the English text is perfectly recognized and the Japanese text is not recognized for the traineddata
+
+    ```none
+    Hello, th5¢
+    ```
+
+    Running almost the same command again, but this time for Japanese scripts
+
+    ```zsh
+    % ./tesseract -l jpn ../../../hello-world.png stdout
+
+    Hello, 世界
+    ```
+
+    and the Japanese text is recognized, as well as the English text.
+
+    Running the command again, but this time for *vertical* Japanese scripts
+
+    ```zsh
+    % ./tesseract -l jpn_vert ../../../hello-world.png stdout
+
+    エのoo 店泡
+    ```
+
+    and nothing is accurately recognized.
+
 ## Creating an Xcode project
 
 1. **File** &rarr; **New Project**
