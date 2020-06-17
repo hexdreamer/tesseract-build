@@ -19,11 +19,43 @@ produces the following high-level flow for the dependencies of Tesseract-OCR, an
 
 ## Platforms & Architectures
 
-As our project is only concerend with iOS, I am ignoring the same set of steps that produce build artifacts for macOS.  The `ios` platform targets both ARM and x86 architectures.  x86 is necessary as it's the architecture for iPhoneSimulator (cross-reference with [BuildNotes.md](./BuildNotes.md#understanding-multi-arch-binaries-and-supported-ios-architectures)):
+The `ios` platform targets both ARM and x86 architectures.  x86 is necessary as it's the architecture for iPhoneSimulator (cross-reference with [BuildNotes.md](./BuildNotes.md#understanding-multi-arch-binaries-and-supported-ios-architectures)):
 
 > Why are Intel slices for iOS a thing? To be able to run your app and the library in the Xcode iOS **simulator**, which actually runs x86 code only. That's why it's *not* called an **"emulator"**.
 
 And the SDK for the x86 build is always `SDKs/iPhoneSimulator13.4.sdk`.
+
+### macOS
+
+To give developers the option to integrate Tesseract-OCR into a desktop app, we're also building for the macOS platform.  In the output of the SwiftyTesseract make log, it looks like the x86 library is "recycled" for macOS:
+
+```sh
+# iOS platform phase
+xcrun lipo /Users/zyoung/dev/SwiftyTesseract/SwiftyTesseract/SwiftyTesseract/libpng-1.6.36/arm-apple-darwin64/lib/libpng16.a /Users/zyoung/dev/SwiftyTesseract/SwiftyTesseract/SwiftyTesseract/libpng-1.6.36/x86_64-apple-darwin/lib/libpng16.a -create -output /Users/zyoung/dev/SwiftyTesseract/SwiftyTesseract/SwiftyTesseract/ios/lib/libpng.a
+
+# macOS platform phase
+xcrun lipo /Users/zyoung/dev/SwiftyTesseract/SwiftyTesseract/SwiftyTesseract/libpng-1.6.36/x86_64-apple-darwin/lib/libpng16.a -create -output /Users/zyoung/dev/SwiftyTesseract/SwiftyTesseract/SwiftyTesseract/macos/lib/libpng.a
+```
+
+I say recycled because the x86 target references the Simulator SDK/sysroot, so I'm not sure this is actually what we want.  Clang also has flags specific to macOS, `-mmacosx-version-min=<arg>, -mmacos-version-min=<arg>`.  There's also a completely different SDK for macOS at `/Applications/Xcode.app/Contents/Developer/Platforms/`.
+
+### Build/Compiler flags
+
+- Command-line options for Clang, like `-miphonesimulator-version-min`, can be found [here][1].  The users manual is [here][2].
+
+- `--enable-shared=no`, gets integrated into the libtool script
+
+### Clang v. LLVM
+
+Taking from SO answers [here][4]:
+
+> LLVM originally stood for "low-level virtual machine", though it now just stands for itself as it has grown to be something other than a traditional virtual machine. It is a set of libraries and tools, as well as a standardized intermediate representation, that can be used to help build compilers and just-in-time compilers. It cannot compile anything other than its own intermediate representation on its own; it needs a language-specific frontend in order to do so.
+
+and,
+
+> LLVM is a backend compiler meant to build compilers on top of it. It deals with optimizations and production of code adapted to the target architecture.
+>
+> CLang is a front end which parses C, C++ and Objective C code and translates it into a representation suitable for LLVM.
 
 ## About this document
 
@@ -650,10 +682,18 @@ grep -v -E \
 '^\.\./|'\
 '^cp|'\
 '^#define|'\
-'^[A-Z]' \
-make.log | shFmt > swifty-make-subtractive.txt
+'^[A-Z]|'\
+'^ld:|'\
+'% Total|'\
+'[0-9-][0-9-]:[0-9-][0-9-]:[0-9-][0-9-]' \
+make.log > swifty-make-subtractive.txt && shFmt -i 2 -w swifty-make-subtractive.txt
 ```
 
 `shFmt` was used to normalize the text to the extent it could.
 
 These commands were then hand-edited and organized into the this document.
+
+[1]: https://clang.llvm.org/docs/ClangCommandLineReference.html
+[2]: https://clang.llvm.org/docs/UsersManual.html
+[3]: https://llvm.org/docs/Packaging.html
+[4]: https://stackoverflow.com/questions/5708610/llvm-vs-clang-on-os-

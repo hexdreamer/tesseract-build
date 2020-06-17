@@ -1,6 +1,10 @@
+__pycache__
+.vscode
 Downloads
 Logs
 Root
 Sources
+tmp
 
+*.pyc
 swifty-make.txt

@@ -1,4 +1,13 @@
-# Existing work
+# Overview
+
+The **build.sh** process creates:
+
+- copies of downloaded tarballs in **Downloads**
+- the extracted contents of the downloaded tarballs in **Sources**
+- multi-architecture, platform-specific libraries in **Root/lib**
+- logs of all major commands run during the process in **Logs**
+
+## Existing work
 
 Here's the Makefile credited in SwiftyTesseract: <https://github.com/gali8/Tesseract-OCR-iOS/blob/master/TesseractOCR/Makefile>
 

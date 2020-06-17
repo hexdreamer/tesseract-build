@@ -1,0 +1,49 @@
+# SC1090: Can't follow non-constant source
+disable=SC1090
+
+# SC2068: zsh has different word-split semantics
+#
+#  Tried to mock-up example based on the wiki entry for SC2068 to prove
+#  the usefulness of following this rule, but it looks zsh does its "right thing"
+#
+disable=SC2068
+
+# SC2086: zsh has different word-split semantics
+#
+#  I use this to keep arrays as arrays as I pass them around:
+#
+#    ../configure $CONFIG_FLAGS
+#
+disable=SC2086
+
+# SC2107: zsh supports new `[[` test syntax which allows for multiple unary
+#   operators in a single test statement, http://mywiki.wooledge.org/BashFAQ/031
+#
+disable=SC2107
+
+# SC2128: zsh fully expands an array without any special index syntax
+#
+#   I use this to define parameters as arrays, for cleanliness and readability, then
+#   squash/concatenate them into a string to be passed to configure/make:
+#
+#   var_arr=( a b c )
+#   var="$var_arr"
+#
+disable=SC2128
+
+# SC2198: zsh allows direct indexing of arrays
+#
+#  From the ZSH Guide:
+#
+#  > Try:
+#  > foo=(’first element’ ’second element’) print -- ${foo[2]}
+#
+disable=SC2198
+
+# SC2206: zsh has different array semantics
+#
+#  I use this to build up parameters with arrays:
+#
+#    CXXFLAGS_A=($CFLAGS_A -Wno-deprecated-register)
+#
+disable=SC2206

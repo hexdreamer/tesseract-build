@@ -1,0 +1,11 @@
+// This file should appear in a directory specified by SWIFT_INCLUDE_PATH
+// in the Project's 'Build Settings'
+module libtesseract {
+  header "tesseract/capi.h"
+  export *
+}
+
+module libleptonica {
+  header "leptonica/allheaders.h"
+  export *
+}
