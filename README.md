@@ -32,164 +32,25 @@ The build steps and these concepts are explained in more detail in [Building](Sc
 
 ## Verifying Tesseract
 
-With everything looking like it was built and installed, we can quickly check Tesseract itself using the **tesseract** command-line (CL) program.  Let's run **test_tesseract.sh**, which will download some trained data for horizontal and vertical Japanese scripts and then run OCR on some simple images.
+With everything looking like it was built and installed, we can quickly check Tesseract itself using the **tesseract** command-line (CL) program.  Let's run **Scripts/test_tesseract.sh**, which will download some trained data for horizontal and vertical Japanese scripts and then run OCR on these 2 images:
 
-
-1. Go to <https://github.com/tesseract-ocr/tessdata_best> and download **eng.traineddata**, **jpn.traineddata**, **jpn_vert.traineddata**.
-1. The tesseract binary is located at $ROOT/macos_x86_64/bin, so download the traineddata files to $ROOT/macos_x86_64/share/tessdata.
-1. We included a sample image that contains some very simply English and Japanese text
-    ![Hello, world](hello-world.png)
-1. The tesseract command takes a language (traineddata) name, the path to the image, and `stdout` to print to the shell
-
-    ```zsh
-    % cd to $ROOT/macos_x86_64/bin
-    % ./tesseract -l eng ../../../hello-world.png stdout
-    ```
-
-    and you should see something like the following where the English text is perfectly recognized and the Japanese text is not recognized for the traineddata
-
-    ```none
-    Hello, th5¢
-    ```
-
-    Running almost the same command again, but this time for Japanese scripts
-
-    ```zsh
-    % ./tesseract -l jpn ../../../hello-world.png stdout
-
-    Hello, 世界
-    ```
-
-    and the Japanese text is recognized, as well as the English text.
-
-    Running the command again, but this time for *vertical* Japanese scripts
-
-    ```zsh
-    % ./tesseract -l jpn_vert ../../../hello-world.png stdout
-
-    エのoo 店泡
-    ```
-
-    and nothing is accurately recognized.
-
-### tesseract command-line
-
-Using this image as my sample comic book panel with Japanese text:
-
-<img src="Notes/static/02-panel.jpg" width="1000">
-
-The basic command looks like:
+| ![hello horizontal](Notes/static/test_hello_hori.png) | ![hello vertical](Notes/static/test_hello_vert.png) |
+|-------------------------------------------------------|-----------------------------------------------------|
 
 ```zsh
-% tesseract 02-panel.jpg stdout -l jpn_vert
+% ./Scripts/test_tesseract.sh
+test horizontal: passed
+test vertical: passed
 ```
 
-Setting the `--dpi` seems to make a big difference in how the text is recognized:
-
-<table>
-<tr><td>dpi</td><td>text</td></tr>
-<tr>
-<td>72</td>
-<td>(doesn't do anything)</td>
-</tr>
-
-<tr>
-<td>70</td>
-<td>
-<pre>
-Estimating resolution as 660
-みんなが
-
-そう言うので、
-お医者さんに
-聞いてみたん
-
-心臓の音が
-びとつしか
-聞こえないから、
-双子ではないと。
-</pre>
-</td>
-</tr>
-
-<tr>
-<td>200</td>
-<td>
-<pre>
-みんなが
-そう言うので、
-お医者さんに
-</pre>
-</td>
-</tr>
-
-<tr>
-<td>1000</td>
-<td>
-<pre>
-Detected 3 diacritics
-
-
-みんなが
-
-そう言うので、
-お医者さんに
-問いてみたん
-
-
-
-
-
-心臓の音が
-びとつしか
-聞こえないから、
-双子ではないと。
-</pre>
-</td>
-</tr>
-</table>
-
-The results of 70 dpi and 1000 dpi are very close to being equal.  70 is correct, to my eyes, while 1000 differs on the first character of line 4:
-
-<table>
-<tr><td>70 dpi</td><td>1000 dpi</td></tr>
-<tr>
-<td style="font-size:1.5em; background-color: #e6ffed">聞</td>
-<td style="font-size:1.5em; background-color: #ffeef0">問</td></tr>
-</table>
-
-The text actually looks like it could be correct, and it mostly is.  The glaring exception in the second line being <emphasis style="font-size: 1.25em">ひびひ</emphasis> where it should be <emphasis style="font-size: 1.25em">ひ</emphasis>:
-
-I ran some tests with the tesseract command-line program and found some options which started saving intermediate versions of the image as it passed through the command-line's pre-processes:
+The actual recognized text for the vertical test is:
 
 ```none
-tesseract cropped2.jpg stdout -l jpn_vert \
-  -c tessedit_display_outwords=1 \
-  -c tessedit_dump_pageseg_images=1 \
-  -c tessedit_write_images=1 \
-  -c textord_debug_tabfind=1 \
-  -c textord_show_final_blobs=1 \
-  -c textord_show_initial_words=1 \
-  -c textord_show_new_words=1 \
-  -c textord_tabfind_show_images=1 \
-  -c textord_tabfind_show_partitions=1 \
-  -c textord_tablefind_show_mark=1 \
-  -c textord_tablefind_show_stats=1 \
-  -c wordrec_display_segmentations=1 \
-  -c wordrec_display_splits=1
+Hello
+
+,世界
+
 ```
-
-### Input image
-
-The tesseract command-line pre-processes the input image, at the very least converting to halftone, and it looks like also upscaling (but I'm still foggy on these distinctions).
-
-`-c tessedit_write_images=1` dumps this input image to **tessinput.tif**.
-
-### Page Segmentation
-
-```-c tessedit_dump_pageseg_images=1 -c textord_tabfind_show_images=1``` produce a PDF of the steps in page segmentation:
-
-![Pageseg images](Notes/static/02-pageseg-images.png)
 
 ## Creating an Xcode project
 

@@ -26,71 +26,27 @@ export PATH=$ROOT/macos_x86_64/bin:$PATH
 # Run tesseract command-line program on a number of sample/test images;
 
 rm out.txt
-tesseract $PROJECTDIR/Notes/static/test_5012GI_hori.png out -l jpn 2>/dev/null
-
-got=$(cat out.txt | tr -d '\n' | tr -d '\f' | tr -d ' ')
-want='...是有5012GI的話、...'
-
-echo '* tesseract $PROJECTDIR/Notes/static/test_5012GI_hori.png out -l jpn'
-if [ $got != $want ]; then
-  echo "  Got:  $got"
-  echo "  Want: $want"
-else
-  echo '  passed'
-fi
-
-rm out.txt
-tesseract $PROJECTDIR/Notes/static/test_hello_hori.png out -l jpn
+tesseract $PROJECTDIR/Notes/static/test_hello_hori.png out -l jpn 2>/dev/null
 
 got=$(cat out.txt | tr -d '\n' | tr -d '\f' | tr -d ' ')
 want='Hello,世界'
 
-echo '* tesseract $PROJECTDIR/Notes/static/test_hello_hori.png out -l jpn'
-if [ $got != $want ]; then
-  echo "  Got:  $got"
-  echo "  Want: $want"
+print -n 'test horizontal: '
+if [ $got = $want ]; then
+  print 'passed'
 else
-  echo '  passed'
+  print "failed,  got $got , want $want"
 fi
 
 rm out.txt
-tesseract $PROJECTDIR/Notes/static/test_5012GI_vert.png out -l jpn_vert
-
-got=$(cat out.txt | tr -d '\n' | tr -d '\f' | tr -d ' ')
-want='...是有5012GI的話、...'
-
-echo '* tesseract $PROJECTDIR/Notes/static/test_5012GI_vert.png out -l jpn_vert'
-if [ $got != $want ]; then
-  echo "  Got:  $got"
-  echo "  Want: $want"
-else
-  echo '  passed'
-fi
-
-rm out.txt
-tesseract $PROJECTDIR/Notes/static/test_hello_vert_1.png out -l jpn_vert
+tesseract $PROJECTDIR/Notes/static/test_hello_vert.png out -l jpn_vert 2>/dev/null
 
 got=$(cat out.txt | tr -d '\n' | tr -d '\f' | tr -d ' ')
 want='Hello,世界'
 
-echo '* tesseract $PROJECTDIR/Notes/static/test_hello_vert_1.png out -l jpn_vert'
-if [ $got != $want ]; then
-  echo "  Got:  $got"
-  echo "  Want: $want"
+print -n 'test vertical: '
+if [ $got = $want ]; then
+  print 'passed'
 else
-  echo '  passed'
-fi
-
-rm out.txt
-tesseract $PROJECTDIR/Notes/static/test_hello_vert_2.png out -l jpn_vert
-
-got=$(cat out.txt | tr -d '\n' | tr -d '\f' | tr -d ' ')
-want='Hello,世界'
-
-echo '* tesseract $PROJECTDIR/Notes/static/test_hello_vert_2.png out -l jpn_vert'
-if [ $got != $want ]; then
-  echo "  Got:  $got"
-  echo "  Want: $want"
-else
-  echo '  passed'
+  print "failed,  got $got , want $want"
 fi
