@@ -48,6 +48,11 @@ struct ContentView: View {
         let txt2 = doOCR(on: _image)
         let blocks2 = doBlocks()
         
+        print(txt2)
+        for block in blocks2 {
+            print(String(format:"- %@: %.2f", block.text.trimmingCharacters(in: .whitespacesAndNewlines), block.confidence))
+        }
+        
         _cgImage = cgImage.cropping(to: self.textBox3)!
         _image = UIImage.init(cgImage:_cgImage)
         
@@ -90,7 +95,7 @@ struct ContentView: View {
             Text(txt2).border(Color.red).font(.system(size: 30))
 //            Text(txt3).border(Color.purple).font(.system(size: 30))
             ForEach(0 ..< blocks2.count) { i in
-                Text("\(blocks2[i].text) \(blocks2[i].confidence) \(blocks2[i].boundingBox.height)").font(.system(size:20))
+                Text("\(blocks2[i].text) \(blocks2[i].confidence, specifier: "%.2f") \(blocks2[i].boundingBox.height)").font(.system(size:20))
             }
             
         }
