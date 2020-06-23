@@ -1,8 +1,5 @@
 #!/bin/zsh -f
 
-# `set -x` turns on debugging, `set +x` turns it off
-# set -x
-
 scriptpath=$0:A
 parentdir=${scriptpath%/*}
 
