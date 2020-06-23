@@ -1,4 +1,4 @@
-// This file should appear in a directory specified by SWIFT_INCLUDE_PATH
+// Set SWIFT_INCLUDE_PATH to this file's parent directory,
 // in the Project's 'Build Settings'
 module libtesseract {
   header "tesseract/capi.h"

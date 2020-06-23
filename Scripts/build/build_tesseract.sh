@@ -92,3 +92,7 @@ xc ditto $ROOT/ios_arm64/include/tesseract $ROOT/include/tesseract
 # --  Copy training/initialization data  --------------------------------------
 
 xc ditto $ROOT/ios_arm64/share/tessdata $ROOT/share/tessdata
+
+# --  Copy tesseract command-line program  ------------------------------------
+
+cp $ROOT/macos_x86_64/bin/tesseract $ROOT/bin/
