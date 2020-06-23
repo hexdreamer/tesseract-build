@@ -17,7 +17,7 @@ strip_whitespace() {
 }
 
 # Download jpn and jpn_vert files
-for langfile in jpn.traineddata jpn_vert.traineddata; do
+for langfile in 'jpn.traineddata' 'jpn_vert.traineddata'; do
   if [ -f $ROOT/share/tessdata/$langfile ]; then
     continue
   fi
@@ -56,3 +56,5 @@ if [ $got = $want ]; then
 else
   print "failed,  got $got , want $want"
 fi
+
+rm -f out.txt
