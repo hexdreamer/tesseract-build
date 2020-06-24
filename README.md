@@ -132,11 +132,11 @@ Much of the insight into configurating and executing the build up to this point 
 
 Our two libraries, Leptonica and Tesseract, need to be copied into the project and made known to Xcode as 2 different modules.
 
-1. Copy over the only two headers we need into a new **dependencies** folder:
+1. Copy over the headers into a new **dependencies** folder:
 
     ```zsh
-    ditto $ROOT/include/leptonica/allheaders.h iOCR/iOCR/dependencies/include/allheaders.h
-    ditto $ROOT/include/tesseract/capi.h iOCR/iOCR/dependencies/include/capi.h
+    ditto $ROOT/include/leptonica iOCR/iOCR/dependencies/include/leptonica
+    ditto $ROOT/include/tesseract/ iOCR/iOCR/dependencies/include/tesseract
     ```
 
     I'm ignoring the libs for now because the error is about modules.
@@ -153,21 +153,26 @@ Our two libraries, Leptonica and Tesseract, need to be copied into the project a
 
     ```swift
     module libtesseract {
-        header "tesseract/capi.h"
+        header "include/tesseract/capi.h"
         export *
     }
 
     module libleptonica {
-        header "leptonica/allheaders.h"
+        header "include/leptonica/allheaders.h"
         export *
     }
     ```
 
 1. My project now looks like:
 
-    <img height="241" src="Notes/static/guide/module_final_structure_cropped.png"/>
+    <img height="241" src="Notes/static/guide/module_final_structure_cropped.png"/> d
 
 1. Set the **SWIFT_INCLUDE_PATHS** in the project's build settings to **$(PROJECTDIR)/iOCR/dependencies/\*\***:
 
-    <img height="540" src="Notes/static/guide/2_swift_include_paths_cropped.png"/>
+    <img src="Notes/static/guide/2_swift_include_paths_cropped.png"/>
 
+    Xcode converts the **/\*\*** part at the end of the path to that **recursive** value in the bottom-right of image.
+
+1. **Product** &rarr; **Build**, and that error is cleared:
+
+    <img height="200" src="Notes/static/guide/build_succeeded.png"/>
