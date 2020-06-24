@@ -21,7 +21,7 @@ The Tesseract OCR library manages its image data with Leptonica, a library that 
 
 The project folder that you cloned or downloaded is referred to as **PROJECTDIR** and comes with three empty directories that the build process will fill up like: download TGZ to **Downloads**; extract TGZ to **Sources**; configure and make source, and install into **Root**.  The **Scripts** directory contains all the shell scripts to order and execute those steps.
 
-For my folder setup, I did everything in the shell and Xcode relative to my PROJECTDIR:
+For my folder setup, I did everything in the shell and Xcode relative to my PROJECTDIR.  There's a symlink to shell script we can source to set up the shell environment and the `print_project_env()` function that shows key aspects of the environment:
 
 ```zsh
 % cd ~/dev/tesseract-build
