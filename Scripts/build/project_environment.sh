@@ -117,3 +117,19 @@ extract() {
   xl $name '1_untar' tar -zxf $DOWNLOADS/$targz --directory $SOURCES || exit 1
   print ' done.'
 }
+
+print_project_env() {
+  cat << EOF
+
+Directories:
+\$PROJECTDIR:  $PROJECTDIR
+\$DOWNLOADS:   $DOWNLOADS 
+\$ROOT:        $ROOT
+\$SCRIPTSDIR:  $SCRIPTSDIR
+\$SOURCES      $SOURCES
+
+Scripts:
+\$BUILDDIR/build_all.sh         clean|run all build/configure scripts
+\$SCRIPTSDIR/test_tesseract.sh  after build, run a quick test of tesseract
+EOF
+}

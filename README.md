@@ -1,57 +1,3 @@
-## Troubleshooting
-
-```zsh
-macos_x86_64: configuring... ERROR running ../configure CC=...
-...
-...
-ERROR see /Users/zyoung/dev/tesseract-build/Logs/tesseract-4.1.1/3_config_macos_x86_64.err for more details
-```
-
-Looking at **Logs/tesseract-4.1.1/3_config_macos_x86_64.err**:
-
-```none
-configure: error: in `/Users/zyoung/dev/tesseract-build/Sources/tesseract-4.1.1/macos_x86_64':
-configure: error: C++ compiler cannot create executables
-See `config.log' for more details
-```
-
-And even though it's not mentioned, I've learned to check all available logs because *sometimes* the relevant info can be found outside of the ERR file.
-
-Looking at **Logs/tesseract-4.1.1/3_config_macos_x86_64.out**:
-
-```none
-checking whether the C++ compiler works... no
-```
-
-Wow, looks like there could be a really big problem here, since the error indicates the issue is with the compiler directly.  In this case, looking at the OUT file might leave you really alarmed and confused.  I think part of being a good detective is understanding the significance of the clues.  While this message is very unambiguous, "the compiler doesn't work", but it doesn't provide any details that allow us to further investigate "the C++ compiler".
-
-I already know the true error to this problem and it's isn't the compiler.  Here's the telling error message from **Sources/tesseract-4.1.1/macos_x86_64/config.log**:
-
-```none
-...
-ld: library not found for -lpng
-clang: error: linker command failed with exit code 1 (use -v to see invocation)
-...
-```
-
-It's true that Tesseract couldn't be compiled, but that's because I just destroyed *all* macos_x86_64 binaries/libraries including **macos_x86_64/lib/libpng16.a** which is what `./configure` failed on.  And keep in mind that this true error came just after other "errors" like:
-
-```none
-configure:2663: /Applications/Xcode.app/Contents/Developer/usr/bin/g++ -V >&5
-clang: error: unsupported option '-V -Wno-objc-signed-char-bool-implicit-int-conversion'
-clang: error: no input files
-```
-
-and:
-
-```none
-configure:2663: /Applications/Xcode.app/Contents/Developer/usr/bin/g++ -qversion >&5
-clang: error: unknown argument '-qversion'; did you mean '--version'?
-clang: error: no input files
-```
-
-which is simply `./configure` trying a number of different options to prove the version of the compiler.  So, troubleshooting will require some familiarization with this system.
-
 # Making an OCR app for iOS or macOS, from scratch
 
 Welcome to our project on building and using Tesseract OCR in your Xcode projects.  We started this project with the very strong philosophy that it should be easy to learn how to build a C or C++ library from source and then build an app on top of that.
@@ -60,7 +6,7 @@ As the person tasked with creating this guide, I didn't know, and still don't kn
 
 ## Building from source
 
-The final Tesseract OCR library that we're going to use depends on the Leptonica library to manage the common image file formats.  And Leptonica is built upon the individual libraries for the different image formats.  In building the image libraries, Leptonica, and then Tesseract, we found that some parts of those builds required additional tools like autoconf and automake, from GNU.  The final arrangement of the tools and libraries that we found looks like:
+The Tesseract OCR library manages its image data with Leptonica, a library that manipulates common image file formats.  And Leptonica is built upon the individual libraries for the different image formats.  In building the image libraries, Leptonica, and then Tesseract, we'll need some additional tools like autoconf and automake, from GNU.  The final arrangement of the tools and libraries I settled on looks like:
 
 1. autoconf
 1. automake
@@ -73,22 +19,52 @@ The final Tesseract OCR library that we're going to use depends on the Leptonica
 1. leptonica
 1. tesseract
 
-and that exact list is taken straight out of **Scripts/build/build_all.sh**.  Just running that one script will produce all the files we need for Xcode.
+The project folder that you cloned or downloaded is referred to as **PROJECTDIR** and comes with three empty directories that the build process will fill up like: download TGZ to **Downloads**; extract TGZ to **Sources**; configure and make source, and install into **Root**.  The **Scripts** directory contains all the shell scripts to order and execute those steps.
 
-The build products that can be used by Xcode will have the following 3 formats: **ios_arm64**, **ios_x86_64**, **macos_x86_64**.  We stitch the two-iOS formatted files into one multi-arch binary, **libname.a**. We write the one macOS-formatted file to a single-arch binary, **libname-macos.a**.
+For my folder setup, I did everything in the shell and Xcode relative to my PROJECTDIR:
 
-| xcode-lipo these formatted libs                                        | into this final lib            |
+```zsh
+% cd ~/dev/tesseract-build
+
+% ls -la project_environment.sh
+lrwxr-xr-x  1 zyoung  staff  36 Jun 24 11:38 project_environment.sh@ -> Scripts/build/project_environment.sh
+
+% source project_environment.sh
+% print_project_env
+
+Directories:
+
+$PROJECTDIR:  /Users/zyoung/dev/tesseract-build
+$DOWNLOADS:   /Users/zyoung/dev/tesseract-build/Downloads
+$ROOT:        /Users/zyoung/dev/tesseract-build/Root
+$SCRIPTSDIR:  /Users/zyoung/dev/tesseract-build/Scripts
+$SOURCES      /Users/zyoung/dev/tesseract-build/Sources
+
+Scripts:
+
+$BUILDDIR/build_all.sh         clean|run all build/configure scripts
+$SCRIPTSDIR/test_tesseract.sh  after build, run a quick test of tesseract
+```
+
+Take a moment to check out the master build script, `$BUILDDIR/build_all.sh`  The script contains an option to clean PROJECTDIR, and then runs a list of build scripts (which is identical to the list of libraries/tools from above).
+
+Just running that one script will produce all the files we need for Xcode.  Running it takes me about 20 minutes.  I've configured those files so they are divided into 3 formats that I've defined: **ios_arm64**, **ios_x86_64**, **macos_x86_64**.  `lipo` stitches the two-iOS formatted files into one multi-arch binary, **libname.a**; and writes the one macOS-formatted file to a single-arch binary, **libname-macos.a**.
+
+| lipo these formatted libs                                        | into this final lib            |
 |--------------------------------------------------------------------|---------------------------|
-| `$ROOT/ios_arm64/lib/libname.a` <br/> `$ROOT/ios_x86_64/lib/libname.a` | `$ROOT/lib/libname.a`       |
-| `$ROOT/macos_x86_64/lib/libname.a`                                   | `$ROOT/lib/libname-macos.a` |
+| `<Root>/ios_arm64/lib/libname.a` <br/> `<Root>/ios_x86_64/lib/libname.a` | `<Root>/lib/libname.a`       |
+| `<Root>/macos_x86_64/lib/libname.a`                                   | `<Root>/lib/libname-macos.a` |
 
+The two header files for Leptonica and Tesseract C-APIs that we need are 
+
+There's also a tesseract command-line program that we'll use, and it's in macos_x86_64.
 The build steps and these concepts are explained in more detail in [Building](Scripts/README.md#Building).
 
 ## Verifying Tesseract
 
-Now that we have built Tesseract, we need to provide it with the reference data it will use to recognize the characters in the language we are interesed in.
+Having run **build_all.sh** and successfully built Tesseract we need to provide it with the reference data it will use to recognize the characters in the language we are interesed in.
 
-Run **Scripts/test_tesseract.sh** to download some trained data for horizontal and vertical Japanese scripts and run OCR on these 2 images:
+Run **Scripts/test_tesseract.sh** to download some trained data for horizontal and vertical Japanese scripts and run a quick OCR test on these 2 images:
 
 | ![hello horizontal](Notes/static/test_hello_hori.png) | ![hello vertical](Notes/static/test_hello_vert.png) |
 |-------------------------------------------------------|-----------------------------------------------------|
@@ -108,7 +84,7 @@ Hello
 
 ```
 
-but for this simple test, all white space is stripped out and the result is compared to `'Hello,世界'`.
+but for this simple test, all white space is stripped out and the result is compared to `'Hello,世界'` (which is also the expected result for the horizontal image).
 
 These images were chosen because some Japanese writing will include English loan words and I think it's noteworthy that some English is recognized when processing exclusively for Japanese.
 
@@ -116,72 +92,82 @@ And with that little test completed, we can get into Xcode.
 
 ## Integrating Tesseract into Xcode
 
-As a personal aside, I don't have much experience with C or Swift.  I've gotten us this far with some personal experience with shell scripts and build systems, but much of the insight into configurating and executing the build came from the Makefile of another open-source iOS Tesseract project, SwiftyTesseract (ST).  I'm going to create a new Xcode project and insert a bit of isolated code from ST, which will immediately fail to build.  I'll chase down build errors as they come, modifying the project along the way.
+Much of the insight into configurating and executing the build up to this point came from the Makefile of another open-source iOS Tesseract project, SwiftyTesseract (ST), *A Swift wrapper around Tesseract for use in iOS applications*.  I've used it as a model for building with Swift on top of a C API.  I'll be using bits of ST code to navigate creating an Xcode project from scratch.  I'll chase down errors as they come, modifying the project along the way.
+
+### Create the project
 
 1. **File** &rarr; **New Project**
 
 1. A **Single View App** is a great template for this guide, **Next**
 
-1. Add **Product Name**, I've named mine *iOCR*
+1. Add **Product Name**, I've named mine *iOCR*, **Next**
 
-1. Create the project at the base of this entire project, `$PROJECTDIR`
+1. Choose your project's location, I chose `$PROJECTDIR`, **Create**
+
+### Write a bit of code
 
 1. **File** &rarr; **New** &rarr; **File...**
 
 1. Choose **Swift File**, **Next**
 
-1. **Save As:** **iOCR**, leave all else as default, **Create**
-
-1. Find the file at top of the tree in the Project Navigator, and move the file down under the **iOCR** folder.  My project now looks like this:
-
-    ![iOCR.swift in iOCR folder](Notes/static/guide_project_navigator_dark.png)
+1. **Save As:** **iOCR**, **Group: iOCR (folder under iOCR project)**, **Create**
 
 1. Insert this snippet into **iOCR.swift**:
 
     ```swift
-    import libtesseract
     import libleptonica
+    import libtesseract
     ```
 
 1. Save that file, and my first error is:
 
     ```none
-    No such module 'libtesseract'
+    No such module 'libleptonica'
     ```
 
-    Our newly built libs need to be brought into Xcode as modules.
+    <!--![no such module 'libtesseract'](Notes/static/guide/err_no_such_module_leptonica.png)-->
+    <img height="53" src="Notes/static/guide/err_no_such_module_leptonica.png"/>
 
-    1. Copy the build products into the new Xcode project folder:
+### No such module
 
-        ```zsh
-        ditto $ROOT/include iOCR/iOCR/dependencies/include
-        ditto $ROOT/lib iOCR/iOCR/dependencies/lib
-        ditto $ROOT/share/tessdata iOCR/iOCR/dependencies/share/tessdata
-        ```
-    
-    1. Right-click the iOCR folder in the project navigator and choose **Add Files to "iOCR"**:
+Our two libraries, Leptonica and Tesseract, need to be copied into the project and made known to Xcode as 2 different modules.
 
-        ![Add dependencies to iOCR folder](Notes/static/guide_add_dependencies.png)
+1. Copy over the only two headers we need into a new **dependencies** folder:
 
-    1. Select the **dependencies** folder, and leave **Create folder references** selected, **Add**
+    ```zsh
+    ditto $ROOT/include/leptonica/allheaders.h iOCR/iOCR/dependencies/include/allheaders.h
+    ditto $ROOT/include/tesseract/capi.h iOCR/iOCR/dependencies/include/capi.h
+    ```
 
-    1. **File &rarr; New...**, scroll down to **Other** and choose **Empty**, **iOCR/iOCR/dependencies/module.modulemap** with the following contents:
+    I'm ignoring the libs for now because the error is about modules.
 
-        ```swift
-        module libtesseract {
-            header "tesseract/capi.h"
-            export *
-        }
+1. Right-click the iOCR folder in the project navigator and choose **Add Files to "iOCR"**:
 
-        module libleptonica {
-            header "leptonica/allheaders.h"
-            export *
-        }
-        ```
+    ![Add dependencies to iOCR folder](Notes/static/guide/guide_add_dependencies.png)
 
-    1. My project now looks like:
+1. Select the folder **iOCR/iOCR/dependencies**, check that **Create groups** is selected, **Add**
 
-        ![Final structure](Notes/static/guide_final_structure.png)
+1. **File** &rarr; **New...** &rarr; **File**, scroll down to **Other** and choose **Empty**
 
-    1. Set the **SWIFT_INCLUDE_PATH** in the project's build settings:
+1. Create **iOCR/iOCR/dependencies/module.modulemap**, in the **Group: dependencies**, with the following contents:
+
+    ```swift
+    module libtesseract {
+        header "tesseract/capi.h"
+        export *
+    }
+
+    module libleptonica {
+        header "leptonica/allheaders.h"
+        export *
+    }
+    ```
+
+1. My project now looks like:
+
+    <img height="241" src="Notes/static/guide/module_final_structure_cropped.png"/>
+
+1. Set the **SWIFT_INCLUDE_PATHS** in the project's build settings to **$(PROJECTDIR)/iOCR/dependencies/\*\***:
+
+    <img height="540" src="Notes/static/guide/2_swift_include_paths_cropped.png"/>
 
