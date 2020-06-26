@@ -2,7 +2,7 @@
 
 Welcome to the heart of building Tesseract-OCR!  We're glad you're checking out our project and hope we can help you integrate multi-lingual OCR into your iOS/macOS app.
 
-The most simple and most reliable thing you should be able to do is run **build_all.sh**  Located in `$SCRIPTSDIR/build`, this script arranges the sequence and orders the getting-and-installing of the build tools and libraries required to produce Tesseract-OCR.  And then it finally makes the drag-and-drop Tesseract library, and its dependent libraries, that you need for Xcode.
+The most simple and most reliable thing you should be able to do is run **build_all.sh**  Located in `Scripts/build`, this script arranges the getting-and-installing of the build tools and libraries required to produce Tesseract-OCR.  The final products of this build will be used by Xcode.
 
 ## Building
 
@@ -160,3 +160,57 @@ The scripts are written in the best zsh I know.  I set upon writing these script
 > ```
 
 [2]: https://insights.stackoverflow.com/trends?tags=bash%2Czsh
+
+## Troubleshooting
+
+```zsh
+macos_x86_64: configuring... ERROR running ../configure CC=...
+...
+...
+ERROR see /Users/zyoung/dev/tesseract-build/Logs/tesseract-4.1.1/3_config_macos_x86_64.err for more details
+```
+
+Looking at **Logs/tesseract-4.1.1/3_config_macos_x86_64.err**:
+
+```none
+configure: error: in `/Users/zyoung/dev/tesseract-build/Sources/tesseract-4.1.1/macos_x86_64':
+configure: error: C++ compiler cannot create executables
+See `config.log' for more details
+```
+
+And even though it's not mentioned, I've learned to check all available logs because *sometimes* the relevant info can be found outside of the ERR file.
+
+Looking at **Logs/tesseract-4.1.1/3_config_macos_x86_64.out**:
+
+```none
+checking whether the C++ compiler works... no
+```
+
+Wow, looks like there could be a really big problem here, since the error indicates the issue is with the compiler directly.  In this case, looking at the OUT file might leave you really alarmed and confused.  I think part of being a good detective is understanding the significance of the clues.  While this message is very unambiguous, "the compiler doesn't work", but it doesn't provide any details that allow us to further investigate "the C++ compiler".
+
+I already know the true error to this problem and it's isn't the compiler.  Here's the telling error message from **Sources/tesseract-4.1.1/macos_x86_64/config.log**:
+
+```none
+...
+ld: library not found for -lpng
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+...
+```
+
+It's true that Tesseract couldn't be compiled, but that's because I just destroyed *all* macos_x86_64 binaries/libraries including **macos_x86_64/lib/libpng16.a** which is what `./configure` failed on.  And keep in mind that this true error came just after other "errors" like:
+
+```none
+configure:2663: /Applications/Xcode.app/Contents/Developer/usr/bin/g++ -V >&5
+clang: error: unsupported option '-V -Wno-objc-signed-char-bool-implicit-int-conversion'
+clang: error: no input files
+```
+
+and:
+
+```none
+configure:2663: /Applications/Xcode.app/Contents/Developer/usr/bin/g++ -qversion >&5
+clang: error: unknown argument '-qversion'; did you mean '--version'?
+clang: error: no input files
+```
+
+which is simply `./configure` trying a number of different options to prove the version of the compiler.  So, troubleshooting will require some familiarization with this system.

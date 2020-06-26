@@ -1,0 +1,734 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F464A67024A3C57A002440AC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A66F24A3C57A002440AC /* AppDelegate.swift */; };
+		F464A67224A3C57A002440AC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A67124A3C57A002440AC /* SceneDelegate.swift */; };
+		F464A67424A3C57A002440AC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A67324A3C57A002440AC /* ContentView.swift */; };
+		F464A67624A3C57D002440AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F464A67524A3C57D002440AC /* Assets.xcassets */; };
+		F464A67924A3C57D002440AC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F464A67824A3C57D002440AC /* Preview Assets.xcassets */; };
+		F464A67C24A3C57D002440AC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F464A67A24A3C57D002440AC /* LaunchScreen.storyboard */; };
+		F464A68724A3C57D002440AC /* iOCRTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A68624A3C57D002440AC /* iOCRTests.swift */; };
+		F464A69224A3C57D002440AC /* iOCRUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A69124A3C57D002440AC /* iOCRUITests.swift */; };
+		F464A6A024A3C766002440AC /* iOCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A69F24A3C766002440AC /* iOCR.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F464A68324A3C57D002440AC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F464A66424A3C57A002440AC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F464A66B24A3C57A002440AC;
+			remoteInfo = iOCR;
+		};
+		F464A68E24A3C57D002440AC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F464A66424A3C57A002440AC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F464A66B24A3C57A002440AC;
+			remoteInfo = iOCR;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		F464A66C24A3C57A002440AC /* iOCR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOCR.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F464A66F24A3C57A002440AC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F464A67124A3C57A002440AC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		F464A67324A3C57A002440AC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		F464A67524A3C57D002440AC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F464A67824A3C57D002440AC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		F464A67B24A3C57D002440AC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		F464A67D24A3C57D002440AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F464A68224A3C57D002440AC /* iOCRTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOCRTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F464A68624A3C57D002440AC /* iOCRTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOCRTests.swift; sourceTree = "<group>"; };
+		F464A68824A3C57D002440AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F464A68D24A3C57D002440AC /* iOCRUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOCRUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F464A69124A3C57D002440AC /* iOCRUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOCRUITests.swift; sourceTree = "<group>"; };
+		F464A69324A3C57D002440AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F464A69F24A3C766002440AC /* iOCR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOCR.swift; sourceTree = "<group>"; };
+		F464A6AC24A3EF72002440AC /* ltrresultiterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ltrresultiterator.h; sourceTree = "<group>"; };
+		F464A6AD24A3EF72002440AC /* pageiterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pageiterator.h; sourceTree = "<group>"; };
+		F464A6AE24A3EF72002440AC /* apitypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apitypes.h; sourceTree = "<group>"; };
+		F464A6AF24A3EF72002440AC /* osdetect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = osdetect.h; sourceTree = "<group>"; };
+		F464A6B024A3EF72002440AC /* renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = renderer.h; sourceTree = "<group>"; };
+		F464A6B124A3EF72002440AC /* publictypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = publictypes.h; sourceTree = "<group>"; };
+		F464A6B224A3EF72002440AC /* unichar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unichar.h; sourceTree = "<group>"; };
+		F464A6B324A3EF72002440AC /* ocrclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ocrclass.h; sourceTree = "<group>"; };
+		F464A6B424A3EF72002440AC /* resultiterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = resultiterator.h; sourceTree = "<group>"; };
+		F464A6B524A3EF72002440AC /* serialis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = serialis.h; sourceTree = "<group>"; };
+		F464A6B624A3EF72002440AC /* baseapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = baseapi.h; sourceTree = "<group>"; };
+		F464A6B724A3EF72002440AC /* capi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = capi.h; sourceTree = "<group>"; };
+		F464A6B824A3EF72002440AC /* tess_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tess_version.h; sourceTree = "<group>"; };
+		F464A6B924A3EF72002440AC /* strngs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = strngs.h; sourceTree = "<group>"; };
+		F464A6BA24A3EF72002440AC /* genericvector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = genericvector.h; sourceTree = "<group>"; };
+		F464A6BB24A3EF72002440AC /* helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = helpers.h; sourceTree = "<group>"; };
+		F464A6BC24A3EF72002440AC /* thresholder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thresholder.h; sourceTree = "<group>"; };
+		F464A6BD24A3EF72002440AC /* platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
+		F464A6BE24A3EF72002440AC /* tesscallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tesscallback.h; sourceTree = "<group>"; };
+		F464A6C124A3EF72002440AC /* dewarp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dewarp.h; sourceTree = "<group>"; };
+		F464A6C224A3EF72002440AC /* allheaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = allheaders.h; sourceTree = "<group>"; };
+		F464A6C324A3EF72002440AC /* imageio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imageio.h; sourceTree = "<group>"; };
+		F464A6C424A3EF72002440AC /* bilateral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bilateral.h; sourceTree = "<group>"; };
+		F464A6C524A3EF72002440AC /* morph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = morph.h; sourceTree = "<group>"; };
+		F464A6C624A3EF72002440AC /* endianness.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = endianness.h; sourceTree = "<group>"; };
+		F464A6C724A3EF72002440AC /* bbuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bbuffer.h; sourceTree = "<group>"; };
+		F464A6C824A3EF72002440AC /* jbclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jbclass.h; sourceTree = "<group>"; };
+		F464A6C924A3EF72002440AC /* bmp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bmp.h; sourceTree = "<group>"; };
+		F464A6CA24A3EF72002440AC /* bmf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bmf.h; sourceTree = "<group>"; };
+		F464A6CB24A3EF72002440AC /* recog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = recog.h; sourceTree = "<group>"; };
+		F464A6CC24A3EF72002440AC /* environ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = environ.h; sourceTree = "<group>"; };
+		F464A6CD24A3EF72002440AC /* readbarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = readbarcode.h; sourceTree = "<group>"; };
+		F464A6CE24A3EF72002440AC /* regutils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = regutils.h; sourceTree = "<group>"; };
+		F464A6CF24A3EF72002440AC /* sudoku.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sudoku.h; sourceTree = "<group>"; };
+		F464A6D024A3EF72002440AC /* gplot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gplot.h; sourceTree = "<group>"; };
+		F464A6D124A3EF72002440AC /* list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = list.h; sourceTree = "<group>"; };
+		F464A6D224A3EF72002440AC /* rbtree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rbtree.h; sourceTree = "<group>"; };
+		F464A6D324A3EF72002440AC /* stringcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stringcode.h; sourceTree = "<group>"; };
+		F464A6D424A3EF72002440AC /* array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = array.h; sourceTree = "<group>"; };
+		F464A6D524A3EF72002440AC /* ptra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ptra.h; sourceTree = "<group>"; };
+		F464A6D624A3EF72002440AC /* stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stack.h; sourceTree = "<group>"; };
+		F464A6D724A3EF72002440AC /* heap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = heap.h; sourceTree = "<group>"; };
+		F464A6D824A3EF72002440AC /* watershed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = watershed.h; sourceTree = "<group>"; };
+		F464A6D924A3EF72002440AC /* ccbord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ccbord.h; sourceTree = "<group>"; };
+		F464A6DA24A3EF72002440AC /* alltypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = alltypes.h; sourceTree = "<group>"; };
+		F464A6DB24A3EF72002440AC /* leptwin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = leptwin.h; sourceTree = "<group>"; };
+		F464A6DC24A3EF72002440AC /* queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = queue.h; sourceTree = "<group>"; };
+		F464A6DD24A3EF72002440AC /* bmfdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bmfdata.h; sourceTree = "<group>"; };
+		F464A6DE24A3EF72002440AC /* pix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pix.h; sourceTree = "<group>"; };
+		F464A6DF24A3EF72002440AC /* arrayaccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arrayaccess.h; sourceTree = "<group>"; };
+		F464A6E024A3EF72002440AC /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F464A66924A3C57A002440AC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F464A67F24A3C57D002440AC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F464A68A24A3C57D002440AC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F464A66324A3C57A002440AC = {
+			isa = PBXGroup;
+			children = (
+				F464A66E24A3C57A002440AC /* iOCR */,
+				F464A68524A3C57D002440AC /* iOCRTests */,
+				F464A69024A3C57D002440AC /* iOCRUITests */,
+				F464A66D24A3C57A002440AC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F464A66D24A3C57A002440AC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F464A66C24A3C57A002440AC /* iOCR.app */,
+				F464A68224A3C57D002440AC /* iOCRTests.xctest */,
+				F464A68D24A3C57D002440AC /* iOCRUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F464A66E24A3C57A002440AC /* iOCR */ = {
+			isa = PBXGroup;
+			children = (
+				F464A6A824A3EF72002440AC /* dependencies */,
+				F464A69F24A3C766002440AC /* iOCR.swift */,
+				F464A66F24A3C57A002440AC /* AppDelegate.swift */,
+				F464A67124A3C57A002440AC /* SceneDelegate.swift */,
+				F464A67324A3C57A002440AC /* ContentView.swift */,
+				F464A67524A3C57D002440AC /* Assets.xcassets */,
+				F464A67A24A3C57D002440AC /* LaunchScreen.storyboard */,
+				F464A67D24A3C57D002440AC /* Info.plist */,
+				F464A67724A3C57D002440AC /* Preview Content */,
+			);
+			path = iOCR;
+			sourceTree = "<group>";
+		};
+		F464A67724A3C57D002440AC /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				F464A67824A3C57D002440AC /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		F464A68524A3C57D002440AC /* iOCRTests */ = {
+			isa = PBXGroup;
+			children = (
+				F464A68624A3C57D002440AC /* iOCRTests.swift */,
+				F464A68824A3C57D002440AC /* Info.plist */,
+			);
+			path = iOCRTests;
+			sourceTree = "<group>";
+		};
+		F464A69024A3C57D002440AC /* iOCRUITests */ = {
+			isa = PBXGroup;
+			children = (
+				F464A69124A3C57D002440AC /* iOCRUITests.swift */,
+				F464A69324A3C57D002440AC /* Info.plist */,
+			);
+			path = iOCRUITests;
+			sourceTree = "<group>";
+		};
+		F464A6A824A3EF72002440AC /* dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				F464A6E024A3EF72002440AC /* module.modulemap */,
+				F464A6A924A3EF72002440AC /* include */,
+			);
+			path = dependencies;
+			sourceTree = "<group>";
+		};
+		F464A6A924A3EF72002440AC /* include */ = {
+			isa = PBXGroup;
+			children = (
+				F464A6AB24A3EF72002440AC /* tesseract */,
+				F464A6C024A3EF72002440AC /* leptonica */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		F464A6AB24A3EF72002440AC /* tesseract */ = {
+			isa = PBXGroup;
+			children = (
+				F464A6AC24A3EF72002440AC /* ltrresultiterator.h */,
+				F464A6AD24A3EF72002440AC /* pageiterator.h */,
+				F464A6AE24A3EF72002440AC /* apitypes.h */,
+				F464A6AF24A3EF72002440AC /* osdetect.h */,
+				F464A6B024A3EF72002440AC /* renderer.h */,
+				F464A6B124A3EF72002440AC /* publictypes.h */,
+				F464A6B224A3EF72002440AC /* unichar.h */,
+				F464A6B324A3EF72002440AC /* ocrclass.h */,
+				F464A6B424A3EF72002440AC /* resultiterator.h */,
+				F464A6B524A3EF72002440AC /* serialis.h */,
+				F464A6B624A3EF72002440AC /* baseapi.h */,
+				F464A6B724A3EF72002440AC /* capi.h */,
+				F464A6B824A3EF72002440AC /* tess_version.h */,
+				F464A6B924A3EF72002440AC /* strngs.h */,
+				F464A6BA24A3EF72002440AC /* genericvector.h */,
+				F464A6BB24A3EF72002440AC /* helpers.h */,
+				F464A6BC24A3EF72002440AC /* thresholder.h */,
+				F464A6BD24A3EF72002440AC /* platform.h */,
+				F464A6BE24A3EF72002440AC /* tesscallback.h */,
+			);
+			path = tesseract;
+			sourceTree = "<group>";
+		};
+		F464A6C024A3EF72002440AC /* leptonica */ = {
+			isa = PBXGroup;
+			children = (
+				F464A6C124A3EF72002440AC /* dewarp.h */,
+				F464A6C224A3EF72002440AC /* allheaders.h */,
+				F464A6C324A3EF72002440AC /* imageio.h */,
+				F464A6C424A3EF72002440AC /* bilateral.h */,
+				F464A6C524A3EF72002440AC /* morph.h */,
+				F464A6C624A3EF72002440AC /* endianness.h */,
+				F464A6C724A3EF72002440AC /* bbuffer.h */,
+				F464A6C824A3EF72002440AC /* jbclass.h */,
+				F464A6C924A3EF72002440AC /* bmp.h */,
+				F464A6CA24A3EF72002440AC /* bmf.h */,
+				F464A6CB24A3EF72002440AC /* recog.h */,
+				F464A6CC24A3EF72002440AC /* environ.h */,
+				F464A6CD24A3EF72002440AC /* readbarcode.h */,
+				F464A6CE24A3EF72002440AC /* regutils.h */,
+				F464A6CF24A3EF72002440AC /* sudoku.h */,
+				F464A6D024A3EF72002440AC /* gplot.h */,
+				F464A6D124A3EF72002440AC /* list.h */,
+				F464A6D224A3EF72002440AC /* rbtree.h */,
+				F464A6D324A3EF72002440AC /* stringcode.h */,
+				F464A6D424A3EF72002440AC /* array.h */,
+				F464A6D524A3EF72002440AC /* ptra.h */,
+				F464A6D624A3EF72002440AC /* stack.h */,
+				F464A6D724A3EF72002440AC /* heap.h */,
+				F464A6D824A3EF72002440AC /* watershed.h */,
+				F464A6D924A3EF72002440AC /* ccbord.h */,
+				F464A6DA24A3EF72002440AC /* alltypes.h */,
+				F464A6DB24A3EF72002440AC /* leptwin.h */,
+				F464A6DC24A3EF72002440AC /* queue.h */,
+				F464A6DD24A3EF72002440AC /* bmfdata.h */,
+				F464A6DE24A3EF72002440AC /* pix.h */,
+				F464A6DF24A3EF72002440AC /* arrayaccess.h */,
+			);
+			path = leptonica;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F464A66B24A3C57A002440AC /* iOCR */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F464A69624A3C57D002440AC /* Build configuration list for PBXNativeTarget "iOCR" */;
+			buildPhases = (
+				F464A66824A3C57A002440AC /* Sources */,
+				F464A66924A3C57A002440AC /* Frameworks */,
+				F464A66A24A3C57A002440AC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = iOCR;
+			productName = iOCR;
+			productReference = F464A66C24A3C57A002440AC /* iOCR.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F464A68124A3C57D002440AC /* iOCRTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F464A69924A3C57D002440AC /* Build configuration list for PBXNativeTarget "iOCRTests" */;
+			buildPhases = (
+				F464A67E24A3C57D002440AC /* Sources */,
+				F464A67F24A3C57D002440AC /* Frameworks */,
+				F464A68024A3C57D002440AC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F464A68424A3C57D002440AC /* PBXTargetDependency */,
+			);
+			name = iOCRTests;
+			productName = iOCRTests;
+			productReference = F464A68224A3C57D002440AC /* iOCRTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		F464A68C24A3C57D002440AC /* iOCRUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F464A69C24A3C57D002440AC /* Build configuration list for PBXNativeTarget "iOCRUITests" */;
+			buildPhases = (
+				F464A68924A3C57D002440AC /* Sources */,
+				F464A68A24A3C57D002440AC /* Frameworks */,
+				F464A68B24A3C57D002440AC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F464A68F24A3C57D002440AC /* PBXTargetDependency */,
+			);
+			name = iOCRUITests;
+			productName = iOCRUITests;
+			productReference = F464A68D24A3C57D002440AC /* iOCRUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F464A66424A3C57A002440AC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1150;
+				LastUpgradeCheck = 1150;
+				ORGANIZATIONNAME = "Zach Young";
+				TargetAttributes = {
+					F464A66B24A3C57A002440AC = {
+						CreatedOnToolsVersion = 11.5;
+					};
+					F464A68124A3C57D002440AC = {
+						CreatedOnToolsVersion = 11.5;
+						TestTargetID = F464A66B24A3C57A002440AC;
+					};
+					F464A68C24A3C57D002440AC = {
+						CreatedOnToolsVersion = 11.5;
+						TestTargetID = F464A66B24A3C57A002440AC;
+					};
+				};
+			};
+			buildConfigurationList = F464A66724A3C57A002440AC /* Build configuration list for PBXProject "iOCR" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F464A66324A3C57A002440AC;
+			productRefGroup = F464A66D24A3C57A002440AC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F464A66B24A3C57A002440AC /* iOCR */,
+				F464A68124A3C57D002440AC /* iOCRTests */,
+				F464A68C24A3C57D002440AC /* iOCRUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F464A66A24A3C57A002440AC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F464A67C24A3C57D002440AC /* LaunchScreen.storyboard in Resources */,
+				F464A67924A3C57D002440AC /* Preview Assets.xcassets in Resources */,
+				F464A67624A3C57D002440AC /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F464A68024A3C57D002440AC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F464A68B24A3C57D002440AC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F464A66824A3C57A002440AC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F464A67024A3C57A002440AC /* AppDelegate.swift in Sources */,
+				F464A67224A3C57A002440AC /* SceneDelegate.swift in Sources */,
+				F464A6A024A3C766002440AC /* iOCR.swift in Sources */,
+				F464A67424A3C57A002440AC /* ContentView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F464A67E24A3C57D002440AC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F464A68724A3C57D002440AC /* iOCRTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F464A68924A3C57D002440AC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F464A69224A3C57D002440AC /* iOCRUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F464A68424A3C57D002440AC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F464A66B24A3C57A002440AC /* iOCR */;
+			targetProxy = F464A68324A3C57D002440AC /* PBXContainerItemProxy */;
+		};
+		F464A68F24A3C57D002440AC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F464A66B24A3C57A002440AC /* iOCR */;
+			targetProxy = F464A68E24A3C57D002440AC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		F464A67A24A3C57D002440AC /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F464A67B24A3C57D002440AC /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F464A69424A3C57D002440AC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_INCLUDE_PATHS = "";
+				"SWIFT_INCLUDE_PATHS[arch=*]" = "$(PROJECT_DIR)/iOCR/dependencies/**";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		F464A69524A3C57D002440AC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				"SWIFT_INCLUDE_PATHS[arch=*]" = "$(PROJECT_DIR)/iOCR/dependencies/**";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F464A69724A3C57D002440AC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"iOCR/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = iOCR/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.iOCR;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F464A69824A3C57D002440AC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"iOCR/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = iOCR/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.iOCR;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		F464A69A24A3C57D002440AC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = iOCRTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.iOCRTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOCR.app/iOCR";
+			};
+			name = Debug;
+		};
+		F464A69B24A3C57D002440AC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = iOCRTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.iOCRTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOCR.app/iOCR";
+			};
+			name = Release;
+		};
+		F464A69D24A3C57D002440AC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = iOCRUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.iOCRUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = iOCR;
+			};
+			name = Debug;
+		};
+		F464A69E24A3C57D002440AC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = iOCRUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.iOCRUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = iOCR;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F464A66724A3C57A002440AC /* Build configuration list for PBXProject "iOCR" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F464A69424A3C57D002440AC /* Debug */,
+				F464A69524A3C57D002440AC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F464A69624A3C57D002440AC /* Build configuration list for PBXNativeTarget "iOCR" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F464A69724A3C57D002440AC /* Debug */,
+				F464A69824A3C57D002440AC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F464A69924A3C57D002440AC /* Build configuration list for PBXNativeTarget "iOCRTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F464A69A24A3C57D002440AC /* Debug */,
+				F464A69B24A3C57D002440AC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F464A69C24A3C57D002440AC /* Build configuration list for PBXNativeTarget "iOCRUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F464A69D24A3C57D002440AC /* Debug */,
+				F464A69E24A3C57D002440AC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F464A66424A3C57A002440AC /* Project object */;
+}
