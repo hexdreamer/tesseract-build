@@ -31,56 +31,43 @@ struct ContentView: View {
     var uiImage:UIImage;
     var text:String;
     
-    let textBox1 = CGRect(origin: CGPoint(x:60,y:60), size: CGSize(width:320,height:500))
-    let textBox2 = CGRect(origin: CGPoint(x:0,y:0), size: CGSize(width:450,height:600))
-    let textBox3 = CGRect(origin: CGPoint(x:0,y:0), size: CGSize(width:500,height:700))
+    let textBox1 = CGRect(origin: CGPoint(x:280,y:200), size: CGSize(width:320,height:640))
     
     var body: some View {
-        var _cgImage = cgImage.cropping(to: self.textBox1)!
-        var _image = UIImage.init(cgImage:_cgImage)
-        
+        let _cgImage = cgImage.cropping(to: self.textBox1)!
+        let _image = UIImage.init(cgImage:_cgImage)
+
         let txt1 = doOCR(on: _image)
         let blocks1 = doBlocks()
-        
-        _cgImage = cgImage.cropping(to: self.textBox2)!
-        _image = UIImage.init(cgImage:_cgImage)
-        
-        let txt2 = doOCR(on: _image)
-        let blocks2 = doBlocks()
-        
-        print(txt2)
-        for block in blocks2 {
+
+        print(txt1)
+        for block in blocks1 {
             print(String(format:"- %@: %.2f", block.text.trimmingCharacters(in: .whitespacesAndNewlines), block.confidence))
         }
-        
-        _cgImage = cgImage.cropping(to: self.textBox3)!
-        _image = UIImage.init(cgImage:_cgImage)
-        
-        let txt3 = doOCR(on: _image)
-        let blocks3 = doBlocks()
         
         return VStack(alignment: .leading) {
             ZStack {
                 GeometryReader { geometry in
-                    Image(uiImage:self.uiImage)
-                        .aspectRatio(contentMode: ContentMode.fit)
+                    Image(uiImage:self.uiImage) //.aspectRatio(contentMode: ContentMode.fit)
                         
-                    
                     drawOriginRegistration().stroke(Color.red, lineWidth: 4)
 //                    drawGrid(size: geometry.size, spacing: 20).stroke(Color.purple, lineWidth:1)
 //                    drawGrid(size: geometry.size, spacing: 100).stroke(Color.red, lineWidth:2)
                     
-//                    Path { path in path.addRect(self.textBox1) }.stroke(Color.yellow, lineWidth: 3)
-//                    ForEach(0 ..< blocks1.count) { i in
-//                        Path { path in path.addRect(blocks1[i].boundingBox) }.stroke(Color.yellow, lineWidth: 3)
-//
-//                    }
-                    
-                    Path { path in path.addRect(self.textBox2) }.stroke(Color.red, lineWidth: 3)
-                    ForEach(0 ..< blocks2.count) { i in
-                        Path { path in path.addRect(blocks2[i].boundingBox) }.stroke(Color.red, lineWidth: 3)
+                    Path { path in path.addRect(self.textBox1) }.stroke(Color.yellow, lineWidth: 3)
+                    ForEach(0 ..< blocks1.count) { i in
+                        Path { path in
+                            var _box = blocks1[i].boundingBox
+                            _box = _box.offsetBy(dx: CGFloat(280), dy: CGFloat(200))
+                            path.addRect(_box)
+                        }.stroke(Color.red, lineWidth: 1)
 
                     }
+                    
+//                    Path { path in path.addRect(self.textBox1) }.stroke(Color.red, lineWidth: 3)
+//                    ForEach(0 ..< blocks1.count) { i in
+//                        Path { path in path.addRect(blocks1[i].boundingBox) }.stroke(Color.red, lineWidth: 3)
+//                    }
 
 //                    Path { path in path.addRect(self.textBox3) }.stroke(Color.purple, lineWidth: 3)
 //                    ForEach(0 ..< blocks3.count) { i in
@@ -89,13 +76,13 @@ struct ContentView: View {
 //                    }
                     
                 }
-            }.frame(height:710, alignment: .topLeading)
+            } // .frame(height:1536, alignment: .topLeading)
             
-//            Text(txt1).border(Color.yellow).font(.system(size: 30))
-            Text(txt2).border(Color.red).font(.system(size: 30))
+            Text(txt1).border(Color.yellow).font(.system(size: 30))
+//            Text(txt1).border(Color.red).font(.system(size: 30))
 //            Text(txt3).border(Color.purple).font(.system(size: 30))
-            ForEach(0 ..< blocks2.count) { i in
-                Text("\(blocks2[i].text) \(blocks2[i].confidence, specifier: "%.2f") \(blocks2[i].boundingBox.height)").font(.system(size:20))
+            ForEach(0 ..< blocks1.count) { i in
+                Text("\(blocks1[i].text) \(blocks1[i].confidence, specifier: "%.2f") \(blocks1[i].boundingBox.height)").font(.system(size:20))
             }
             
         }
@@ -205,7 +192,7 @@ struct ContentView: View {
             else { return .failure(MyError.unableToInitializeTesseract("Initialization error")) }
         
         TessBaseAPISetImage2(tesseract, pix)
-        TessBaseAPISetSourceResolution(tesseract, 300)
+        TessBaseAPISetSourceResolution(tesseract, 72)
         TessBaseAPISetPageSegMode(tesseract, PSM_AUTO)
         print(TessBaseAPIGetSourceYResolution(tesseract))
         guard let extractedTxt = TessBaseAPIGetUTF8Text(tesseract)

@@ -136,7 +136,7 @@ Our two libraries, Leptonica and Tesseract, need to be copied into the project a
 
     ```zsh
     ditto $ROOT/include/leptonica iOCR/iOCR/dependencies/include/leptonica
-    ditto $ROOT/include/tesseract/ iOCR/iOCR/dependencies/include/tesseract
+    ditto $ROOT/include/tesseract iOCR/iOCR/dependencies/include/tesseract
     ```
 
     I'm ignoring the libs for now because the error is about modules.
@@ -165,7 +165,7 @@ Our two libraries, Leptonica and Tesseract, need to be copied into the project a
 
 1. My project now looks like:
 
-    <img height="241" src="Notes/static/guide/module_final_structure_cropped.png"/> d
+    <img height="241" src="Notes/static/guide/module_final_structure_cropped.png"/>
 
 1. Set the **SWIFT_INCLUDE_PATHS** in the project's build settings to **$(PROJECTDIR)/iOCR/dependencies/\*\***:
 
