@@ -1,8 +1,13 @@
-# Making an OCR app for iOS or macOS, from scratch
+# Multilingual OCR for your for iOS or macOS project
 
-Welcome to our project on building and using Tesseract OCR in your Xcode projects.  We started this project with the very strong philosophy that it should be easy to learn how to build a C or C++ library from source and then build an app on top of that.
+Welcome to our guide to building and using Tesseract OCR in an Xcode project.  We started this project with the very strong philosophy that it should be easy to learn how to build a C or C++ library from source and then integrate the build products into an app.
 
-As the person tasked with creating this guide, I didn't know, and still don't know how to do a lot of what this guide requires.  C is familiar, but I don't know it.  I've used Xcode before, but that was like 10 years ago and I didn't have to deal with libraries, targets, and most of the details that go into making this project.  And if that sounds familiar and you're unsure, hopefully this can guide you forward.
+The repo contains:
+
+- a skeleton folder structure for downloading and building the tools and libraries
+- all the configuration and build scripts
+- a simple test of the build phase
+- an Xcode project that imports the libraries and modules, and a basic iPad app that can recognize vertical Japanese and traditional Chinese
 
 ## Building from source
 
