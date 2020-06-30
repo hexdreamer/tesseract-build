@@ -32,13 +32,8 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-func drawOriginRegistration() -> Path {
-    return Path { path in
-        path.move(to:CGPoint(x:0, y:10))
-        path.addLine(to:CGPoint.zero)
-        path.addLine(to:CGPoint(x:10, y:0))
-    }
-}
+// This simple demo has at most 3 recognized RIL_TEXTLINE objects for any image
+var Colors = [Color.red, Color.yellow, Color.purple]
 
 struct ImageBlocksAndText: View {
     private var recognizer: Recognizer
@@ -67,26 +62,33 @@ struct ImageBlocksAndText: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .border(Color.black, width: 2)
     }
 }
-
-var Colors = [Color.red, Color.yellow, Color.purple]
 
 struct ConfidentText: View {
     private var s: String
     private var i: Int
-
+    
     init(
         block: RecognizedBlock,
         i: Int
     ) {
-        self.s = String(format:"%@: %.2f", block.text.trimmingCharacters(in: .whitespacesAndNewlines), block.confidence)
+        var txt = block.text
+        if (txt.filter { !$0.isWhitespace } == "") {
+            txt="<blank>"
+        }
+        self.s = String(
+            format:"%@ - %.2f",
+            txt.filter { !$0.isWhitespace },
+            block.confidence)
         self.i = i
     }
     
     var body: some View {
         Text(s)
+            .font(.system(size: 30))
             .border(Colors[self.i], width: 2)
-            .frame(height: 30, alignment: .topLeading)
+            .frame(height: 35, alignment: .topLeading)
     }
 }
