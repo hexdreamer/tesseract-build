@@ -31,4 +31,66 @@ class iOCRTests: XCTestCase {
         }
     }
 
+    func testHelloJapaneseVertical() {
+        // There's spacing the OCR sees that I was having trouble encoding into
+        // `want`, so I stripped all spaces for comparison
+        initializeOCR(trainedData: "jpn_vert")
+
+        let img = UIImage(named: "hello_japanese_vertical")!
+        let want = "Hello,世界"
+        let got = performOCR(on: img)
+
+        XCTAssertEqual(got.filter { !$0.isWhitespace }, want)
+        
+        deInitOCR()
+    }
+
+    func testHelloJapaneseHorizontal() {
+        // There's spacing the OCR sees that I was having trouble encoding into
+        // `want`, so I stripped all spaces for comparison
+        initializeOCR(trainedData: "jpn")
+        
+        let img = UIImage(named: "hello_japanese_horizontal")!
+        let want = "Hello,世界"
+        let got = performOCR(on: img)
+        
+        XCTAssertEqual(got.filter { !$0.isWhitespace }, want)
+        
+        deInitOCR()
+    }
+    
+    func testChineseTraditionalVertical1() {
+        initializeOCR(trainedData: "chi_tra_vert")
+        
+        let img = UIImage(named: "traditional_chinese_vertical_1")!
+        let want = """
+哈哈
+
+我第一個到
+終點了!
+
+"""
+        let got = performOCR(on: img)
+        
+        XCTAssertEqual(got, want)
+ 
+        deInitOCR()
 }
+
+    func testChineseTraditionalVertical2() {
+        initializeOCR(trainedData: "chi_tra_vert")
+        
+        let img = UIImage(named: "traditional_chinese_vertical_2")!
+        let want = """
+如果終點地下
+有地雷怎麼辦!
+
+"""
+        let got = performOCR(on: img)
+        
+        XCTAssertEqual(got, want)
+
+        deInitOCR()
+    }
+}
+

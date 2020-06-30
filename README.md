@@ -2,7 +2,7 @@
 
 Welcome to our project on building and using Tesseract OCR in your Xcode projects.  We started this project with the very strong philosophy that it should be easy to learn how to build a C or C++ library from source and then build an app on top of that.
 
-As the person tasked with creating this guide, I didn't know, and still don't know how to do a lot of what this guide requires.  C is familiar, but I don't know it.  I've used Xcode before, but that was like 10 years ago and I didn't have to deal with libraries, targets, and most of the details that go into making this project.  And if that sounds familiar and your unsure, hopefully this can guide you forward.
+As the person tasked with creating this guide, I didn't know, and still don't know how to do a lot of what this guide requires.  C is familiar, but I don't know it.  I've used Xcode before, but that was like 10 years ago and I didn't have to deal with libraries, targets, and most of the details that go into making this project.  And if that sounds familiar and you're unsure, hopefully this can guide you forward.
 
 ## Building from source
 
@@ -24,7 +24,7 @@ The project folder that you cloned or downloaded is referred to as **PROJECTDIR*
 For my folder setup, I did everything in the shell and Xcode relative to my PROJECTDIR.  There's a symlink to shell script we can source to set up the shell environment and the `print_project_env()` function that shows key aspects of the environment:
 
 ```zsh
-% cd ~/dev/tesseract-build
+% cd ~/Projects/tesseract-build
 
 % ls -la project_environment.sh
 lrwxr-xr-x  1 zyoung  staff  36 Jun 24 11:38 project_environment.sh@ -> Scripts/build/project_environment.sh
@@ -34,11 +34,11 @@ lrwxr-xr-x  1 zyoung  staff  36 Jun 24 11:38 project_environment.sh@ -> Scripts/
 
 Directories:
 
-$PROJECTDIR:  /Users/zyoung/dev/tesseract-build
-$DOWNLOADS:   /Users/zyoung/dev/tesseract-build/Downloads
-$ROOT:        /Users/zyoung/dev/tesseract-build/Root
-$SCRIPTSDIR:  /Users/zyoung/dev/tesseract-build/Scripts
-$SOURCES      /Users/zyoung/dev/tesseract-build/Sources
+$PROJECTDIR:  /Users/zyoung/Projects/tesseract-build
+$DOWNLOADS:   /Users/zyoung/Projects/tesseract-build/Downloads
+$ROOT:        /Users/zyoung/Projects/tesseract-build/Root
+$SCRIPTSDIR:  /Users/zyoung/Projects/tesseract-build/Scripts
+$SOURCES      /Users/zyoung/Projects/tesseract-build/Sources
 
 Scripts:
 
@@ -55,14 +55,9 @@ Just running that one script will produce all the files we need for Xcode.  Runn
 | `<Root>/ios_arm64/lib/libname.a` <br/> `<Root>/ios_x86_64/lib/libname.a` | `<Root>/lib/libname.a`       |
 | `<Root>/macos_x86_64/lib/libname.a`                                   | `<Root>/lib/libname-macos.a` |
 
-The two header files for Leptonica and Tesseract C-APIs that we need are 
-
-There's also a tesseract command-line program that we'll use, and it's in macos_x86_64.
-The build steps and these concepts are explained in more detail in [Building](Scripts/README.md#Building).
-
 ## Verifying Tesseract
 
-Having run **build_all.sh** and successfully built Tesseract we need to provide it with the reference data it will use to recognize the characters in the language we are interesed in.
+Having run **build_all.sh** and successfully built Tesseract we need to provide it with the reference data it will use to recognize the characters in the language we are interested in.
 
 Run **Scripts/test_tesseract.sh** to download some trained data for horizontal and vertical Japanese scripts and run a quick OCR test on these 2 images:
 
@@ -86,13 +81,11 @@ Hello
 
 but for this simple test, all white space is stripped out and the result is compared to `'Hello,世界'` (which is also the expected result for the horizontal image).
 
-These images were chosen because some Japanese writing will include English loan words and I think it's noteworthy that some English is recognized when processing exclusively for Japanese.
+These images were chosen because some Japanese writing will include words borrowed from English, and I think it's noteworthy that some English is recognized when processing exclusively for Japanese.
 
 And with that little test completed, we can get into Xcode.
 
 ## Integrating Tesseract into Xcode
-
-Much of the insight into configurating and executing the build up to this point came from the Makefile of another open-source iOS Tesseract project, SwiftyTesseract (ST), *A Swift wrapper around Tesseract for use in iOS applications*.  I've used it as a model for building with Swift on top of a C API.  I'll be using bits of ST code to navigate creating an Xcode project from scratch.  I'll chase down errors as they come, modifying the project along the way.
 
 ### Create the project
 
@@ -167,7 +160,7 @@ Our two libraries, Leptonica and Tesseract, need to be copied into the project a
 
     <img height="241" src="Notes/static/guide/module_final_structure_cropped.png"/>
 
-1. Set the **SWIFT_INCLUDE_PATHS** in the project's build settings to **$(PROJECTDIR)/iOCR/dependencies/\*\***:
+1. Set the **SWIFT_INCLUDE_PATHS** in the project's build settings to **$(PROJECT_DIR)/../Root/include/\*\***:
 
     <img src="Notes/static/guide/2_swift_include_paths_cropped.png"/>
 

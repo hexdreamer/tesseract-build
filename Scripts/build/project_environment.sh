@@ -18,7 +18,10 @@ readonly SOURCES=$PROJECTDIR/Sources
 
 readonly MASTER_CMDS=$LOGS/commands.sh
 
+# TODO: why isn't this exported?, I still see Root/bin added to path, and I've grepped
+# and don't see PATH exported anywhere
 PATH=$ROOT/bin:$PATH
+export TESSDATA_PREFIX=$ROOT/share/tessdata
 
 _exec() {
   local _status
