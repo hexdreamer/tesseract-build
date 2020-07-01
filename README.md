@@ -122,25 +122,25 @@ And with that little test completed, we can get into Xcode.
 
 ## A simple OCR app
 
-iOCR is a small project that references all build products in **Root**.  We tried to keep the abstractions to a minimum so that a simple pattern for using the Tesseract API would be more obvious.
+If you're not familiar with the Tesseract C-API, here are some of the basics I've learned with figurative code samples.
 
-The basic steps of using the API are:
+### Tesseract API basis
 
-### Initialize API object
+#### Initialize API object
 
 Create an API object and initialize it with the trained data's parent folder, the data's filename, and an *OCR engine mode (OEM)*.  **OEM_LSTM_ONLY** is the latest neural-net recognition engine, which has some advantage in "line recognition" over the previous engine.
 
 ```swift
-let tessAPI = TessBaseAPICreate()!
+tessAPI = TessBaseAPICreate()
 TessBaseAPIInit2(tessAPI, trainedDataFolder, "jpn_vert", OEM_LSTM_ONLY)
 ```
 
-### Perform OCR
+#### Perform OCR
 
-Get an image and set it on the API, then configure the resolution and *page segmentation mode (PSM)*.  By default, Tesseract expects a page of text when it segments an image, and **PSM_AUTO** defines this default[^2].  All the images in this guide have been cropped to just the text, so this value makes sense.
+Get an image and set it on the API, then configure the resolution and *page segmentation mode (PSM)*.  By default, Tesseract expects a page of text when it segments an image, and **PSM_AUTO** defines this default behavior.  All the images in this guide have been cropped to just the text, so this value makes sense for this demo/guide.
 
 ```swift
-let image = getImage()
+image = getImage()
 TessBaseAPISetImage2(tessAPI, image)
 TessBaseAPISetSourceResolution(tessAPI, 72)
 TessBaseAPISetPageSegMode(tessAPI, PSM_AUTO)
@@ -149,33 +149,42 @@ TessBaseAPISetPageSegMode(tessAPI, PSM_AUTO)
 Finally, call the method that returns the recognized text in the image.
 
 ```swift
-TessBaseAPIGetUTF8Text(tesseract)
+TessBaseAPIGetUTF8Text(tessAPI)
 ```
 
 We could stop here, but there's more we can know about the text.
 
-### Iterate over results
+#### Iterate over results
 
 The API also provides an iterator for individually recognized text elements in the image.  The size or scope of the elements is determined by *level*.  **RIL_TEXTLINE** is the ResultIteratorLevel for recognizing individual lines of text.  `TessBaseAPIGetUTF8Text()` from before uses `RIL_PARA` internally to recognize paragraphs of text.
 
 ```swift
-let level = RIL_TEXTLINE
-let iterator = TessBaseAPIGetIterator(tessAPI)
-let txt = TessResultIteratorGetUTF8Text(iterator, level)
+level = RIL_TEXTLINE
+iterator = TessBaseAPIGetIterator(tessAPI)
+txt = TessResultIteratorGetUTF8Text(iterator, level)
 TessPageIteratorBoundingBox(iterator, level, &originX, &originY, &width, &height)
-let confidence = TessResultIteratorConfidence(iterator, level)
+confidence = TessResultIteratorConfidence(iterator, level)
 ```
 
-*Note:* `TessBaseAPIGetUTF8Text(tesseract)` must be called before any of the methods that use the iterator.
+*Note:* `TessBaseAPIGetUTF8Text` must be called before the `TessPageIterator` and `TessResultIterator` methods.
 
-Subsequent results are accessed by calling the iterators next method:
+Subsequent results are accessed by calling the iterator's next method:
 
 ```swift
 TessPageIteratorNext(iterator, level)
 ```
 
-There is a concrete example of these steps in **iOCRTests.swift::testGuideExample()**.
+There is a small test and working example of these basics in **iOCRTests.swift::testGuideExample()** in the Xcode project.
 
+### iOCR Xcode project
+
+**PROJECTDIR/iOCR/iOCR.xcodeproj** is an example of putting everything together into a working project and running an app in the simulator that highlights those API basics.
+
+Open the project and run the **iOCR** target for an **iPad Pro (12.9-in)**:
+
+<img height="969" src="Notes/static/guide/blank_error.png"/>
+
+`TessPageIteratorBoundingBox(iterator, level, &originX, &originY, &width, &height)` will be used to make an array of CGRect
 ## Learning Tesseract
 
 Configuration can matter a lot for Tesseract.  If you're new to it, you might need to dig in if you don't immediately get good results.  Here are two resources I've consulted:
