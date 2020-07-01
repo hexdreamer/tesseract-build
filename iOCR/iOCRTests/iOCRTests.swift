@@ -62,20 +62,23 @@ class iOCRTests: XCTestCase {
     }
     
     func testGuideExample() {
-        let tesseract = TessBaseAPICreate()!
+        let tessAPI = TessBaseAPICreate()!
         
         let trainedDataFolder = Bundle.main.path(forResource: "tessdata", ofType: nil, inDirectory: "share")
-        TessBaseAPIInit2(tesseract, trainedDataFolder, "jpn_vert", OEM_LSTM_ONLY)
+        TessBaseAPIInit2(tessAPI, trainedDataFolder, "jpn_vert", OEM_LSTM_ONLY)
 
-        let image = getImage(from: UIImage(named: "hello_japanese_vertical")!)
-        TessBaseAPISetImage2(tesseract, image)
-        TessBaseAPISetSourceResolution(tesseract, 72)
-        TessBaseAPISetPageSegMode(tesseract, PSM_AUTO)
+        var image = getImage(from: UIImage(named: "hello_japanese_vertical")!)
+        TessBaseAPISetImage2(tessAPI, image)
+        // Leptonica method to manage Leptonica's PIX-type
+        pixDestroy(&image)
+
+        TessBaseAPISetSourceResolution(tessAPI, 72)
+        TessBaseAPISetPageSegMode(tessAPI, PSM_AUTO)
 
         // This is a pre-req for any TessResultIterator call
-        TessBaseAPIGetUTF8Text(tesseract)
+        TessBaseAPIGetUTF8Text(tessAPI)
 
-        let iterator = TessBaseAPIGetIterator(tesseract)
+        let iterator = TessBaseAPIGetIterator(tessAPI)
         let level = RIL_TEXTLINE
         
         var txt = TessResultIteratorGetUTF8Text(iterator, level)!
@@ -83,39 +86,42 @@ class iOCRTests: XCTestCase {
         
         var x: Int32 = 0
         var y: Int32 = 0
-        var w: Int32 = 0
-        var h: Int32 = 0
-        TessPageIteratorBoundingBox(iterator, level, &x, &y, &w, &h)
+        // wO and hO are widthOffset and heighOffset
+        var wO: Int32 = 0
+        var hO: Int32 = 0
+        TessPageIteratorBoundingBox(iterator, level, &x, &y, &wO, &hO)
         
         XCTAssertEqual(String(cString:txt).filter { !$0.isWhitespace }, "Hello")
         
         // Don't know actual coordinates or confidence, other than nothing should be 0
         XCTAssertNotEqual(x, 0)
         XCTAssertNotEqual(y, 0)
-        XCTAssertNotEqual(w, 0)
-        XCTAssertNotEqual(h, 0)
+        XCTAssertNotEqual(wO, 0)
+        XCTAssertNotEqual(hO, 0)
         XCTAssertGreaterThan(confidence, 0)
         
         // Get next result
-        
         XCTAssertNotEqual(TessPageIteratorNext(iterator, level), 0)
         
         x  = 0
         y  = 0
-        w  = 0
-        h = 0
-        txt.deallocate()
+        wO  = 0
+        hO = 0
+        TessDeleteText(txt)
         confidence = 0
 
         txt = TessResultIteratorGetUTF8Text(iterator, level)!
         confidence = TessResultIteratorConfidence(iterator, level)
-        TessPageIteratorBoundingBox(iterator, level, &x, &y, &w, &h)
+        TessPageIteratorBoundingBox(iterator, level, &x, &y, &wO, &hO)
         
         XCTAssertEqual(String(cString:txt).filter { !$0.isWhitespace }, ",世界")
         XCTAssertNotEqual(x, 0)
         XCTAssertNotEqual(y, 0)
-        XCTAssertNotEqual(w, 0)
-        XCTAssertNotEqual(h, 0)
+        XCTAssertNotEqual(wO, 0)
+        XCTAssertNotEqual(hO, 0)
         XCTAssertGreaterThan(confidence, 0)
+
+        TessBaseAPIEnd(tessAPI)
+        TessBaseAPIDelete(tessAPI)
     }
 }

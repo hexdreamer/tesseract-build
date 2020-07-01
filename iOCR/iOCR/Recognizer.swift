@@ -15,20 +15,24 @@ import libtesseract
 class Recognizer {
     let img: UIImage
     let txt: String
-    let blocks: [RecognizedBlock]
+    let rects: [RecognizedRectangle]
     
     init(
         trainedData: String,
         imgName: String
     ) {
-        let tessAPI = initOCR(trainedData: trainedData)
-        
         self.img = UIImage(named: imgName)!
-        self.txt = performOCR(on: self.img, tessAPI: tessAPI)
-        self.blocks = recognizedBlocks(tessAPI: tessAPI, level: RIL_TEXTLINE)
+        let tessAPI = initAPI(langDataName: trainedData, uiImage: self.img)
         
-        deInitOCR(tessAPI: tessAPI)
+        var txt = getAllText(tessAPI: tessAPI)
+        if (txt.filter { !$0.isWhitespace } == "") {
+            txt="<*blank*>"
+        }
+        self.txt = txt
+
+        self.rects = recognizedRectangles(tessAPI: tessAPI, level: RIL_TEXTLINE)
         
+        deInitAPI(tessAPI: tessAPI)
     }
     
 }

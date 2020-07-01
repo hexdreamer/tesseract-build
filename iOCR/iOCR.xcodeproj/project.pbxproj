@@ -14,7 +14,6 @@
 		F464A67924A3C57D002440AC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F464A67824A3C57D002440AC /* Preview Assets.xcassets */; };
 		F464A67C24A3C57D002440AC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F464A67A24A3C57D002440AC /* LaunchScreen.storyboard */; };
 		F464A68724A3C57D002440AC /* iOCRTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A68624A3C57D002440AC /* iOCRTests.swift */; };
-		F464A69224A3C57D002440AC /* iOCRUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A69124A3C57D002440AC /* iOCRUITests.swift */; };
 		F464A6A024A3C766002440AC /* iOCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A69F24A3C766002440AC /* iOCR.swift */; };
 		F464B28724A6B35F002440AC /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F464B28624A6B346002440AC /* libjpeg.a */; };
 		F464B28824A6B372002440AC /* liblept.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F464B28224A6B346002440AC /* liblept.a */; };
@@ -36,13 +35,6 @@
 			remoteGlobalIDString = F464A66B24A3C57A002440AC;
 			remoteInfo = iOCR;
 		};
-		F464A68E24A3C57D002440AC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F464A66424A3C57A002440AC /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F464A66B24A3C57A002440AC;
-			remoteInfo = iOCR;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -57,7 +49,6 @@
 		F464A68224A3C57D002440AC /* iOCRTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOCRTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F464A68624A3C57D002440AC /* iOCRTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOCRTests.swift; sourceTree = "<group>"; };
 		F464A68824A3C57D002440AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F464A68D24A3C57D002440AC /* iOCRUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOCRUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F464A69124A3C57D002440AC /* iOCRUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOCRUITests.swift; sourceTree = "<group>"; };
 		F464A69324A3C57D002440AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F464A69F24A3C766002440AC /* iOCR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOCR.swift; sourceTree = "<group>"; };
@@ -94,13 +85,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F464A68A24A3C57D002440AC /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -120,7 +104,6 @@
 			children = (
 				F464A66C24A3C57A002440AC /* iOCR.app */,
 				F464A68224A3C57D002440AC /* iOCRTests.xctest */,
-				F464A68D24A3C57D002440AC /* iOCRUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -220,24 +203,6 @@
 			productReference = F464A68224A3C57D002440AC /* iOCRTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		F464A68C24A3C57D002440AC /* iOCRUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F464A69C24A3C57D002440AC /* Build configuration list for PBXNativeTarget "iOCRUITests" */;
-			buildPhases = (
-				F464A68924A3C57D002440AC /* Sources */,
-				F464A68A24A3C57D002440AC /* Frameworks */,
-				F464A68B24A3C57D002440AC /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				F464A68F24A3C57D002440AC /* PBXTargetDependency */,
-			);
-			name = iOCRUITests;
-			productName = iOCRUITests;
-			productReference = F464A68D24A3C57D002440AC /* iOCRUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -252,10 +217,6 @@
 						CreatedOnToolsVersion = 11.5;
 					};
 					F464A68124A3C57D002440AC = {
-						CreatedOnToolsVersion = 11.5;
-						TestTargetID = F464A66B24A3C57A002440AC;
-					};
-					F464A68C24A3C57D002440AC = {
 						CreatedOnToolsVersion = 11.5;
 						TestTargetID = F464A66B24A3C57A002440AC;
 					};
@@ -276,7 +237,6 @@
 			targets = (
 				F464A66B24A3C57A002440AC /* iOCR */,
 				F464A68124A3C57D002440AC /* iOCRTests */,
-				F464A68C24A3C57D002440AC /* iOCRUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -298,13 +258,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F464B94024A6BCEE002440AC /* share in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F464A68B24A3C57D002440AC /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,14 +284,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F464A68924A3C57D002440AC /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F464A69224A3C57D002440AC /* iOCRUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -346,11 +291,6 @@
 			isa = PBXTargetDependency;
 			target = F464A66B24A3C57A002440AC /* iOCR */;
 			targetProxy = F464A68324A3C57D002440AC /* PBXContainerItemProxy */;
-		};
-		F464A68F24A3C57D002440AC /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F464A66B24A3C57A002440AC /* iOCR */;
-			targetProxy = F464A68E24A3C57D002440AC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -565,44 +505,6 @@
 			};
 			name = Release;
 		};
-		F464A69D24A3C57D002440AC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = iOCRUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.iOCRUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = iOCR;
-			};
-			name = Debug;
-		};
-		F464A69E24A3C57D002440AC /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = iOCRUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.iOCRUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = iOCR;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -629,15 +531,6 @@
 			buildConfigurations = (
 				F464A69A24A3C57D002440AC /* Debug */,
 				F464A69B24A3C57D002440AC /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		F464A69C24A3C57D002440AC /* Build configuration list for PBXNativeTarget "iOCRUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F464A69D24A3C57D002440AC /* Debug */,
-				F464A69E24A3C57D002440AC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -49,15 +49,15 @@ struct ImageBlocksAndText: View {
         VStack {
             ZStack {
                 Image(uiImage:recognizer.img).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                ForEach(0 ..< recognizer.blocks.count) { i in
+                ForEach(0 ..< recognizer.rects.count) { i in
                     Path { path in
-                        path.addRect(self.recognizer.blocks[i].boundingBox)
+                        path.addRect(self.recognizer.rects[i].boundingBox)
                     }.stroke(Colors[i], lineWidth: 2)
                 }
             }
             VStack {
-                ForEach(0 ..< recognizer.blocks.count) { i in
-                    ConfidentText(block: self.recognizer.blocks[i], i: i)
+                ForEach(0 ..< recognizer.rects.count) { i in
+                    ConfidentText(block: self.recognizer.rects[i], i: i)
                 }
             }
         }
@@ -71,13 +71,10 @@ struct ConfidentText: View {
     private var i: Int
     
     init(
-        block: RecognizedBlock,
+        block: RecognizedRectangle,
         i: Int
     ) {
         var txt = block.text
-        if (txt.filter { !$0.isWhitespace } == "") {
-            txt="<*blank*>"
-        }
         self.s = String(
             format:"%@ - %.2f",
             txt.filter { !$0.isWhitespace },

@@ -14,7 +14,7 @@ import libtesseract
 
 //--------------------------------------------------------------------------------
 
-/// Convert UIImage to Pix format that Leptonica/Tesseract deal with
+/// Convert UIImage to format/structure that Leptonica and Tesseract deal with
 public func getImage(from image: UIImage) -> UnsafeMutablePointer<PIX>? {
     let data = image.pngData()!
     let rawPointer = (data as NSData).bytes
@@ -24,26 +24,27 @@ public func getImage(from image: UIImage) -> UnsafeMutablePointer<PIX>? {
 
 //--------------------------------------------------------------------------------
 
-public typealias TessBaseAPI = OpaquePointer
-
-/// Pass in the name of a trainedData language file and get back a Tesseract API object
-public func initOCR(trainedData: String) -> TessBaseAPI {
+/// Create a Tesseract API object.
+/// - Parameters:
+///     - langDataName: the name portion of the trained data file to use, e.g.: for the file `jpn_vert.traineddata`, pass in **jpn_vert**
+///     - uiImage: an image with text to recognize
+public func initAPI(langDataName: String, uiImage: UIImage) -> OpaquePointer {
     let path = Bundle.main.path(forResource: "tessdata", ofType: nil, inDirectory: "share")
-    let tesseract = TessBaseAPICreate()!
-    TessBaseAPIInit2(tesseract, path, trainedData, OEM_LSTM_ONLY)
-    return tesseract
-}
-
-/// Pass in an image with a tessAPI and get back some recognized text, hopefully.
-/// If text cannot be recognized, get back ** No Text Found! **
-public func performOCR(on: UIImage, tessAPI: TessBaseAPI) -> String {
-    var image = getImage(from: on)
+    let tessAPI = TessBaseAPICreate()!
+    TessBaseAPIInit2(tessAPI, path, langDataName, OEM_LSTM_ONLY)
+    
+    var image = getImage(from: uiImage)
     defer { pixDestroy(&image) }
 
     TessBaseAPISetImage2(tessAPI, image)
     TessBaseAPISetSourceResolution(tessAPI, 72)
     TessBaseAPISetPageSegMode(tessAPI, PSM_AUTO)
     
+    return tessAPI
+}
+
+/// Get back all recognized text in the entire image, hopefully.  If no text is recognized, get back ** No Text Found! **
+public func getAllText(tessAPI: OpaquePointer) -> String {
     let charPtr: UnsafeMutablePointer<Int8>? = TessBaseAPIGetUTF8Text(tessAPI)
     defer { TessDeleteText(charPtr) }
 
@@ -54,64 +55,61 @@ public func performOCR(on: UIImage, tessAPI: TessBaseAPI) -> String {
     }
 }
 
-public func deInitOCR(tessAPI: TessBaseAPI) {
-    TessBaseAPIEnd(tessAPI)
-    TessBaseAPIDelete(tessAPI)
-}
-
 //--------------------------------------------------------------------------------
 
-/// Represents a "unit" of recognized text; the unit's size/scope is defined by TessPageIteratorLevel
-struct RecognizedBlock {
+/// A unit of recognition that includes the recognized text, the text's location and size (in the image's coordinate space),
+/// and the API's confidence in this recognition.
+struct RecognizedRectangle {
     public var text: String
     public var boundingBox: CGRect
     public var confidence: Float
 }
 
-/// TessPageIteratorLevel (RIL = "Result Iterator Levels"):
-/// RIL_BLOCK
-/// RIL_PARA
-/// RIL_TEXTLINE
-/// RIL_WORD
-/// RIL_SYMBOL
-func recognizedBlocks(tessAPI: TessBaseAPI, level: TessPageIteratorLevel) -> [RecognizedBlock] {
-    guard let resultIterator = TessBaseAPIGetIterator(tessAPI) else { return [] }
-    defer { TessPageIteratorDelete(resultIterator)}
-    
-    var results = [RecognizedBlock]()
-    
+/// Returns an array of recognized objects; `performOCR()` must be called before calling this function.
+///
+/// - Parameters:
+///     - tessAPI: A Tesseract API object; `performOCR()` must have already been called on it.
+///     - level: A TessPageIteratorLevel that defines the scope/size of the recognition object.
+///         Valid values are: `RIL_BLOCK`, `RIL_PARA`, `RIL_TEXTLINE`, `RIL_WORD`, `RIL_SYMBOL`
+///
+func  recognizedRectangles(tessAPI: OpaquePointer, level: TessPageIteratorLevel) -> [RecognizedRectangle] {
+    guard let iterator = TessBaseAPIGetIterator(tessAPI) else { return [] }
+    defer { TessPageIteratorDelete(iterator)}
+
+    var rects = [RecognizedRectangle]()
     repeat {
-        if let block = block(from: resultIterator, for: level) {
-            results.append(block)
-        }
-    } while (TessPageIteratorNext(resultIterator, level) > 0)
-    
-    return results
+        // Text
+        let txt = TessResultIteratorGetUTF8Text(iterator, level)!
+        defer { TessDeleteText(txt) }
+        let txtStr = String(cString: txt)
+        
+        // Rectangles
+        var originX: Int32 = 0
+        var originY: Int32 = 0
+        // these "offsets" are the (x,y)-point "opposite" of origin
+        var widthOffset: Int32 = 0
+        var heightOffset: Int32 = 0
+
+        TessPageIteratorBoundingBox(iterator, level, &originX, &originY, &widthOffset, &heightOffset)
+
+        let width = widthOffset - originX
+        let height = heightOffset - originY
+        let cgRect = CGRect(x: CGFloat(originX), y: CGFloat(originY), width: CGFloat(width), height: CGFloat(height))
+        
+        // Confidence
+        let confidence = TessResultIteratorConfidence(iterator, level)
+        
+        // RecognizedRectangle
+        rects.append(RecognizedRectangle(text: txtStr, boundingBox: cgRect, confidence: confidence))
+    } while (TessPageIteratorNext(iterator, level) > 0)
+
+    return rects
 }
 
-func block(from iterator: OpaquePointer, for level: TessPageIteratorLevel) -> RecognizedBlock? {
-    guard let cString = TessResultIteratorGetUTF8Text(iterator, level) else { return nil }
-    defer { TessDeleteText(cString) }
-    
-    let rect = makeBoundingRect(from: iterator, for: level)
-    let text = String(cString: cString)
-    let confidence = TessResultIteratorConfidence(iterator, level)
-    
-    return RecognizedBlock(text: text, boundingBox: rect, confidence: confidence)
-}
+//--------------------------------------------------------------------------------
 
-func makeBoundingRect(from iterator: OpaquePointer, for level: TessPageIteratorLevel) -> CGRect {
-    var originX: Int32 = 0
-    var originY: Int32 = 0
-    var widthOffset: Int32 = 0
-    var heightOffset: Int32 = 0
-
-    TessPageIteratorBoundingBox(iterator, level, &originX, &originY, &widthOffset, &heightOffset)
-
-    return CGRect(
-        x: .init(originX),
-        y: .init(originY),
-        width: .init(widthOffset - originX),
-        height: .init(heightOffset - originY)
-    )
+/// Frees a Tesseract API object
+public func deInitAPI(tessAPI: OpaquePointer) {
+    TessBaseAPIEnd(tessAPI)
+    TessBaseAPIDelete(tessAPI)
 }

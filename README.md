@@ -182,9 +182,50 @@ There is a small test and working example of these basics in **iOCRTests.swift::
 
 Open the project and run the **iOCR** target for an **iPad Pro (12.9-in)**:
 
-<img height="969" src="Notes/static/guide/blank_error.png"/>
+<img height="650" src="Notes/static/guide/blank_error.png"/>
 
-`TessPageIteratorBoundingBox(iterator, level, &originX, &originY, &width, &height)` will be used to make an array of CGRect
+The colored rectangles, texts, and numbers are the iterated bounding boxes, utf8 texts, and confidence scores from the basics:
+
+```swift
+class Recognizer {
+    let img: UIImage
+    let txt: String
+    let rects: [RecognizedRectangle]
+
+    init(
+        trainedData: String,
+        imgName: String
+    ) {
+        self.img = UIImage(named: imgName)!
+        let tessAPI = initAPI(langDataName: trainedData, uiImage: self.img)
+
+        var txt = getAllText(tessAPI: tessAPI)
+        if (txt.filter { !$0.isWhitespace } == "") {
+            txt="<*blank*>"
+        }
+        self.txt = txt
+
+        self.rects = recognizedRectangles(tessAPI: tessAPI, level: RIL_TEXTLINE)
+
+        deInitAPI(tessAPI: tessAPI)
+    }
+}
+```
+
+and in the case of the traditional Chinese panel in the bottom-left corner, the view's `recognizer` is created in this fashion:
+
+```swift
+var recognizer = Recognizer(trainedData: "chi_tra_vert", imgName: "traditional_chinese_vertical_1")
+```
+
+#### Some weird geometry and \<\*blank\*\>
+
+In the Japanese sample image, there's the text value `<*blank*>` with a confidence of 95.00%.  Those values correspond to the unexpected recognition of a single stroke inside the <span style="font-size: 1.5em">世</span> character as a whole other valid character(s), weird.
+
+<img height="261" src="Notes/static/guide/blank_error_cropped.png"/>
+
+That possibility is covered in `Recognizer` above with the `if (txt.filter { !$0.isWhitespace } == "")` check.
+
 ## Learning Tesseract
 
 Configuration can matter a lot for Tesseract.  If you're new to it, you might need to dig in if you don't immediately get good results.  Here are two resources I've consulted:
