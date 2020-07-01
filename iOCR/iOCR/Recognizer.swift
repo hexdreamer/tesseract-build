@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 
+// Needed for ResultIteratorLevel, e.g. RIL_TEXTLINE
 import libtesseract
 
 class Recognizer {
@@ -20,7 +21,7 @@ class Recognizer {
         trainedData: String,
         imgName: String
     ) {
-        let tessAPI = initializeOCR(trainedData: trainedData)
+        let tessAPI = initOCR(trainedData: trainedData)
         
         self.img = UIImage(named: imgName)!
         self.txt = performOCR(on: self.img, tessAPI: tessAPI)

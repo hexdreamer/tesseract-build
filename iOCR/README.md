@@ -1,5 +1,7 @@
 # Configuring Xcode
 
+Steps I went through learning how to create an Xcode project around a C-API.
+
 ## Integrating Tesseract into Xcode
 
 ### Create the project

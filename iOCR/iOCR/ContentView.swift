@@ -76,7 +76,7 @@ struct ConfidentText: View {
     ) {
         var txt = block.text
         if (txt.filter { !$0.isWhitespace } == "") {
-            txt="<blank>"
+            txt="<*bad_recognition*>"
         }
         self.s = String(
             format:"%@ - %.2f",
