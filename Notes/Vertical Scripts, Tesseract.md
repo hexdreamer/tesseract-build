@@ -19,6 +19,8 @@ Someone created a Japanese vertical traineddata file expressly for Manga, <https
 
 ## Tesseract command-line
 
+Playing with the tesseract CL program is a quick way to validate settings like resolution, OEM, and PSM against new images or new kinds of images.  Though I've noticed the CL program results are not always 1:1 with the API; I think the CL does some preprocessing.
+
 Using this image as my sample comic book panel with Japanese text:
 
 <img src="static/02-panel.jpg" width="1000">

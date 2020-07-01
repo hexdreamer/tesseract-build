@@ -129,10 +129,16 @@ Directories:
 \$DOWNLOADS:   $DOWNLOADS 
 \$ROOT:        $ROOT
 \$SCRIPTSDIR:  $SCRIPTSDIR
+\$BUILDDIR:    $BUILDDIR
 \$SOURCES      $SOURCES
 
 Scripts:
-\$BUILDDIR/build_all.sh         clean|run all build/configure scripts
+\$BUILDDIR/build_all.sh         clean|run all configure/build scripts
 \$SCRIPTSDIR/test_tesseract.sh  after build, run a quick test of tesseract
+
+Functions:
+print_project_env  print this listing of the project environment
 EOF
 }
+
+print_project_env

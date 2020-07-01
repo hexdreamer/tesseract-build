@@ -42,8 +42,10 @@ done
 #   tesseract CL program should be in Root/bin, and Root/bin is 
 #   added to $PATH in project_environment.sh
 
+cd $PROJECTDIR/iOCR/iOCR/Assets.xcassets
+
 rm -f out.txt
-tesseract $PROJECTDIR/Notes/static/test_hello_hori.png out -l jpn 2>/dev/null
+tesseract hello_japanese_horizontal.imageset/test_hello_hori.png out -l jpn 2>/dev/null
 
 got=$(strip_whitespace out.txt)
 want='Hello,世界'
@@ -52,13 +54,11 @@ print -n 'test horizontal: '
 if [ $got = $want ]; then
   print 'passed'
 else
-  print "failed,  got $got , want $want"
+  print "failed; got '$got', want '$want'"
 fi
 
-mv out.txt out_horizontal.txt
-
 rm -f out.txt
-tesseract $PROJECTDIR/Notes/static/test_hello_vert.png out -l jpn_vert 2>/dev/null
+tesseract hello_japanese_vertical.imageset/test_hello_vert.png out -l jpn_vert 2>/dev/null
 
 got=$(strip_whitespace out.txt)
 want='Hello,世界'
@@ -67,9 +67,7 @@ print -n 'test vertical: '
 if [ $got = $want ]; then
   print 'passed'
 else
-  print "failed,  got $got , want $want"
+  print "failed; got '$got', want '$want'"
 fi
-
-mv out.txt out_vertical.txt
 
 rm -f out.txt
