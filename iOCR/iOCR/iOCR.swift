@@ -28,10 +28,10 @@ public func getImage(from image: UIImage) -> UnsafeMutablePointer<PIX>? {
 /// - Parameters:
 ///     - langDataName: the name portion of the trained data file to use, e.g.: for the file `jpn_vert.traineddata`, pass in **jpn_vert**
 ///     - uiImage: an image with text to recognize
-public func initAPI(langDataName: String, uiImage: UIImage) -> OpaquePointer {
+public func initAPI(trainedLangName: String, uiImage: UIImage) -> OpaquePointer {
     let path = Bundle.main.path(forResource: "tessdata", ofType: nil, inDirectory: "share")
     let tessAPI = TessBaseAPICreate()!
-    TessBaseAPIInit2(tessAPI, path, langDataName, OEM_LSTM_ONLY)
+    TessBaseAPIInit2(tessAPI, path, trainedLangName, OEM_LSTM_ONLY)
     
     var image = getImage(from: uiImage)
     defer { pixDestroy(&image) }
@@ -41,6 +41,10 @@ public func initAPI(langDataName: String, uiImage: UIImage) -> OpaquePointer {
     TessBaseAPISetPageSegMode(tessAPI, PSM_AUTO)
     
     return tessAPI
+}
+
+public func setPageSegMode(tessAPI: OpaquePointer, psm: TessPageSegMode) {
+    TessBaseAPISetPageSegMode(tessAPI, psm)
 }
 
 /// Get back all recognized text in the entire image, hopefully.  If no text is recognized, get back ** No Text Found! **

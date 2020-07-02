@@ -13,26 +13,36 @@ import SwiftUI
 import libtesseract
 
 class Recognizer {
-    let img: UIImage
-    let txt: String
-    let rects: [RecognizedRectangle]
-    
+    var img: UIImage
+    var allTxt: String
+    var recognizedRects: [RecognizedRectangle]
+
     init(
-        trainedData: String,
-        imgName: String
+        imgName: String,
+        trainedLangName: String,  // chi_tra, eng, jpn_vert
+        imgDPI: Int=72,
+        tessPIL: TessPageIteratorLevel=RIL_TEXTLINE,
+        tessOEM: TessOcrEngineMode=OEM_LSTM_ONLY,
+        tessPSM: TessPageSegMode=PSM_AUTO
     ) {
         self.img = UIImage(named: imgName)!
-        let tessAPI = initAPI(langDataName: trainedData, uiImage: self.img)
-        
+        let tessAPI = initAPI(trainedLangName: trainedLangName, uiImage: self.img)
+        setPageSegMode(tessAPI: tessAPI, psm: tessPSM)
+
         var txt = getAllText(tessAPI: tessAPI)
         if (txt.filter { !$0.isWhitespace } == "") {
             txt="<*blank*>"
         }
-        self.txt = txt
+        self.allTxt = txt
 
-        self.rects = recognizedRectangles(tessAPI: tessAPI, level: RIL_TEXTLINE)
+        self.recognizedRects = recognizedRectangles(tessAPI: tessAPI, level: tessPIL)
         
+        for i in 0..<self.recognizedRects.count {
+            if (self.recognizedRects[i].text.filter { !$0.isWhitespace } == "") {
+                self.recognizedRects[i].text = "<*blank*>"
+            }
+        }
+
         deInitAPI(tessAPI: tessAPI)
     }
-    
 }

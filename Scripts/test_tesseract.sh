@@ -19,6 +19,7 @@ strip_whitespace() {
 langfiles=(
   'chi_tra.traineddata'
   'chi_tra_vert.traineddata'
+  'eng.traineddata'
   'jpn.traineddata'
   'jpn_vert.traineddata'
 )

@@ -11,16 +11,27 @@ import SwiftUI
 import libtesseract
 
 /// Run this demo as **iPad Pro (12.9-inch)**
-struct ContentView: View {
+struct ContentView: View {    
+    private var jpn = Recognizer(imgName: "japanese", trainedLangName: "jpn")
+    private var jpn_vert = Recognizer(imgName: "japanese_vert", trainedLangName: "jpn_vert")
+    private var chi_trad_vert = Recognizer(imgName: "chinese_traditional_vert", trainedLangName: "chi_tra_vert")
+
+    /// This sample image isn't so normal in its format, it's one run-on sentence wrapped around 8 ines.
+    /// Something like a speech bubble from an English comic would probably be a much better sample.
+    private var eng = Recognizer(
+        imgName: "english_left_just_square", trainedLangName: "eng",
+        tessPIL: RIL_BLOCK, tessPSM: PSM_SINGLE_BLOCK
+    )
+    
     var body: some View {
         return VStack {
             HStack{
-                ImageBlocksAndText(trainedData: "jpn_vert", imgName: "hello_japanese_vertical")
-                ImageBlocksAndText(trainedData: "jpn", imgName: "hello_japanese_horizontal")
+                ImageRectsAndText(recognizer: jpn)
+                ImageRectsAndText(recognizer: jpn_vert)
             }
             HStack {
-                ImageBlocksAndText(trainedData: "chi_tra_vert", imgName: "traditional_chinese_vertical_1")
-                ImageBlocksAndText(trainedData: "chi_tra_vert", imgName: "traditional_chinese_vertical_2")
+                ImageRectsAndText(recognizer: chi_trad_vert)
+                ImageRectsAndText(recognizer: eng)
             }
         }
     }
@@ -32,32 +43,32 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-// This simple demo has at most 3 recognized RIL_TEXTLINE objects for any image
+// This simple demo has at most 3 recognized recognized objects for any image
 var Colors = [Color.red, Color.yellow, Color.purple]
 
-struct ImageBlocksAndText: View {
+struct ImageRectsAndText: View {
     private var recognizer: Recognizer
     
     init(
-        trainedData: String,
-        imgName: String
+        recognizer: Recognizer
     ) {
-        self.recognizer = Recognizer(trainedData: trainedData, imgName: imgName)
+        self.recognizer = recognizer
     }
     
     var body: some View {
         VStack {
-            ZStack {
+            ZStack {  // image and super-imposed colored rectangles
                 Image(uiImage:recognizer.img).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                ForEach(0 ..< recognizer.rects.count) { i in
+                ForEach(0..<recognizer.recognizedRects.count) { i in
                     Path { path in
-                        path.addRect(self.recognizer.rects[i].boundingBox)
+                        let rect = self.recognizer.recognizedRects[i]
+                        path.addRect(rect.boundingBox)
                     }.stroke(Colors[i], lineWidth: 2)
                 }
             }
             VStack {
-                ForEach(0 ..< recognizer.rects.count) { i in
-                    ConfidentText(block: self.recognizer.rects[i], i: i)
+                ForEach(0..<recognizer.recognizedRects.count) { i in
+                    ConfidentText(rect: self.recognizer.recognizedRects[i], color: Colors[i])
                 }
             }
         }
@@ -67,25 +78,22 @@ struct ImageBlocksAndText: View {
 }
 
 struct ConfidentText: View {
-    private var s: String
-    private var i: Int
+    private var color: Color
+    private var txt: String
     
     init(
-        block: RecognizedRectangle,
-        i: Int
+        rect: RecognizedRectangle,
+        color: Color
     ) {
-        var txt = block.text
-        self.s = String(
-            format:"%@ - %.2f",
-            txt.filter { !$0.isWhitespace },
-            block.confidence)
-        self.i = i
+        self.color = color
+        self.txt = String(format:"%@ - %.2f",
+                          rect.text.trimmingCharacters(in: .whitespacesAndNewlines), rect.confidence)
     }
-    
+
     var body: some View {
-        Text(s)
+        Text(txt)
             .font(.system(size: 30))
-            .border(Colors[self.i], width: 2)
-            .frame(height: 35, alignment: .topLeading)
+            .border(self.color, width: 2)
+            .frame(maxHeight: .infinity, alignment: .topLeading)
     }
 }

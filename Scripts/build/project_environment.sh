@@ -140,5 +140,3 @@ Functions:
 print_project_env  print this listing of the project environment
 EOF
 }
-
-print_project_env

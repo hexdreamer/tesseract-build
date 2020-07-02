@@ -14,20 +14,20 @@ import libtesseract
 @testable import iOCR
 
 class iOCRTests: XCTestCase {
-    func testHelloJapaneseVertical() {
-        let recognizer = Recognizer(trainedData: "jpn_vert", imgName: "hello_japanese_vertical")
+    func testJapaneseVertical() {
+        let recognizer = Recognizer(imgName: "japanese_vert", trainedLangName: "jpn_vert")
         let want = "Hello,世界"
-        let got = recognizer.txt
-
+        let got = recognizer.allTxt
+        
         // There's spacing the OCR sees that I was having trouble encoding into
         // `want`, so I stripped all spaces for comparison
         XCTAssertEqual(got.filter { !$0.isWhitespace }, want)
     }
 
     func testHelloJapaneseHorizontal() {
-        let recognizer = Recognizer(trainedData: "jpn", imgName: "hello_japanese_horizontal")
+        let recognizer = Recognizer(imgName: "japanese", trainedLangName: "jpn")
         let want = "Hello,世界"
-        let got = recognizer.txt
+        let got = recognizer.allTxt
 
         // There's spacing the OCR sees that I was having trouble encoding into
         // `want`, so I stripped all spaces for comparison
@@ -35,7 +35,7 @@ class iOCRTests: XCTestCase {
     }
 
     func testChineseTraditionalVertical1() {
-        let recognizer = Recognizer(trainedData: "chi_tra_vert", imgName: "traditional_chinese_vertical_1")
+        let recognizer = Recognizer(imgName: "chinese_traditional_vert", trainedLangName: "chi_tra_vert")
         let want = """
 哈哈
 
@@ -43,84 +43,129 @@ class iOCRTests: XCTestCase {
 終點了!
 
 """
-        let got = recognizer.txt
+        let got = recognizer.allTxt
         
         XCTAssertEqual(got, want)
- 
-}
-
-    func testChineseTraditionalVertical2() {
-        let recognizer = Recognizer(trainedData: "chi_tra_vert", imgName: "traditional_chinese_vertical_2")
+        
+    }
+    
+    /// Understanding something of Tesseract's process:  with the text **center-justified**, the recognizer gets it mostly right
+    func testEnglishCenterJustify() {
+        let recognizer = Recognizer(imgName: "english_ctr_just", trainedLangName: "eng",
+                                    tessPIL: RIL_BLOCK, tessPSM: PSM_SINGLE_BLOCK)
+        
+        // Note that the 4th-to-last line is 'foruseina'; should be 'for use in a'
         let want = """
-如果終點地下
-有地雷怎麼辦!
+Welcome to
+Hexdreamer's
+dream of a
+simple-to-
+understand
+guide for
+integrating a C-
+API, and
+specifically
+Tesseract
+OCR, into an
+Xcode project
+foruseina
+dream iOS
+manga-reader
+app.
 
 """
-        let got = recognizer.txt
+        let got = recognizer.allTxt
         
         XCTAssertEqual(got, want)
+        
+        // Only true if RIL_BLOCK or RIL_PARA is set
+        XCTAssertEqual(recognizer.recognizedRects.count, 1)
+    }
+    
+    /// Understanding something of Tesseract's process:  with the text **left-justified**, the recognizer get it all correct
+    func testEnglishLeftJustify() {
+        let recognizer = Recognizer(imgName: "english_left_just", trainedLangName: "eng",
+                                    tessPIL: RIL_BLOCK, tessPSM: PSM_SINGLE_BLOCK)
+        // Note that the 4th-to-last line is 'for use in a'; CORRECT!
+        let want = """
+Welcome to
+Hexdreamer's
+dream of a
+simple-to-
+understand
+guide for
+integrating a C-
+API, and
+specifically
+Tesseract
+OCR, into an
+Xcode project
+for use in a
+dream iOS
+manga-reader
+app.
+
+"""
+        let got = recognizer.allTxt
+        
+        XCTAssertEqual(got, want)
+        
+        // Only true if RIL_BLOCK or RIL_PARA is set
+        XCTAssertEqual(recognizer.recognizedRects.count, 1)
+    }
+    func testBlank() {
+        let recognizer = Recognizer(imgName: "japanese_vert", trainedLangName: "jpn_vert")
+        let want = ["Hello",",世界","<*blank*>"]
+        let got = recognizer.recognizedRects
+        
+        for i in 0...2 {
+            XCTAssertEqual(
+                got[i].text.filter{ !$0.isWhitespace },
+                want[i])
+        }
     }
     
     func testGuideExample() {
         let tessAPI = TessBaseAPICreate()!
+        let trainedDataFolder = Bundle.main.path(
+            forResource: "tessdata", ofType: nil, inDirectory: "share")
+        TessBaseAPIInit2(tessAPI, trainedDataFolder, "jpn", OEM_LSTM_ONLY)
         
-        let trainedDataFolder = Bundle.main.path(forResource: "tessdata", ofType: nil, inDirectory: "share")
-        TessBaseAPIInit2(tessAPI, trainedDataFolder, "jpn_vert", OEM_LSTM_ONLY)
-
-        var image = getImage(from: UIImage(named: "hello_japanese_vertical")!)
+        var image = getImage(from: UIImage(named: "japanese")!)
         TessBaseAPISetImage2(tessAPI, image)
-        // Leptonica method to manage Leptonica's PIX-type
-        pixDestroy(&image)
-
-        TessBaseAPISetSourceResolution(tessAPI, 72)
+        pixDestroy(&image)  // Leptonica method to manage Leptonica's PIX-type
+        
+        TessBaseAPISetSourceResolution(tessAPI, 144)  // w/default DPI: 72, no text recognized
         TessBaseAPISetPageSegMode(tessAPI, PSM_AUTO)
-
-        // This is a pre-req for any TessResultIterator call
-        TessBaseAPIGetUTF8Text(tessAPI)
-
+        
+        TessBaseAPIGetUTF8Text(tessAPI)  // Pre-req for Tess[Page|Result]Iterator calls
+        
         let iterator = TessBaseAPIGetIterator(tessAPI)
         let level = RIL_TEXTLINE
         
-        var txt = TessResultIteratorGetUTF8Text(iterator, level)!
-        var confidence = TessResultIteratorConfidence(iterator, level)
+        let txt = TessResultIteratorGetUTF8Text(iterator, level)!
+        let got = String(cString:txt)
+        TessDeleteText(txt)
+        XCTAssertEqual(got, "Hello, 世界\n")
+        
+        let confidence = TessResultIteratorConfidence(iterator, level)
+        XCTAssertGreaterThan(confidence, 88)
         
         var x: Int32 = 0
         var y: Int32 = 0
-        // wO and hO are widthOffset and heighOffset
-        var wO: Int32 = 0
-        var hO: Int32 = 0
-        TessPageIteratorBoundingBox(iterator, level, &x, &y, &wO, &hO)
-        
-        XCTAssertEqual(String(cString:txt).filter { !$0.isWhitespace }, "Hello")
-        
-        // Don't know actual coordinates or confidence, other than nothing should be 0
-        XCTAssertNotEqual(x, 0)
-        XCTAssertNotEqual(y, 0)
-        XCTAssertNotEqual(wO, 0)
-        XCTAssertNotEqual(hO, 0)
-        XCTAssertGreaterThan(confidence, 0)
-        
-        // Get next result
-        XCTAssertNotEqual(TessPageIteratorNext(iterator, level), 0)
-        
-        x  = 0
-        y  = 0
-        wO  = 0
-        hO = 0
-        TessDeleteText(txt)
-        confidence = 0
+        var wOffset: Int32 = 0
+        var hOffset: Int32 = 0
 
-        txt = TessResultIteratorGetUTF8Text(iterator, level)!
-        confidence = TessResultIteratorConfidence(iterator, level)
-        TessPageIteratorBoundingBox(iterator, level, &x, &y, &wO, &hO)
+        TessPageIteratorBoundingBox(iterator, level, &x, &y, &wOffset, &hOffset)
+        XCTAssertEqual(x, 10)
+        XCTAssertEqual(y, 14)
+        XCTAssertEqual(wOffset, 160)
+        XCTAssertEqual(hOffset, 43)
         
-        XCTAssertEqual(String(cString:txt).filter { !$0.isWhitespace }, ",世界")
-        XCTAssertNotEqual(x, 0)
-        XCTAssertNotEqual(y, 0)
-        XCTAssertNotEqual(wO, 0)
-        XCTAssertNotEqual(hO, 0)
-        XCTAssertGreaterThan(confidence, 0)
-
+        // For PIL and PSM, should not have more than one result
+        XCTAssertEqual(TessPageIteratorNext(iterator, level), 0)
+        TessPageIteratorDelete(iterator)
+        
         TessBaseAPIEnd(tessAPI)
         TessBaseAPIDelete(tessAPI)
     }

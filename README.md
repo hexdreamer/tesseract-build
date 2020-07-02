@@ -161,18 +161,15 @@ The API also provides an iterator for individually recognized text elements in t
 ```swift
 level = RIL_TEXTLINE
 iterator = TessBaseAPIGetIterator(tessAPI)
-txt = TessResultIteratorGetUTF8Text(iterator, level)
-TessPageIteratorBoundingBox(iterator, level, &originX, &originY, &width, &height)
-confidence = TessResultIteratorConfidence(iterator, level)
+
+while (TessPageIteratorNext(iterator, level) > 0) {
+  txt = TessResultIteratorGetUTF8Text(iterator, level)
+  TessPageIteratorBoundingBox(iterator, level, &originX, &originY, &width, &height)
+  confidence = TessResultIteratorConfidence(iterator, level)
+}
 ```
 
 *Note:* `TessBaseAPIGetUTF8Text` must be called before the `TessPageIterator` and `TessResultIterator` methods.
-
-Subsequent results are accessed by calling the iterator's next method:
-
-```swift
-TessPageIteratorNext(iterator, level)
-```
 
 There is a small test and working example of these basics in **iOCRTests.swift::testGuideExample()** in the Xcode project.
 
@@ -184,17 +181,18 @@ Open the project and run the **iOCR** target for an **iPad Pro (12.9-in)**:
 
 <img height="650" src="Notes/static/guide/blank_error.png"/>
 
-The colored rectangles, texts, and numbers are the iterated bounding boxes, utf8 texts, and confidence scores from the basics:
+The colored rectangles, texts, and numbers are the iterated bounding boxes, utf8 texts, and confidence scores from the basics section and now wrapped up in `recognizedRects`:
 
 ```swift
 class Recognizer {
     let img: UIImage
-    let txt: String
-    let rects: [RecognizedRectangle]
+    let allTxt: String
+    let recognizedRects: [RecognizedRectangle]
 
     init(
         trainedData: String,
-        imgName: String
+        imgName: String,
+        level: TessPageIteratorLevel
     ) {
         self.img = UIImage(named: imgName)!
         let tessAPI = initAPI(langDataName: trainedData, uiImage: self.img)
@@ -203,19 +201,19 @@ class Recognizer {
         if (txt.filter { !$0.isWhitespace } == "") {
             txt="<*blank*>"
         }
-        self.txt = txt
+        self.allTxt = txt
 
-        self.rects = recognizedRectangles(tessAPI: tessAPI, level: RIL_TEXTLINE)
+        self.recognizedRects = recognizedRectangles(tessAPI: tessAPI, level: level)
 
         deInitAPI(tessAPI: tessAPI)
     }
 }
 ```
 
-and in the case of the traditional Chinese panel in the bottom-left corner, the view's `recognizer` is created in this fashion:
+and in the case of the English panel in the bottom-right corner, the view's `recognizer` is created in this fashion:
 
 ```swift
-var recognizer = Recognizer(trainedData: "chi_tra_vert", imgName: "traditional_chinese_vertical_1")
+var recognizer = Recognizer(trainedData: "eng", imgName: "hexdreams_english", level:RIL_PARA)
 ```
 
 #### Some weird geometry and \<\*blank\*\>
