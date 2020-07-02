@@ -9,6 +9,8 @@
 import UIKit
 import SwiftUI
 
+import libtesseract
+
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
@@ -19,8 +21,33 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
+        var jpn = Recognizer(imgName: "japanese", trainedDataName: "jpn")
+        var jpn_vert = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert")
+        var chi_trad_vert = Recognizer(imgName: "chinese_traditional_vert", trainedDataName: "chi_tra_vert")
+
+        /// This sample image isn't so normal in its format, it's one run-on sentence wrapped around 8 ines.
+        /// Something like a speech bubble from an English comic would probably be a much better sample.
+        var eng = Recognizer(
+            imgName: "english_left_just_square", trainedDataName: "eng",
+            tessPIL: RIL_BLOCK, tessPSM: PSM_SINGLE_BLOCK
+        )
+        
+        _ = jpn.getRecognizedRects()
+        _ = jpn_vert.getRecognizedRects()
+        _ = chi_trad_vert.getRecognizedRects()
+        _ = eng.getRecognizedRects()
+        
+        defer {
+            jpn.destroy()
+            jpn_vert.destroy()
+            chi_trad_vert.destroy()
+            eng.destroy()
+        }
+        
         // Create the SwiftUI view that provides the window contents.
-        let contentView = ContentView()
+        let contentView = ContentView(
+            jpn: jpn, jpn_vert: jpn_vert, chi_trad_vert: chi_trad_vert, eng: eng
+        )
  
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {

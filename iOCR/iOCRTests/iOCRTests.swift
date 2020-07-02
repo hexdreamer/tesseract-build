@@ -15,45 +15,49 @@ import libtesseract
 
 class iOCRTests: XCTestCase {
     func testJapaneseVertical() {
-        let recognizer = Recognizer(imgName: "japanese_vert", trainedLangName: "jpn_vert")
-        let want = "Hello,世界"
-        let got = recognizer.allTxt
-        
         // There's spacing the OCR sees that I was having trouble encoding into
         // `want`, so I stripped all spaces for comparison
-        XCTAssertEqual(got.filter { !$0.isWhitespace }, want)
+
+        let recognizer = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert")
+        defer { recognizer.destroy() }
+        let got = recognizer.getAllText()
+
+        XCTAssertEqual(got.filter { !$0.isWhitespace }, "Hello,世界")
     }
 
     func testHelloJapaneseHorizontal() {
-        let recognizer = Recognizer(imgName: "japanese", trainedLangName: "jpn")
-        let want = "Hello,世界"
-        let got = recognizer.allTxt
-
         // There's spacing the OCR sees that I was having trouble encoding into
         // `want`, so I stripped all spaces for comparison
-        XCTAssertEqual(got.filter { !$0.isWhitespace }, want)
+
+        let recognizer = Recognizer(imgName: "japanese", trainedDataName: "jpn")
+        defer { recognizer.destroy() }
+        let got = recognizer.getAllText()
+
+        XCTAssertEqual(got.filter { !$0.isWhitespace }, "Hello,世界")
     }
 
     func testChineseTraditionalVertical1() {
-        let recognizer = Recognizer(imgName: "chinese_traditional_vert", trainedLangName: "chi_tra_vert")
-        let want = """
+        let recognizer = Recognizer(imgName: "chinese_traditional_vert", trainedDataName: "chi_tra_vert")
+        defer { recognizer.destroy() }
+        let got = recognizer.getAllText()
+
+        XCTAssertEqual(got,
+                       """
 哈哈
 
 我第一個到
 終點了!
 
-"""
-        let got = recognizer.allTxt
-        
-        XCTAssertEqual(got, want)
-        
+""")
     }
     
     /// Understanding something of Tesseract's process:  with the text **center-justified**, the recognizer gets it mostly right
     func testEnglishCenterJustify() {
-        let recognizer = Recognizer(imgName: "english_ctr_just", trainedLangName: "eng",
+        let recognizer = Recognizer(imgName: "english_ctr_just", trainedDataName: "eng",
                                     tessPIL: RIL_BLOCK, tessPSM: PSM_SINGLE_BLOCK)
-        
+        defer { recognizer.destroy() }
+        let got = recognizer.getAllText()
+
         // Note that the 4th-to-last line is 'foruseina'; should be 'for use in a'
         let want = """
 Welcome to
@@ -74,18 +78,19 @@ manga-reader
 app.
 
 """
-        let got = recognizer.allTxt
-        
         XCTAssertEqual(got, want)
         
         // Only true if RIL_BLOCK or RIL_PARA is set
-        XCTAssertEqual(recognizer.recognizedRects.count, 1)
+        let rects = recognizer.getRecognizedRects()
+        XCTAssertEqual(rects.count, 1)
     }
     
     /// Understanding something of Tesseract's process:  with the text **left-justified**, the recognizer get it all correct
     func testEnglishLeftJustify() {
-        let recognizer = Recognizer(imgName: "english_left_just", trainedLangName: "eng",
+        let recognizer = Recognizer(imgName: "english_left_just", trainedDataName: "eng",
                                     tessPIL: RIL_BLOCK, tessPSM: PSM_SINGLE_BLOCK)
+        defer { recognizer.destroy() }
+        
         // Note that the 4th-to-last line is 'for use in a'; CORRECT!
         let want = """
 Welcome to
@@ -106,23 +111,45 @@ manga-reader
 app.
 
 """
-        let got = recognizer.allTxt
+        let got = recognizer.getAllText()
         
         XCTAssertEqual(got, want)
         
         // Only true if RIL_BLOCK or RIL_PARA is set
-        XCTAssertEqual(recognizer.recognizedRects.count, 1)
+        let rects = recognizer.getRecognizedRects()
+        XCTAssertEqual(rects.count, 1)
     }
-    func testBlank() {
-        let recognizer = Recognizer(imgName: "japanese_vert", trainedLangName: "jpn_vert")
-        let want = ["Hello",",世界","<*blank*>"]
-        let got = recognizer.recognizedRects
-        
-        for i in 0...2 {
-            XCTAssertEqual(
-                got[i].text.filter{ !$0.isWhitespace },
-                want[i])
+
+    /// Originally a test to  assert that bad/false recognitions are rendered as `<*blank*>`;
+    /// now also a lesson in getting the image's DPI correct.
+    func testBlankVsNonBlank() {
+        // This image's DPI is 144, but running at 72 DPI yields false recognition (<*blank*>)
+        var recognizer = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 72)
+        var got = recognizer.getRecognizedRects()
+
+        if got.count == 3 {
+            XCTAssertEqual(got[0].text, "Hello\n\n")
+            XCTAssertEqual(got[1].text, ",世界\n\n")
+            XCTAssertEqual(got[2].text, "<*blank*>")
+
+        } else {
+            XCTFail(String(format: "got %d recognized rects, want 3", got.count))
         }
+
+        // Now run test with correct DPI for only true recognitions
+        recognizer.destroy()
+        recognizer = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 144)
+        got = recognizer.getRecognizedRects()
+        
+        if got.count == 2 {
+            XCTAssertEqual(got[0].text, "Hello\n\n")
+            XCTAssertEqual(got[1].text, ",世界\n")
+        } else {
+            XCTFail(String(format: "got %d recognized rects, want 2", got.count))
+        }
+
+
+        recognizer.destroy()
     }
     
     func testGuideExample() {

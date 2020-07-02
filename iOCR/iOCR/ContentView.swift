@@ -12,16 +12,10 @@ import libtesseract
 
 /// Run this demo as **iPad Pro (12.9-inch)**
 struct ContentView: View {    
-    private var jpn = Recognizer(imgName: "japanese", trainedLangName: "jpn")
-    private var jpn_vert = Recognizer(imgName: "japanese_vert", trainedLangName: "jpn_vert")
-    private var chi_trad_vert = Recognizer(imgName: "chinese_traditional_vert", trainedLangName: "chi_tra_vert")
-
-    /// This sample image isn't so normal in its format, it's one run-on sentence wrapped around 8 ines.
-    /// Something like a speech bubble from an English comic would probably be a much better sample.
-    private var eng = Recognizer(
-        imgName: "english_left_just_square", trainedLangName: "eng",
-        tessPIL: RIL_BLOCK, tessPSM: PSM_SINGLE_BLOCK
-    )
+    var jpn: Recognizer
+    var jpn_vert: Recognizer
+    var chi_trad_vert: Recognizer
+    var eng: Recognizer
     
     var body: some View {
         return VStack {
@@ -37,11 +31,11 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//    }
+//}
 
 // This simple demo has at most 3 recognized recognized objects for any image
 var Colors = [Color.red, Color.yellow, Color.purple]
@@ -58,7 +52,7 @@ struct ImageRectsAndText: View {
     var body: some View {
         VStack {
             ZStack {  // image and super-imposed colored rectangles
-                Image(uiImage:recognizer.img).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                Image(uiImage:recognizer.uiImage).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                 ForEach(0..<recognizer.recognizedRects.count) { i in
                     Path { path in
                         let rect = self.recognizer.recognizedRects[i]
