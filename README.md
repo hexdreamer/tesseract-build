@@ -7,11 +7,11 @@ The repo contains:
 - a skeleton folder structure for downloading and building the tools and libraries, which includes
   - all the configuration and build scripts
 - a simple test of the build phase
-- an Xcode project that imports the libraries and modules, and a basic iPad app that can recognize vertical Japanese and traditional Chinese
+- an Xcode project that imports the libraries and modules, and a basic iPad app that shows off some the recognition features for traditional Chinese, English, and Japanese
 
 ## Building from source
 
-The Tesseract OCR library manages its image data with Leptonica, a library that manipulates common image file formats.  And Leptonica is built upon the individual libraries for the different image formats.  In building the image libraries, Leptonica, and then Tesseract, we'll need some additional tools like autoconf and automake, from GNU.  The final arrangement of the tools and libraries I settled on looks like:
+The Tesseract OCR library manages its image data with Leptonica, a library that manipulates common image file formats.  And Leptonica is built upon the individual libraries for the different image formats.  For the complete sequence of building the image libraries, Leptonica, and then Tesseract, some additional tools, like autoconf and automake from GNU, are required.  The final arrangement of the tools and libraries I settled on looks like:
 
 1. autoconf
 1. automake
@@ -32,10 +32,12 @@ This guide refers to the project folder that you cloned or downloaded as **PROJE
 
 The **Scripts** directory contains all the shell scripts to order and execute those steps.
 
-From my PROJECTDIR, I source the project's environment into my shell, which also prints out some key elements of the environment:
+From my PROJECTDIR, I source the project's environment into my shell:
 
 ```zsh
 % source project_environment.sh
+
+% print_project_env
 
 Directories:
 $PROJECTDIR:  /Users/zyoung/dev/tesseract-build
@@ -94,7 +96,7 @@ Xcode's **lipo** tool can stitch files from different architectures together, bu
 
 Having run **build_all.sh** and successfully built Tesseract we need to provide it with the reference data it will use to recognize the characters in the language we are interested in.
 
-Run **Scripts/test_tesseract.sh** to download some trained data for horizontal and vertical Japanese scripts, vertical traditional Chinese scripts, and run a quick OCR test on these 2 images:
+Run **Scripts/test_tesseract.sh** to download some trained data for traditional Chinese, English and Japanese scripts, and run a quick OCR test on these sample images:
 
 <table>
 <tr>
@@ -111,6 +113,7 @@ Run **Scripts/test_tesseract.sh** to download some trained data for horizontal a
 <img height="300" src="iOCR/iOCR/Assets.xcassets/english_left_just_square.imageset/hexdreams.png"/>
 </td>
 </tr>
+<tr><td>Japanese</td><td>Japanese (vert)</td><td>Chinese (trad, vert)</td><td>English</td></tr>
 </table>
 
 ```zsh
@@ -122,10 +125,10 @@ downloading eng.traineddata...done
 downloading jpn.traineddata...done
 downloading jpn_vert.traineddata...done
 # Recognizing Sample Images
-testing Japanese horizontal...passed
-testing Japanese vertical...passed
-testing Traditional Chinese vertical...passed
-testing English (left-justified, square aspect)...passed
+testing Japanese...passed
+testing Japanese (vert)...passed
+testing Chinese (trad, vert)...passed
+testing English...passed
 ```
 
 The images for the Japanese test were chosen because some Japanese writing will include words borrowed from English, and it's noteworthy that some English is recognized when processing exclusively for Japanese.

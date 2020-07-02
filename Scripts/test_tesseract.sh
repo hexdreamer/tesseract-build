@@ -78,7 +78,7 @@ TESTDIR=tesseractTest
 mkdir -p $TESTDIR; cd $TESTDIR || exit 1
 
 vars=(
-  'Japanese horizontal'
+  'Japanese'
   $ASSETSDIR/japanese.imageset/test_hello_hori.png
   'jpn'
   'Hello,世界'
@@ -86,7 +86,7 @@ vars=(
 test_image $vars
 
 vars=(
-  'Japanese vertical'
+  'Japanese (vert)'
   $ASSETSDIR/japanese_vert.imageset/test_hello_vert.png
   'jpn_vert'
   'Hello,世界'
@@ -94,7 +94,7 @@ vars=(
 test_image $vars
 
 vars=(
-  'Traditional Chinese vertical'
+  'Chinese (trad, vert)'
   $ASSETSDIR/chinese_traditional_vert.imageset/cropped.png
   'chi_tra_vert'
   '哈哈我第一個到終點了!'
@@ -102,7 +102,7 @@ vars=(
 test_image $vars
 
 vars=(
-  'English (left-justified, square aspect)'
+  'English'
   $ASSETSDIR/english_left_just_square.imageset/hexdreams.png
   'eng'
   "WelcometoHexdreamer'sdreamofasimple-to-followguideforaddingaC-API,andspecificallyTesseractOCR'sC-API,intoanXcodeprojectforuseinadreamiOSmanga-readerapp."
