@@ -96,33 +96,45 @@ Having run **build_all.sh** and successfully built Tesseract we need to provide 
 
 Run **Scripts/test_tesseract.sh** to download some trained data for horizontal and vertical Japanese scripts, vertical traditional Chinese scripts, and run a quick OCR test on these 2 images:
 
-| ![hello horizontal](Notes/static/test_hello_hori.png) | ![hello vertical](Notes/static/test_hello_vert.png) |
-|-------------------------------------------------------|-----------------------------------------------------|
+<table>
+<tr>
+<td>
+<img src="Notes/static/test_hello_hori.png"/>
+</td>
+<td>
+<img height="300" src="Notes/static/test_hello_vert.png"/>
+</td>
+<td>
+<img height="300" src="iOCR/iOCR/Assets.xcassets/chinese_traditional_vert.imageset/cropped.png"/>
+</td>
+<td>
+<img height="300" src="iOCR/iOCR/Assets.xcassets/english_left_just_square.imageset/hexdreams.png"/>
+</td>
+</tr>
+</table>
 
 ```zsh
 % ./Scripts/test_tesseract.sh
-test horizontal: passed
-test vertical: passed
+# Checking for Trained Data Language Files
+downloading chi_tra.traineddata...done
+downloading chi_tra_vert.traineddata...done
+downloading eng.traineddata...done
+downloading jpn.traineddata...done
+downloading jpn_vert.traineddata...done
+# Recognizing Sample Images
+testing Japanese horizontal...passed
+testing Japanese vertical...passed
+testing Traditional Chinese vertical...passed
+testing English (left-justified, square aspect)...passed
 ```
 
-The actual text recognized in the vertical image is:
-
-```none
-Hello
-
-,世界
-
-```
-
-but for this simple test, all white space is stripped out and the result is compared to `'Hello,世界'` (which is also the expected result for the horizontal image).
-
-These images were chosen because some Japanese writing will include words borrowed from English, and I think it's noteworthy that some English is recognized when processing exclusively for Japanese.
+The images for the Japanese test were chosen because some Japanese writing will include words borrowed from English, and it's noteworthy that some English is recognized when processing exclusively for Japanese.
 
 And with that little test completed, we can get into Xcode.
 
 ## A simple OCR app
 
-If you're not familiar with the Tesseract C-API, here are some of the basics I've learned with figurative code samples.
+If you're not familiar with the Tesseract C-API, here are the basics&mdash;that this project builds upon&mdash;with figurative code samples.
 
 ### Tesseract API basis
 
@@ -137,12 +149,12 @@ TessBaseAPIInit2(tessAPI, trainedDataFolder, "jpn_vert", OEM_LSTM_ONLY)
 
 #### Perform OCR
 
-Get an image and set it on the API, then configure the resolution and *page segmentation mode (PSM)*.  By default, Tesseract expects a page of text when it segments an image, and **PSM_AUTO** defines this default behavior.  All the images in this guide have been cropped to just the text, so this value makes sense for this demo/guide.
+Get an image and set it on the API, then configure the resolution and *page segmentation mode (PSM)*.  By default, Tesseract expects a page of text when it segments an image, and **PSM_AUTO** defines this default behavior.  All the images in this guide have been cropped to just the text, so this value makes sense for most of samples in this demo/guide.
 
 ```swift
-image = getImage()
+image = getImage("japanese_vertical_sample")
 TessBaseAPISetImage2(tessAPI, image)
-TessBaseAPISetSourceResolution(tessAPI, 72)
+TessBaseAPISetSourceResolution(tessAPI, 144)
 TessBaseAPISetPageSegMode(tessAPI, PSM_AUTO)
 ```
 
@@ -156,7 +168,7 @@ We could stop here, but there's more we can know about the text.
 
 #### Iterate over results
 
-The API also provides an iterator for individually recognized text elements in the image.  The size or scope of the elements is determined by *level*.  **RIL_TEXTLINE** is the ResultIteratorLevel for recognizing individual lines of text.  `TessBaseAPIGetUTF8Text()` from before uses `RIL_PARA` internally to recognize paragraphs of text.
+The API also provides an iterator for individually recognized objects in the image.  The size or scope of the object is determined by *level*.  **RIL_TEXTLINE** is the *ResultIteratorLevel* for working with individual lines of text.
 
 ```swift
 level = RIL_TEXTLINE
@@ -179,52 +191,79 @@ There is a small test and working example of these basics in **iOCRTests.swift::
 
 Open the project and run the **iOCR** target for an **iPad Pro (12.9-in)**:
 
-<img height="650" src="Notes/static/guide/blank_error.png"/>
+<img height="650" src="Notes/static/guide/ipad_app_blank_errors.png"/>
 
-The colored rectangles, texts, and numbers are the iterated bounding boxes, utf8 texts, and confidence scores from the basics section and now wrapped up in `recognizedRects`:
+The colored rectangles, texts, and numbers are the iterated bounding boxes, utf8 texts, and confidence scores from the basics section and are now wrapped up in a **RecognizedRectangle**:
 
 ```swift
-class Recognizer {
-    let img: UIImage
-    let allTxt: String
-    let recognizedRects: [RecognizedRectangle]
+struct RecognizedRectangle {
+    public var text: String
+    public var boundingBox: CGRect
+    public var confidence: Float
+}
+```
 
-    init(
-        trainedData: String,
-        imgName: String,
-        level: TessPageIteratorLevel
-    ) {
-        self.img = UIImage(named: imgName)!
-        let tessAPI = initAPI(langDataName: trainedData, uiImage: self.img)
+and this struct is handled with the **Recognizer** class which exposes two main methods for getting plain text or RecognizedRectangles:
 
-        var txt = getAllText(tessAPI: tessAPI)
-        if (txt.filter { !$0.isWhitespace } == "") {
-            txt="<*blank*>"
-        }
-        self.allTxt = txt
+```swift
+let recognizer = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 144)
 
-        self.recognizedRects = recognizedRectangles(tessAPI: tessAPI, level: level)
 
-        deInitAPI(tessAPI: tessAPI)
+print recognizer.getAllText()
+
+  (String) $R2 = "Hello\n\n,世界\n"
+
+
+print recognizer.getRecognizedRects()
+
+  ([iOCR.RecognizedRectangle]) $R8 = 2 values {
+    [0] = {
+      text = "Hello\n\n"
+      boundingBox = (origin = (x = 9, y = 12), size = (width = 22, height = 166))
+      confidence = 88.5363388
+    }
+    [1] = {
+      text = ",世界\n"
+      boundingBox = (origin = (x = 7, y = 210), size = (width = 30, height = 83))
+      confidence = 78.3088684
     }
 }
 ```
 
-and in the case of the English panel in the bottom-right corner, the view's `recognizer` is created in this fashion:
+#### A weird rectangle and \<\*blank\*\>
+
+In the Japanese sample images, we can see the text value `<*blank*>` with a confidence of 95.00%.  Those values correspond to the unexpected recognition of a single stroke inside the <span style="font-size: 1.25em">世</span> character as a whole other valid character, weird...
+
+<img height="200" src="Notes/static/guide/blank_error_cropped.png"/>
+
+but completely avoidable with only a little more understanding of the images.
+
+The Japanese sample images were initially created for the demo like so:
 
 ```swift
-var recognizer = Recognizer(trainedData: "eng", imgName: "hexdreams_english", level:RIL_PARA)
+var jpn = Recognizer(imgName: "japanese", trainedDataName: "jpn")
+var jpn_vert = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert")
 ```
 
-#### Some weird geometry and \<\*blank\*\>
+which uses a default DPI of 72.  These images have a DPI of 144, though.
 
-In the Japanese sample image, there's the text value `<*blank*>` with a confidence of 95.00%.  Those values correspond to the unexpected recognition of a single stroke inside the <span style="font-size: 1.5em">世</span> character as a whole other valid character(s), weird.
 
-<img height="261" src="Notes/static/guide/blank_error_cropped.png"/>
+#### Better configuration is better recognition
 
-That possibility is covered in `Recognizer` above with the `if (txt.filter { !$0.isWhitespace } == "")` check.
+Simply add the correct DPI to the Recognizer:
 
-## Learning Tesseract
+```swift
+var jpn = Recognizer(imgName: "japanese", trainedDataName: "jpn", imgDPI: 144)
+var jpn_vert = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 144)
+```
+
+and it just works!
+
+<img height="235" src="Notes/static/guide/ipad_app_fixed_cropped.png"/>
+
+This little problem-and-solution set starts to highlight some of the internal workings of Tesseract.
+
+#### Learning Tesseract
 
 Configuration can matter a lot for Tesseract.  If you're new to it, you might need to dig in if you don't immediately get good results.  Here are two resources I've consulted:
 

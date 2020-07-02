@@ -18,7 +18,7 @@ class iOCRTests: XCTestCase {
         // There's spacing the OCR sees that I was having trouble encoding into
         // `want`, so I stripped all spaces for comparison
 
-        let recognizer = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert")
+        let recognizer = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 144)
         defer { recognizer.destroy() }
         let got = recognizer.getAllText()
 
@@ -85,7 +85,7 @@ app.
         XCTAssertEqual(rects.count, 1)
     }
     
-    /// Understanding something of Tesseract's process:  with the text **left-justified**, the recognizer get it all correct
+    /// Understanding something of Tesseract's process:  with the text **left-justified**, the recognizer gets it all correct
     func testEnglishLeftJustify() {
         let recognizer = Recognizer(imgName: "english_left_just", trainedDataName: "eng",
                                     tessPIL: RIL_BLOCK, tessPSM: PSM_SINGLE_BLOCK)
@@ -148,14 +148,12 @@ app.
             XCTFail(String(format: "got %d recognized rects, want 2", got.count))
         }
 
-
         recognizer.destroy()
     }
     
     func testGuideExample() {
         let tessAPI = TessBaseAPICreate()!
-        let trainedDataFolder = Bundle.main.path(
-            forResource: "tessdata", ofType: nil, inDirectory: "share")
+        let trainedDataFolder = Bundle.main.path(forResource: "tessdata", ofType: nil, inDirectory: "share")
         TessBaseAPIInit2(tessAPI, trainedDataFolder, "jpn", OEM_LSTM_ONLY)
         
         var image = getImage(from: UIImage(named: "japanese")!)
@@ -189,7 +187,7 @@ app.
         XCTAssertEqual(wOffset, 160)
         XCTAssertEqual(hOffset, 43)
         
-        // For PIL and PSM, should not have more than one result
+        // With RIL_TEXTLINE and PSM_AUTO, should not have more than one result
         XCTAssertEqual(TessPageIteratorNext(iterator, level), 0)
         TessPageIteratorDelete(iterator)
         

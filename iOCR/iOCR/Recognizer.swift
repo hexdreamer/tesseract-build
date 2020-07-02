@@ -79,28 +79,29 @@ class Recognizer {
         }
     }
 
-    /// Get back all recognized objects for the set tessPIL
+    /// Get back all recognized objects for the set `tessPIL`
     public func getRecognizedRects() -> [RecognizedRectangle] {
-        // A little odd looking, but we need some state setup from TessBaseAPIGetUTF8Text()
+        // Odd looking, but let's us avoid pre-calling `getAllText()`
         TessDeleteText(TessBaseAPIGetUTF8Text(self.tessAPI))
         
         guard let iterator = TessBaseAPIGetIterator(self.tessAPI) else { return [] }
         defer { TessPageIteratorDelete(iterator)}
         
         var rects = [RecognizedRectangle]()
+        
+        // If we got this far, iterator has at least one object, so step in and process
         repeat {
             // Text
-            let txt = TessResultIteratorGetUTF8Text(iterator, self.tessPIL)!
-            defer { TessDeleteText(txt) }
-            let txtStr = String(cString: txt)
+            let charPtr: UnsafeMutablePointer<Int8>?
+            charPtr = TessResultIteratorGetUTF8Text(iterator, self.tessPIL)!
+            let text = String(cString: charPtr!)
+            TessDeleteText(charPtr)
             
-            // Rectangles
+            // Rectangles; "offsets" are the (x,y)-point "opposite/diagonal" of origin
             var originX: Int32 = 0
             var originY: Int32 = 0
-            // these "offsets" are the (x,y)-point "opposite" of origin
             var widthOffset: Int32 = 0
             var heightOffset: Int32 = 0
-
             TessPageIteratorBoundingBox(iterator, self.tessPIL, &originX, &originY, &widthOffset, &heightOffset)
 
             let width = widthOffset - originX
@@ -110,11 +111,14 @@ class Recognizer {
             // Confidence
             let confidence = TessResultIteratorConfidence(iterator, self.tessPIL)
             
-            // RecognizedRectangle
-            rects.append(RecognizedRectangle(text: txtStr, boundingBox: cgRect, confidence: confidence))
+            // -> RecognizedRectangle
+            rects.append(
+                RecognizedRectangle(text: text, boundingBox: cgRect, confidence: confidence)
+            )
         } while (TessPageIteratorNext(iterator, self.tessPIL) > 0)
         
-        // Special handling of bad/false recognitions in the Japanese samples
+        // Special handling of bad/false recognitions
+        // Originally showed up when Japanese images (with native 144dpi) were run through Tesseract at 72dpi
         for i in 0..<rects.count {
             if (rects[i].text.filter { !$0.isWhitespace } == "") {
                 rects[i].text = "<*blank*>"

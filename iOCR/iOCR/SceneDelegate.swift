@@ -21,8 +21,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
-        var jpn = Recognizer(imgName: "japanese", trainedDataName: "jpn")
-        var jpn_vert = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert")
+        var jpn = Recognizer(imgName: "japanese", trainedDataName: "jpn", imgDPI: 144)
+        var jpn_vert = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 144)
         var chi_trad_vert = Recognizer(imgName: "chinese_traditional_vert", trainedDataName: "chi_tra_vert")
 
         /// This sample image isn't so normal in its format, it's one run-on sentence wrapped around 8 ines.
