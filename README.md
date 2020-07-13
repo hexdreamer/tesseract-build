@@ -1,12 +1,17 @@
-# Making an OCR app for iOS or macOS, from scratch
+# Multilingual OCR for your for iOS or macOS project
 
-Welcome to our project on building and using Tesseract OCR in your Xcode projects.  We started this project with the very strong philosophy that it should be easy to learn how to build a C or C++ library from source and then build an app on top of that.
+Welcome to our guide to building and using Tesseract OCR in an Xcode project.  We started this project with the very strong philosophy that it should be easy to learn how to build a C or C++ library from source and then integrate the build products into an app.
 
-As the person tasked with creating this guide, I didn't know, and still don't know how to do a lot of what this guide requires.  C is familiar, but I don't know it.  I've used Xcode before, but that was like 10 years ago and I didn't have to deal with libraries, targets, and most of the details that go into making this project.  And if that sounds familiar and your unsure, hopefully this can guide you forward.
+The repo contains:
+
+- a skeleton folder structure for downloading and building the tools and libraries, which includes
+  - all the configuration and build scripts
+- a simple test of the build phase
+- an Xcode project that imports the libraries and modules, and a basic iPad app that shows off some the recognition features for traditional Chinese, English, and Japanese
 
 ## Building from source
 
-The Tesseract OCR library manages its image data with Leptonica, a library that manipulates common image file formats.  And Leptonica is built upon the individual libraries for the different image formats.  In building the image libraries, Leptonica, and then Tesseract, we'll need some additional tools like autoconf and automake, from GNU.  The final arrangement of the tools and libraries I settled on looks like:
+The Tesseract OCR library manages its image data with Leptonica, a library that manipulates common image file formats.  And Leptonica is built upon the individual libraries for the different image formats.  For the complete sequence of building the image libraries, Leptonica, and then Tesseract, some additional tools, like autoconf and automake from GNU, are required.  The final arrangement of the tools and libraries I settled on looks like:
 
 1. autoconf
 1. automake
@@ -19,160 +24,252 @@ The Tesseract OCR library manages its image data with Leptonica, a library that 
 1. leptonica
 1. tesseract
 
-The project folder that you cloned or downloaded is referred to as **PROJECTDIR** and comes with three empty directories that the build process will fill up like: download TGZ to **Downloads**; extract TGZ to **Sources**; configure and make source, and install into **Root**.  The **Scripts** directory contains all the shell scripts to order and execute those steps.
+This guide refers to the project folder that you cloned or downloaded as **PROJECTDIR**, which comes with three empty directories that the build process will fill by:
 
-For my folder setup, I did everything in the shell and Xcode relative to my PROJECTDIR.  There's a symlink to shell script we can source to set up the shell environment and the `print_project_env()` function that shows key aspects of the environment:
+1. downloading a TGZ to **Downloads**
+1. extracting the TGZ to **Sources**
+1. configuring and making the source, and installing into **Root**
+
+The **Scripts** directory contains all the shell scripts to order and execute those steps.
+
+From my PROJECTDIR, I source the project's environment into my shell:
 
 ```zsh
-% cd ~/dev/tesseract-build
-
-% ls -la project_environment.sh
-lrwxr-xr-x  1 zyoung  staff  36 Jun 24 11:38 project_environment.sh@ -> Scripts/build/project_environment.sh
-
 % source project_environment.sh
+
 % print_project_env
 
 Directories:
-
 $PROJECTDIR:  /Users/zyoung/dev/tesseract-build
 $DOWNLOADS:   /Users/zyoung/dev/tesseract-build/Downloads
 $ROOT:        /Users/zyoung/dev/tesseract-build/Root
 $SCRIPTSDIR:  /Users/zyoung/dev/tesseract-build/Scripts
+$BUILDDIR:    /Users/zyoung/dev/tesseract-build/Scripts/build
 $SOURCES      /Users/zyoung/dev/tesseract-build/Sources
 
 Scripts:
-
-$BUILDDIR/build_all.sh         clean|run all build/configure scripts
+$BUILDDIR/build_all.sh         clean|run all configure/build scripts
 $SCRIPTSDIR/test_tesseract.sh  after build, run a quick test of tesseract
+
+Functions:
+print_project_env  print this listing of the project environment
 ```
 
-Take a moment to check out the master build script, `$BUILDDIR/build_all.sh`  The script contains an option to clean PROJECTDIR, and then runs a list of build scripts (which is identical to the list of libraries/tools from above).
+The master build script, **BUILDDIR/build_all.sh**, runs all the individual build scripts for the tools and libraries (which is identical to the 10-point list from above).  
 
-Just running that one script will produce all the files we need for Xcode.  Running it takes me about 20 minutes.  I've configured those files so they are divided into 3 formats that I've defined: **ios_arm64**, **ios_x86_64**, **macos_x86_64**.  `lipo` stitches the two-iOS formatted files into one multi-arch binary, **libname.a**; and writes the one macOS-formatted file to a single-arch binary, **libname-macos.a**.
+Running that one script will produce all the files that we will eventually need for Xcode:
+
+```zsh
+ % ./Scripts/build/build_all.sh
+
+...
+
+...
+
+======== tesseract-4.1.1 ========
+Downloading... done.
+Extracting... done.
+Preconfiguring... done.
+ios_arm64: configuring... done, making... done, installing... done.
+ios_x86_64: configuring... done, making... done, installing... done.
+macos_x86_64: configuring... done, making... done, installing... done.
+ios: lipo... done.
+macos: lipo... done.
+```
+
+The builds are targeted for two different processor *architectures*, **arm64** and **x86_64**.  There are also two different *platform* configurations, **ios** and **macos**.  This results in the following three files for every library, and each is needed for the stated uses:
+
+| lib name                            | use                                |
+|-------------------------------------|------------------------------------|
+| `Root/ios_arm64/lib/libname.a`    | running in iOS                     |
+| `Root/ios_x86_64/lib/libname.a`   | running in iOS Simulator, on a mac |
+| `Root/macos_x86_64/lib/libname.a` | running on a mac                   |
+
+Xcode's **lipo** tool can stitch files from different architectures together, but it cannot stitch the same architectures together.  This will finally leave us with a set of two binary files for each library, and installed to the common location **Root/lib**:
 
 | lipo these formatted libs                                        | into this final lib            |
 |--------------------------------------------------------------------|---------------------------|
-| `<Root>/ios_arm64/lib/libname.a` <br/> `<Root>/ios_x86_64/lib/libname.a` | `<Root>/lib/libname.a`       |
-| `<Root>/macos_x86_64/lib/libname.a`                                   | `<Root>/lib/libname-macos.a` |
-
-The two header files for Leptonica and Tesseract C-APIs that we need are 
-
-There's also a tesseract command-line program that we'll use, and it's in macos_x86_64.
-The build steps and these concepts are explained in more detail in [Building](Scripts/README.md#Building).
+| `Root/ios_arm64/lib/libname.a` <br/> `Root/ios_x86_64/lib/libname.a` | `Root/lib/libname.a`       |
+| `Root/macos_x86_64/lib/libname.a`                                   | `Root/lib/libname-macos.a` |
 
 ## Verifying Tesseract
 
-Having run **build_all.sh** and successfully built Tesseract we need to provide it with the reference data it will use to recognize the characters in the language we are interesed in.
+Having run **build_all.sh** and successfully built Tesseract we need to provide it with the reference data it will use to recognize the characters in the language we are interested in.
 
-Run **Scripts/test_tesseract.sh** to download some trained data for horizontal and vertical Japanese scripts and run a quick OCR test on these 2 images:
+Run **Scripts/test_tesseract.sh** to download some trained data for traditional Chinese, English and Japanese scripts, and run a quick OCR test on these sample images:
 
-| ![hello horizontal](Notes/static/test_hello_hori.png) | ![hello vertical](Notes/static/test_hello_vert.png) |
-|-------------------------------------------------------|-----------------------------------------------------|
+<table>
+<tr>
+<td>
+<img src="Notes/static/test_hello_hori.png"/>
+</td>
+<td>
+<img height="300" src="Notes/static/test_hello_vert.png"/>
+</td>
+<td>
+<img height="300" src="iOCR/iOCR/Assets.xcassets/chinese_traditional_vert.imageset/cropped.png"/>
+</td>
+<td>
+<img height="300" src="iOCR/iOCR/Assets.xcassets/english_left_just_square.imageset/hexdreams.png"/>
+</td>
+</tr>
+<tr><td>Japanese</td><td>Japanese (vert)</td><td>Chinese (trad, vert)</td><td>English</td></tr>
+</table>
 
 ```zsh
 % ./Scripts/test_tesseract.sh
-test horizontal: passed
-test vertical: passed
+# Checking for Trained Data Language Files
+downloading chi_tra.traineddata...done
+downloading chi_tra_vert.traineddata...done
+downloading eng.traineddata...done
+downloading jpn.traineddata...done
+downloading jpn_vert.traineddata...done
+# Recognizing Sample Images
+testing Japanese...passed
+testing Japanese (vert)...passed
+testing Chinese (trad, vert)...passed
+testing English...passed
 ```
 
-The actual text recognized in the vertical image is:
-
-```none
-Hello
-
-,世界
-
-```
-
-but for this simple test, all white space is stripped out and the result is compared to `'Hello,世界'` (which is also the expected result for the horizontal image).
-
-These images were chosen because some Japanese writing will include English loan words and I think it's noteworthy that some English is recognized when processing exclusively for Japanese.
+The images for the Japanese test were chosen because some Japanese writing will include words borrowed from English, and it's noteworthy that some English is recognized when processing exclusively for Japanese.
 
 And with that little test completed, we can get into Xcode.
 
-## Integrating Tesseract into Xcode
+## A simple OCR app
 
-Much of the insight into configurating and executing the build up to this point came from the Makefile of another open-source iOS Tesseract project, SwiftyTesseract (ST), *A Swift wrapper around Tesseract for use in iOS applications*.  I've used it as a model for building with Swift on top of a C API.  I'll be using bits of ST code to navigate creating an Xcode project from scratch.  I'll chase down errors as they come, modifying the project along the way.
+If you're not familiar with the Tesseract C-API, here are the basics&mdash;that this project builds upon&mdash;with figurative code samples.
 
-### Create the project
+### Tesseract API basis
 
-1. **File** &rarr; **New Project**
+#### Initialize API object
 
-1. A **Single View App** is a great template for this guide, **Next**
+Create an API object and initialize it with the trained data's parent folder, the data's filename, and an *OCR engine mode (OEM)*.  **OEM_LSTM_ONLY** is the latest neural-net recognition engine, which has some advantage in "line recognition" over the previous engine.
 
-1. Add **Product Name**, I've named mine *iOCR*, **Next**
+```swift
+tessAPI = TessBaseAPICreate()
+TessBaseAPIInit2(tessAPI, trainedDataFolder, "jpn_vert", OEM_LSTM_ONLY)
+```
 
-1. Choose your project's location, I chose `$PROJECTDIR`, **Create**
+#### Perform OCR
 
-### Write a bit of code
+Get an image and set it on the API, then configure the resolution and *page segmentation mode (PSM)*.  By default, Tesseract expects a page of text when it segments an image, and **PSM_AUTO** defines this default behavior.  All the images in this guide have been cropped to just the text, so this value makes sense for most of samples in this demo/guide.
 
-1. **File** &rarr; **New** &rarr; **File...**
+```swift
+image = getImage("japanese_vertical_sample")
+TessBaseAPISetImage2(tessAPI, image)
+TessBaseAPISetSourceResolution(tessAPI, 144)
+TessBaseAPISetPageSegMode(tessAPI, PSM_AUTO)
+```
 
-1. Choose **Swift File**, **Next**
+Finally, call the method that returns the recognized text in the image.
 
-1. **Save As:** **iOCR**, **Group: iOCR (folder under iOCR project)**, **Create**
+```swift
+TessBaseAPIGetUTF8Text(tessAPI)
+```
 
-1. Insert this snippet into **iOCR.swift**:
+We could stop here, but there's more we can know about the text.
 
-    ```swift
-    import libleptonica
-    import libtesseract
-    ```
+#### Iterate over results
 
-1. Save that file, and my first error is:
+The API also provides an iterator for individually recognized objects in the image.  The size or scope of the object is determined by *level*.  **RIL_TEXTLINE** is the *ResultIteratorLevel* for working with individual lines of text.
 
-    ```none
-    No such module 'libleptonica'
-    ```
+```swift
+level = RIL_TEXTLINE
+iterator = TessBaseAPIGetIterator(tessAPI)
 
-    <!--![no such module 'libtesseract'](Notes/static/guide/err_no_such_module_leptonica.png)-->
-    <img height="53" src="Notes/static/guide/err_no_such_module_leptonica.png"/>
+while (TessPageIteratorNext(iterator, level) > 0) {
+  txt = TessResultIteratorGetUTF8Text(iterator, level)
+  TessPageIteratorBoundingBox(iterator, level, &originX, &originY, &width, &height)
+  confidence = TessResultIteratorConfidence(iterator, level)
+}
+```
 
-### No such module
+*Note:* `TessBaseAPIGetUTF8Text` must be called before the `TessPageIterator` and `TessResultIterator` methods.
 
-Our two libraries, Leptonica and Tesseract, need to be copied into the project and made known to Xcode as 2 different modules.
+There is a small test and working example of these basics in **iOCRTests.swift::testGuideExample()** in the Xcode project.
 
-1. Copy over the headers into a new **dependencies** folder:
+### iOCR Xcode project
 
-    ```zsh
-    ditto $ROOT/include/leptonica iOCR/iOCR/dependencies/include/leptonica
-    ditto $ROOT/include/tesseract iOCR/iOCR/dependencies/include/tesseract
-    ```
+**PROJECTDIR/iOCR/iOCR.xcodeproj** is an example of putting everything together into a working project and running an app in the simulator that highlights those API basics.
 
-    I'm ignoring the libs for now because the error is about modules.
+Open the project and run the **iOCR** target for an **iPad Pro (12.9-in)**:
 
-1. Right-click the iOCR folder in the project navigator and choose **Add Files to "iOCR"**:
+<img height="650" src="Notes/static/guide/ipad_app_blank_errors.png"/>
 
-    ![Add dependencies to iOCR folder](Notes/static/guide/guide_add_dependencies.png)
+The colored rectangles, texts, and numbers are the iterated bounding boxes, utf8 texts, and confidence scores from the basics section and are now wrapped up in a **RecognizedRectangle**:
 
-1. Select the folder **iOCR/iOCR/dependencies**, check that **Create groups** is selected, **Add**
+```swift
+struct RecognizedRectangle {
+    public var text: String
+    public var boundingBox: CGRect
+    public var confidence: Float
+}
+```
 
-1. **File** &rarr; **New...** &rarr; **File**, scroll down to **Other** and choose **Empty**
+and this struct is handled with the **Recognizer** class which exposes two main methods for getting plain text or RecognizedRectangles:
 
-1. Create **iOCR/iOCR/dependencies/module.modulemap**, in the **Group: dependencies**, with the following contents:
+```swift
+let recognizer = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 144)
 
-    ```swift
-    module libtesseract {
-        header "include/tesseract/capi.h"
-        export *
+
+print recognizer.getAllText()
+
+  (String) $R2 = "Hello\n\n,世界\n"
+
+
+print recognizer.getRecognizedRects()
+
+  ([iOCR.RecognizedRectangle]) $R8 = 2 values {
+    [0] = {
+      text = "Hello\n\n"
+      boundingBox = (origin = (x = 9, y = 12), size = (width = 22, height = 166))
+      confidence = 88.5363388
     }
-
-    module libleptonica {
-        header "include/leptonica/allheaders.h"
-        export *
+    [1] = {
+      text = ",世界\n"
+      boundingBox = (origin = (x = 7, y = 210), size = (width = 30, height = 83))
+      confidence = 78.3088684
     }
-    ```
+}
+```
 
-1. My project now looks like:
+#### A weird rectangle and \<\*blank\*\>
 
-    <img height="241" src="Notes/static/guide/module_final_structure_cropped.png"/>
+In the Japanese sample images, we can see the text value `<*blank*>` with a confidence of 95.00%.  Those values correspond to the unexpected recognition of a single stroke inside the <span style="font-size: 1.25em">世</span> character as a whole other valid character, weird...
 
-1. Set the **SWIFT_INCLUDE_PATHS** in the project's build settings to **$(PROJECTDIR)/iOCR/dependencies/\*\***:
+<img height="200" src="Notes/static/guide/blank_error_cropped.png"/>
 
-    <img src="Notes/static/guide/2_swift_include_paths_cropped.png"/>
+but completely avoidable with only a little more understanding of the images.
 
-    Xcode converts the **/\*\*** part at the end of the path to that **recursive** value in the bottom-right of image.
+The Japanese sample images were initially created for the demo like so:
 
-1. **Product** &rarr; **Build**, and that error is cleared:
+```swift
+var jpn = Recognizer(imgName: "japanese", trainedDataName: "jpn")
+var jpn_vert = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert")
+```
 
-    <img height="200" src="Notes/static/guide/build_succeeded.png"/>
+which uses a default DPI of 72.  These images have a DPI of 144, though.
+
+
+#### Better configuration is better recognition
+
+Simply add the correct DPI to the Recognizer:
+
+```swift
+var jpn = Recognizer(imgName: "japanese", trainedDataName: "jpn", imgDPI: 144)
+var jpn_vert = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 144)
+```
+
+and it just works!
+
+<img height="235" src="Notes/static/guide/ipad_app_fixed_cropped.png"/>
+
+This little problem-and-solution set starts to highlight some of the internal workings of Tesseract.
+
+#### Learning Tesseract
+
+Configuration can matter a lot for Tesseract.  If you're new to it, you might need to dig in if you don't immediately get good results.  Here are two resources I've consulted:
+
+- **Is there a Minimum / Maximum Text Size? (It won’t read screen text!)**  [https://tesseract-ocr.github.io/tessdoc/FAQ-Old#is-there-a-minimum--maximum-text-size-it-wont-read-screen-text]
+
+- **Improving the quality of the output** [https://tesseract-ocr.github.io/tessdoc/ImproveQuality]

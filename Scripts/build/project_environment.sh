@@ -18,7 +18,10 @@ readonly SOURCES=$PROJECTDIR/Sources
 
 readonly MASTER_CMDS=$LOGS/commands.sh
 
+# TODO: why isn't this exported?, I still see Root/bin added to path, and I've grepped
+# and don't see PATH exported anywhere
 PATH=$ROOT/bin:$PATH
+export TESSDATA_PREFIX=$ROOT/share/tessdata
 
 _exec() {
   local _status
@@ -126,10 +129,14 @@ Directories:
 \$DOWNLOADS:   $DOWNLOADS 
 \$ROOT:        $ROOT
 \$SCRIPTSDIR:  $SCRIPTSDIR
+\$BUILDDIR:    $BUILDDIR
 \$SOURCES      $SOURCES
 
 Scripts:
-\$BUILDDIR/build_all.sh         clean|run all build/configure scripts
+\$BUILDDIR/build_all.sh         clean|run all configure/build scripts
 \$SCRIPTSDIR/test_tesseract.sh  after build, run a quick test of tesseract
+
+Functions:
+print_project_env  print this listing of the project environment
 EOF
 }
