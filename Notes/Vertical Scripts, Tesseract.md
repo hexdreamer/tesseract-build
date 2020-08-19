@@ -13,6 +13,20 @@ And for background on East Asian scripts:
 - <https://en.wikipedia.org/wiki/CJK_Unified_Ideographs>
 - <https://en.wikipedia.org/wiki/Horizontal_and_vertical_writing_in_East_Asian_scripts>
 
+And Japanese typographic symbols not included in kana or kanji groups:
+
+- <https://en.wikipedia.org/wiki/List_of_Japanese_typographic_symbols>
+
+also, weird typographic errors in the page:
+
+- <https://japanese.stackexchange.com/questions/77017/what-do-these-symbols-in-manga-mean>
+
+![manga typos](static/manga_weird_typographic_errors.jpg)
+
+> This seems to be an encoding/typesetting issue and the "symbols" are indeed Greek letters Ψ, Π, π that seem to be displayed instead of !, ?, 〜.
+>
+> There is another typographical oddity that suggests something went wrong here: the ch­ōonpu (long vowel marker) ー (for example in はーい or おーいっ) should be vertical in vertical writing, but it appears horizontal here.
+
 ## Manga and OCR
 
 Someone created a Japanese vertical traineddata file expressly for Manga, <https://github.com/zodiac3539/jpn_vert?files=1>.

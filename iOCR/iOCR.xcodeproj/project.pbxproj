@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F43ABA7324EDBF890055D99B /* include in Resources */ = {isa = PBXBuildFile; fileRef = F43ABA7224EDBF890055D99B /* include */; };
 		F464A67024A3C57A002440AC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A66F24A3C57A002440AC /* AppDelegate.swift */; };
 		F464A67224A3C57A002440AC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A67124A3C57A002440AC /* SceneDelegate.swift */; };
 		F464A67424A3C57A002440AC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A67324A3C57A002440AC /* ContentView.swift */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F43ABA7224EDBF890055D99B /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; name = include; path = ../../Root/include; sourceTree = "<group>"; };
 		F464A66C24A3C57A002440AC /* iOCR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOCR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F464A66F24A3C57A002440AC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F464A67124A3C57A002440AC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 		F464A66E24A3C57A002440AC /* iOCR */ = {
 			isa = PBXGroup;
 			children = (
+				F43ABA7224EDBF890055D99B /* include */,
 				F464B93E24A6BCEE002440AC /* share */,
 				F464A66F24A3C57A002440AC /* AppDelegate.swift */,
 				F464A67124A3C57A002440AC /* SceneDelegate.swift */,
@@ -246,6 +249,7 @@
 				F464B93F24A6BCEE002440AC /* share in Resources */,
 				F464A67C24A3C57D002440AC /* LaunchScreen.storyboard in Resources */,
 				F464A67924A3C57D002440AC /* Preview Assets.xcassets in Resources */,
+				F43ABA7324EDBF890055D99B /* include in Resources */,
 				F464A67624A3C57D002440AC /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

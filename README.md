@@ -1,63 +1,67 @@
 # Multilingual OCR for your for iOS or macOS project
 
-Welcome to our guide to building and using Tesseract OCR in an Xcode project.  We started this project with the very strong philosophy that it should be easy to learn how to build a C or C++ library from source and then integrate the build products into an app.
+Welcome to our **Tesseract OCR in an Xcode** project.  We started this project with the very strong philosophy that it should be *easy* to see how a C or C++ library is built from source and then integrated into an app.
 
-The repo contains:
+Like, this *easy*:
 
-- a skeleton folder structure for downloading and building the tools and libraries, which includes
-  - all the configuration and build scripts
-- a simple test of the build phase
-- an Xcode project that imports the libraries and modules, and a basic iPad app that shows off some the recognition features for traditional Chinese, English, and Japanese
+1. **git clone** or download this repo
+1. **cd** to the repo
+1. run **Scripts/build/build_all.sh**
+1. wait for successful build
+1. run **Scripts/test_tesseract.sh**: get some language recognition data and use it to test Tesseract against sample Chinese, English, and Japanese images
+1. open **iOCR/iOCR.xcodeproj**
+1. run the **iOCR** target on an iPad Pro 12.9-inch simulator
 
-## Building from source
+If you want to learn more about those steps, we've laid out the repo and included this guide to show how we:
 
-The Tesseract OCR library manages its image data with Leptonica, a library that manipulates common image file formats.  And Leptonica is built upon the individual libraries for the different image formats.  For the complete sequence of building the image libraries, Leptonica, and then Tesseract, some additional tools, like autoconf and automake from GNU, are required.  The final arrangement of the tools and libraries I settled on looks like:
+
+- [Build from source](#build-from-source): create a build chain and organize the configurations for the various tools and libraries (packages) that make up Tesseract OCR
+- [Test Tesseract](#test-tesseract): quickly and directly get to using Tesseract by running a small test, that also adds needs target language data
+- [Write an app](#write-an-app): wrap the Leptonica and Tesseract C-API's into a very basic and static iPad app that shows some recognition features for traditional Chinese, English, and Japanese
+
+## Build from source
+
+The Tesseract OCR library manages its image data with Leptonica, a library that manipulates common image file formats.  And Leptonica is built upon the individual libraries for some of the different image formats it supports: jpg, png, tiff.
+
+Completing the sequence of building the image libraries, Leptonica, and then Tesseract requires some additional tools, like autoconf and automake from GNU.
+
+The final arrangement of the packages I settled on looks like:
 
 1. autoconf
 1. automake
 1. pkgconfig
 1. libtool
-1. zlib
 1. libjpeg
 1. libpng
 1. libtiff
 1. leptonica
 1. tesseract
 
-This guide refers to the project folder that you cloned or downloaded as **PROJECTDIR**, which comes with three empty directories that the build process will fill by:
+### Starting the build
 
-1. downloading a TGZ to **Downloads**
-1. extracting the TGZ to **Sources**
-1. configuring and making the source, and installing into **Root**
+This guide refers to the project folder that you cloned or downloaded as **PROJECTDIR**.  For each of the packages above, the build process:
 
-The **Scripts** directory contains all the shell scripts to order and execute those steps.
+1. downloads a package's TGZ to **Downloads**
+1. extracts that TGZ to **Sources**
+1. configures and makes that source, then installs those build products into **Root**
 
-From my PROJECTDIR, I source the project's environment into my shell:
+The **Scripts/build** directory contains all the shell scripts to order and execute those steps.
 
 ```zsh
-% source project_environment.sh
-
-% print_project_env
-
-Directories:
-$PROJECTDIR:  /Users/zyoung/dev/tesseract-build
-$DOWNLOADS:   /Users/zyoung/dev/tesseract-build/Downloads
-$ROOT:        /Users/zyoung/dev/tesseract-build/Root
-$SCRIPTSDIR:  /Users/zyoung/dev/tesseract-build/Scripts
-$BUILDDIR:    /Users/zyoung/dev/tesseract-build/Scripts/build
-$SOURCES      /Users/zyoung/dev/tesseract-build/Sources
-
-Scripts:
-$BUILDDIR/build_all.sh         clean|run all configure/build scripts
-$SCRIPTSDIR/test_tesseract.sh  after build, run a quick test of tesseract
-
-Functions:
-print_project_env  print this listing of the project environment
+ % ls Scripts/build 
+build_all.sh*                     build_tesseract.sh*
+build_autoconf.sh*                build_zlib.sh*
+build_automake.sh*                config-make-install_leptonica.sh
+build_leptonica.sh*               config-make-install_libjpeg.sh
+build_libjpeg.sh*                 config-make-install_libpng.sh
+build_libpng.sh*                  config-make-install_libtiff.sh
+build_libtiff.sh*                 config-make-install_tesseract.sh
+build_libtool.sh*                 project_environment.sh
+build_only_libs.sh*               utility.sh
+build_pkgconfig.sh*
 ```
 
-The master build script, **BUILDDIR/build_all.sh**, runs all the individual build scripts for the tools and libraries (which is identical to the 10-point list from above).  
-
-Running that one script will produce all the files that we will eventually need for Xcode:
+Any of the **build_\<PACKAGE-NAME\>.sh** scripts can be run by itself, but the final scripts for Leptonica and Tesseract depend on previous installations.  **build_all.sh** orders and executes all this for you; running that one script will produce all the files that we will eventually need for Xcode:
 
 ```zsh
  % ./Scripts/build/build_all.sh
@@ -92,7 +96,7 @@ Xcode's **lipo** tool can stitch files from different architectures together, bu
 | `Root/ios_arm64/lib/libname.a` <br/> `Root/ios_x86_64/lib/libname.a` | `Root/lib/libname.a`       |
 | `Root/macos_x86_64/lib/libname.a`                                   | `Root/lib/libname-macos.a` |
 
-## Verifying Tesseract
+## Test Tesseract
 
 Having run **build_all.sh** and successfully built Tesseract we need to provide it with the reference data it will use to recognize the characters in the language we are interested in.
 
@@ -135,7 +139,7 @@ The images for the Japanese test were chosen because some Japanese writing will 
 
 And with that little test completed, we can get into Xcode.
 
-## A simple OCR app
+## Write an app
 
 If you're not familiar with the Tesseract C-API, here are the basics&mdash;that this project builds upon&mdash;with figurative code samples.
 
