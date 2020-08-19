@@ -38,14 +38,14 @@ extract $name $targz
 
 export ARCH='arm64'
 export TARGET='arm-apple-darwin64'
-export PLATFORM='iPhoneOS.platform/Developer/SDKs/iPhoneOS13.5.sdk'
+export PLATFORM='iPhoneOS.platform/Developer/SDKs/iPhoneOS13.6.sdk'
 export PLATFORM_MIN_VERSION='-miphoneos-version-min=11.0'
 
 zsh $parentdir/config-make-install_libpng.sh $name 'ios_arm64'
 
 export ARCH='x86_64'
 export TARGET='x86_64-apple-darwin'
-export PLATFORM='iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.5.sdk'
+export PLATFORM='iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.6.sdk'
 export PLATFORM_MIN_VERSION='-mios-simulator-version-min=11.0'
 
 zsh $parentdir/config-make-install_libpng.sh $name 'ios_x86_64'

@@ -10,13 +10,14 @@ fi
 
 # ARCH='arm64'
 # TARGET='arm-apple-darwin64'
-# PLATFORM='iPhoneOS.platform/Developer/SDKs/iPhoneOS13.5.sdk'
+# PLATFORM='iPhoneOS.platform/Developer/SDKs/iPhoneOS13.6.sdk'
 # PLATFORM_MIN_VERSION='-miphoneos-version-min=11.0'
 
 os_arch=$1 # ios_arm64
 
 print -n "$os_arch: "
 
+# Verify liblept.a is installed; requires pkglib is installed
 pkg_lib=$ROOT/$os_arch/lib/liblept.a
 if {
   [ -f $pkg_lib ] &&
@@ -26,6 +27,11 @@ if {
 }; then
   print "skipped config/make/install, found valid single-$ARCH-arch $pkg_lib"
   exit 0
+fi
+
+# Verify sysroot platform exists
+if [ ! -d /Applications/Xcode.app/Contents/Developer/Platforms/$PLATFORM ]; then
+  print "ERROR $PLATFORM does not exist; has the SDK been updated?"
 fi
 
 cflags=(

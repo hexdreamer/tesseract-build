@@ -83,9 +83,9 @@ download() {
 
   if [ -e $DOWNLOADS/$targz ]; then
     # Substring replacement,
-    #  '/Users/name/dev/project_root/SomePath/WeCareAbout'
+    #  'SomePath/ToTrim/SomePath/WeCareAbout'
     #  -->
-    #                   '$PROJECTDIR/SomePath/WeCareAbout'
+    #     '$PROJECTDIR/SomePath/WeCareAbout'
     # shellcheck disable=SC2016
     local _downloads=${DOWNLOADS/$PROJECTDIR/'$PROJECTDIR'}
     echo "Skipped download, found $_downloads/$targz"
