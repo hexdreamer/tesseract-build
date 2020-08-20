@@ -31,7 +31,7 @@ also, weird typographic errors in the page:
 
 Someone created a Japanese vertical traineddata file expressly for Manga, <https://github.com/zodiac3539/jpn_vert?files=1>.
 
-## Tesseract command-line
+## Tuning Tesseract
 
 Playing with the tesseract CL program is a quick way to validate settings like resolution, OEM, and PSM against new images or new kinds of images.  Though I've noticed the CL program results are not always 1:1 with the API; I think the CL does some preprocessing.
 
@@ -151,3 +151,35 @@ The tesseract command-line pre-processes the input image, at the very least conv
 ```-c tessedit_dump_pageseg_images=1 -c textord_tabfind_show_images=1``` produce a PDF of the steps in page segmentation:
 
 ![Pageseg images](static/02-pageseg-images.png)
+
+### Useful parameters for Japanese and Chinese
+
+From [Useful parameters for Japanese and Chinese
+](https://tesseract-ocr.github.io/tessdoc/ControlParams.html#useful-parameters-for-japanese-and-chinese):
+
+A [tesseract 3.02](https://groups.google.com/g/tesseract-ocr/c/A4IQlslY7hc/m/d4xK1PoihfMJ?pli=1) user for Japanese scripts noticed these values helped:
+
+| Name                           | Suggested value | Description                                                                                                                       |
+|--------------------------------|-----------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| chop_enable                    | T               | Chop enable.                                                                                                                      |
+| use_new_state_cost             | F               | Use new state cost heuristics for segmentation state evaluation                                                                   |
+| segment_segcost_rating         | F               | Incorporate segmentation cost in word rating?                                                                                     |
+| enable_new_segsearch           | 0               | Enable new segmentation search path. It could solve the problem of dividing one character to two characters                       |
+| language_model_ngram_on        | 0               | Turn on/off the use of character ngram model.                                                                                     |
+| textord_force_make_prop_words  | F               | Force proportional word segmentation on all rows.                                                                                 |
+| edges_max_children_per_outline | 40              | Max number of children inside a character outline. Increase this value if some of KANJI characters are not recognized (rejected). |
+
+### More Tuning
+
+But for English text, <https://mlichtenberg.wordpress.com/2015/11/04/tuning-tesseract-ocr/>.
+
+Notes on PageSegMode **6**:
+
+- By default, Tesseract fully automates the page segmentation, but does not perform orientation and script detection.  A value of 6 directs Tesseract to assume a single uniform block of text.
+- There are no longer extra lines between paragraphs.  However, those lines do not actually appear on the source image either.
+The garbage words at the end of the page no longer appear.
+- A small number of errors in individual words that appear in the original output were corrected, and a few other incorrect words changed (but were still incorrect).
+- `-psm 6` can produce very poor output.  For example, processing of the image found at <http://www.archive.org/download/mobot31753002262522/page/n1> results in a huge amount of garbage output, instead of just a few lines of text.
+  - Pages with images produce poor output.  Because this parameter instructs Tesseract to treat everything as a single block of text, images are not recognized as images, and are instead processed as text (resulting in lots of garbage in the OCR).
+  - Text on "rotated" pages is not recognized.  In its normal mode, Tesseract is able to automatically normalize the page orientation and detect words.
+  - Very poor results for multi-column pages.  In its normal mode Tesseract does a decent job of processing columns of text.
