@@ -29,7 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         /// Something like a speech bubble from an English comic would probably be a much better sample.
         var eng = Recognizer(
             imgName: "english_left_just_square", trainedDataName: "eng",
-            tessPIL: RIL_BLOCK, tessPSM: PSM_SINGLE_BLOCK
+            tessPSM: PSM_SINGLE_BLOCK, tessPIL: RIL_BLOCK
         )
         
         _ = jpn.getRecognizedRects()

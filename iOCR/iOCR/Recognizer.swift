@@ -34,17 +34,17 @@ class Recognizer {
     ///     - trainedDataName: The name portion of the trained data file to use, e.g.:
     ///         pass in `jpn_vert` for the file `jpn_vert.traineddata`.
     ///     - imgDPI: The image's DPI, default is `72`.
-    ///     - tessPIL: A TessPageIteratorLevel that sets the scope/size of the recognition object.
-    ///         Valid values are: `RIL_BLOCK`, `RIL_PARA`, `RIL_TEXTLINE` (default), `RIL_WORD`, `RIL_SYMBOL`.
-    ///     - tessPSM: A TessPageSegMode, that affect how Tesseract sees the image as a whole.
+    ///     - tessPSM: A TessPageSegMode that affects how Tesseract treats/parses the image as a whole.
     ///         Many valid values, check Tesseract documentation; default is `PSM_AUTO`.
+    ///     - tessPIL: A TessPageIteratorLevel that sets the scope/size of the objects you want recognized.
+    ///         Valid values are: `RIL_BLOCK`, `RIL_PARA`, `RIL_TEXTLINE` (default), `RIL_WORD`, `RIL_SYMBOL`.
     init(
         imgName: String,
         trainedDataName: String,  // chi_tra, eng, jpn_vert
         imgDPI: Int32=72,
-        tessPIL: TessPageIteratorLevel=RIL_TEXTLINE,
-        tessPSM: TessPageSegMode=PSM_AUTO
-    ) {
+        tessPSM: TessPageSegMode=PSM_AUTO,
+        tessPIL: TessPageIteratorLevel=RIL_TEXTLINE
+) {
         self.recognizedRects = []
         self.uiImage = UIImage(named: imgName)!
         self.tessPIL = tessPIL
@@ -81,8 +81,8 @@ class Recognizer {
 
     /// Get back all recognized objects for the set `tessPIL`
     public func getRecognizedRects() -> [RecognizedRectangle] {
-        // Odd looking, but let's us avoid pre-calling `getAllText()`
-        TessDeleteText(TessBaseAPIGetUTF8Text(self.tessAPI))
+        // Prime self.tessAPI
+        _ = getAllText()
         
         guard let iterator = TessBaseAPIGetIterator(self.tessAPI) else { return [] }
         defer { TessPageIteratorDelete(iterator)}

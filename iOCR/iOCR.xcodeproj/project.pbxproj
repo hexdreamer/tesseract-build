@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F43ABA7324EDBF890055D99B /* include in Resources */ = {isa = PBXBuildFile; fileRef = F43ABA7224EDBF890055D99B /* include */; };
 		F464A67024A3C57A002440AC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A66F24A3C57A002440AC /* AppDelegate.swift */; };
 		F464A67224A3C57A002440AC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A67124A3C57A002440AC /* SceneDelegate.swift */; };
 		F464A67424A3C57A002440AC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A67324A3C57A002440AC /* ContentView.swift */; };
@@ -25,6 +24,7 @@
 		F464B93F24A6BCEE002440AC /* share in Resources */ = {isa = PBXBuildFile; fileRef = F464B93E24A6BCEE002440AC /* share */; };
 		F464B94024A6BCEE002440AC /* share in Resources */ = {isa = PBXBuildFile; fileRef = F464B93E24A6BCEE002440AC /* share */; };
 		F499D41624AAC49100B5EF87 /* Recognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F499D41524AAC49100B5EF87 /* Recognizer.swift */; };
+		F49DDACE24EDEAFC00371E06 /* include in Resources */ = {isa = PBXBuildFile; fileRef = F49DDACD24EDEAFC00371E06 /* include */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,7 +38,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		F43ABA7224EDBF890055D99B /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; name = include; path = ../../Root/include; sourceTree = "<group>"; };
 		F464A66C24A3C57A002440AC /* iOCR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOCR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F464A66F24A3C57A002440AC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F464A67124A3C57A002440AC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -61,6 +60,7 @@
 		F464B28E24A6B3A5002440AC /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		F464B93E24A6BCEE002440AC /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../../Root/share; sourceTree = "<group>"; };
 		F499D41524AAC49100B5EF87 /* Recognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recognizer.swift; sourceTree = "<group>"; };
+		F49DDACD24EDEAFC00371E06 /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; name = include; path = ../../Root/include; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,7 +111,7 @@
 		F464A66E24A3C57A002440AC /* iOCR */ = {
 			isa = PBXGroup;
 			children = (
-				F43ABA7224EDBF890055D99B /* include */,
+				F49DDACD24EDEAFC00371E06 /* include */,
 				F464B93E24A6BCEE002440AC /* share */,
 				F464A66F24A3C57A002440AC /* AppDelegate.swift */,
 				F464A67124A3C57A002440AC /* SceneDelegate.swift */,
@@ -249,7 +249,7 @@
 				F464B93F24A6BCEE002440AC /* share in Resources */,
 				F464A67C24A3C57D002440AC /* LaunchScreen.storyboard in Resources */,
 				F464A67924A3C57D002440AC /* Preview Assets.xcassets in Resources */,
-				F43ABA7324EDBF890055D99B /* include in Resources */,
+				F49DDACE24EDEAFC00371E06 /* include in Resources */,
 				F464A67624A3C57D002440AC /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

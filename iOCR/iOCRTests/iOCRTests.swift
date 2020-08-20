@@ -13,10 +13,73 @@ import libtesseract
 
 @testable import iOCR
 
-class iOCRTests: XCTestCase {
+class StraightUpRecognitionTest: XCTestCase {
+    /// Build a recognition pipeline/chain from the bottom-up.
+    ///
+    /// The other tests rely on the Recognizer class which wraps this all up.
+    func testGuideExample() {
+        
+        let uiImage = UIImage(named: "japanese")!
+        let data = uiImage.pngData()!
+        let rawPointer = (data as NSData).bytes
+        let uint8Pointer = rawPointer.assumingMemoryBound(to: UInt8.self)
+
+        var image = pixReadMem(uint8Pointer, data.count)   // var because image is passed as in-out, so must be mutable
+
+        let trainedDataFolder = Bundle.main.path(
+            forResource: "tessdata", ofType: nil, inDirectory: "share")
+
+        let tessAPI = TessBaseAPICreate()!
+        TessBaseAPIInit2(tessAPI, trainedDataFolder, "jpn", OEM_LSTM_ONLY)
+        TessBaseAPISetImage2(tessAPI, image)
+
+        pixDestroy(&image)                                 // Leptonica method to manage Leptonica's PIX-type
+        
+        TessBaseAPISetSourceResolution(tessAPI, 144)       // w/Tesseract's default of 72, no text recognized
+        TessBaseAPISetPageSegMode(tessAPI, PSM_AUTO)       // Let Tesseract decide how to see the image
+        
+        TessBaseAPIGetUTF8Text(tessAPI)                    // Pre-req for Tess[Page|Result]Iterator calls
+                                                           // We could get the text back from this method call
+        
+        let iterator = TessBaseAPIGetIterator(tessAPI)     // Get an iterator...
+        let level = RIL_TEXTLINE                           // at the level of an individual "line of text"
+        
+        // Get text
+        let txt = TessResultIteratorGetUTF8Text(iterator, level)!
+        let got = String(cString:txt)
+        TessDeleteText(txt)
+        XCTAssertEqual(got, "Hello, 世界\n")
+     
+        // Get confidence
+        let confidence = TessResultIteratorConfidence(iterator, level)
+        XCTAssertGreaterThan(confidence, 88)
+        
+        // Get locations/rectangles around recognized text
+        var x: Int32 = 0
+        var y: Int32 = 0
+        var wOffset: Int32 = 0
+        var hOffset: Int32 = 0
+
+        TessPageIteratorBoundingBox(iterator, level, &x, &y, &wOffset, &hOffset)
+        XCTAssertEqual(x, 10)
+        XCTAssertEqual(y, 14)
+        XCTAssertEqual(wOffset, 160)
+        XCTAssertEqual(hOffset, 43)
+        
+        // With RIL_TEXTLINE and PSM_AUTO, should have had only one result for this image
+        XCTAssertEqual(TessPageIteratorNext(iterator, level), 0)
+        
+        // Teardown
+        TessPageIteratorDelete(iterator)
+        TessBaseAPIEnd(tessAPI)
+        TessBaseAPIDelete(tessAPI)
+    }
+}
+
+class iOCRRecognizerTests: XCTestCase {
     func testJapaneseVertical() {
         // There's spacing the OCR sees that I was having trouble encoding into
-        // `want`, so I stripped all spaces for comparison
+        // the string, so I stripped all spaces for comparison
 
         let recognizer = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 144)
         defer { recognizer.destroy() }
@@ -27,7 +90,7 @@ class iOCRTests: XCTestCase {
 
     func testHelloJapaneseHorizontal() {
         // There's spacing the OCR sees that I was having trouble encoding into
-        // `want`, so I stripped all spaces for comparison
+        // the string, so I stripped all spaces for comparison
 
         let recognizer = Recognizer(imgName: "japanese", trainedDataName: "jpn")
         defer { recognizer.destroy() }
@@ -51,10 +114,10 @@ class iOCRTests: XCTestCase {
 """)
     }
     
-    /// Understanding something of Tesseract's process:  with the text **center-justified**, the recognizer gets it mostly right
+    /// Understanding something of Tesseract's process:  with the text *center-justified*, the recognizer gets it **mostly** right
     func testEnglishCenterJustify() {
         let recognizer = Recognizer(imgName: "english_ctr_just", trainedDataName: "eng",
-                                    tessPIL: RIL_BLOCK, tessPSM: PSM_SINGLE_BLOCK)
+                                    tessPSM: PSM_SINGLE_BLOCK, tessPIL: RIL_BLOCK)
         defer { recognizer.destroy() }
         let got = recognizer.getAllText()
 
@@ -85,10 +148,10 @@ app.
         XCTAssertEqual(rects.count, 1)
     }
     
-    /// Understanding something of Tesseract's process:  with the text **left-justified**, the recognizer gets it all correct
+    /// Understanding something of Tesseract's process:  with the text *left-justified*, the recognizer gets it **all** correct
     func testEnglishLeftJustify() {
         let recognizer = Recognizer(imgName: "english_left_just", trainedDataName: "eng",
-                                    tessPIL: RIL_BLOCK, tessPSM: PSM_SINGLE_BLOCK)
+                                    tessPSM: PSM_SINGLE_BLOCK, tessPIL: RIL_BLOCK)
         defer { recognizer.destroy() }
         
         // Note that the 4th-to-last line is 'for use in a'; CORRECT!
@@ -120,7 +183,7 @@ app.
         XCTAssertEqual(rects.count, 1)
     }
 
-    /// Originally a test to  assert that bad/false recognitions are rendered as `<*blank*>`;
+    /// Originally a test to assert that the Recognizer rendered bad/false recognitions as `<*blank*>`;
     /// now also a lesson in getting the image's DPI correct.
     func testBlankVsNonBlank() {
         // This image's DPI is 144, but running at 72 DPI yields false recognition (<*blank*>)
@@ -149,49 +212,5 @@ app.
         }
 
         recognizer.destroy()
-    }
-    
-    func testGuideExample() {
-        let tessAPI = TessBaseAPICreate()!
-        let trainedDataFolder = Bundle.main.path(forResource: "tessdata", ofType: nil, inDirectory: "share")
-        TessBaseAPIInit2(tessAPI, trainedDataFolder, "jpn", OEM_LSTM_ONLY)
-        
-        var image = getImage(from: UIImage(named: "japanese")!)
-        TessBaseAPISetImage2(tessAPI, image)
-        pixDestroy(&image)  // Leptonica method to manage Leptonica's PIX-type
-        
-        TessBaseAPISetSourceResolution(tessAPI, 144)  // w/default DPI: 72, no text recognized
-        TessBaseAPISetPageSegMode(tessAPI, PSM_AUTO)
-        
-        TessBaseAPIGetUTF8Text(tessAPI)  // Pre-req for Tess[Page|Result]Iterator calls
-        
-        let iterator = TessBaseAPIGetIterator(tessAPI)
-        let level = RIL_TEXTLINE
-        
-        let txt = TessResultIteratorGetUTF8Text(iterator, level)!
-        let got = String(cString:txt)
-        TessDeleteText(txt)
-        XCTAssertEqual(got, "Hello, 世界\n")
-        
-        let confidence = TessResultIteratorConfidence(iterator, level)
-        XCTAssertGreaterThan(confidence, 88)
-        
-        var x: Int32 = 0
-        var y: Int32 = 0
-        var wOffset: Int32 = 0
-        var hOffset: Int32 = 0
-
-        TessPageIteratorBoundingBox(iterator, level, &x, &y, &wOffset, &hOffset)
-        XCTAssertEqual(x, 10)
-        XCTAssertEqual(y, 14)
-        XCTAssertEqual(wOffset, 160)
-        XCTAssertEqual(hOffset, 43)
-        
-        // With RIL_TEXTLINE and PSM_AUTO, should not have more than one result
-        XCTAssertEqual(TessPageIteratorNext(iterator, level), 0)
-        TessPageIteratorDelete(iterator)
-        
-        TessBaseAPIEnd(tessAPI)
-        TessBaseAPIDelete(tessAPI)
     }
 }
