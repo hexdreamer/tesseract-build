@@ -11,9 +11,14 @@ All references to files and XCode settings can be checked and verified in the iO
 
 This guide will highlight 4 distinct issues I had to overcome as I was creating my first Xcode project to use the C-APIs for Leptonica and Tesseract.  The first three issues are Xcode-specific build issues, the fourth is a run-time error from one of the unit tests.
 
-For the first three Xcode-issues, all instructions assume you are looking at the project settings found by clicking on the top-level project in the Project Navigator, then selecting the "main" target.  I'll go between the **General** and **Build Settings** tabs:
+For the first three Xcode-issues, all instructions assume you are looking at the project settings: 
 
-<img height="212" src="../Notes/static/setup_xcode/xcode_overview.png"/>
+1. Click on the top-level project in the Project Navigator
+1. Select the "main" target:
+
+    <img height="212" src="../Notes/static/setup_xcode/xcode_overview.png"/>
+
+The settings I needed to modify were under the **General** and **Build Settings** tabs.
 
 This overview of the Xcode project will be the basis for the following steps.
 
