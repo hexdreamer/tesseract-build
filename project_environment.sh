@@ -1,1 +1,0 @@
-Scripts/build/project_environment.sh

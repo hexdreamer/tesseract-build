@@ -1,107 +1,16 @@
-# An introduction
+# Miscellaneous
 
-Welcome to the heart of building Tesseract-OCR!  We're glad you're checking out our project and hope we can help you integrate multi-lingual OCR into your iOS/macOS app.
+## libtiff header
 
-The most simple and most reliable thing you should be able to do is run **build_all.sh**  Located in `Scripts/build`, this script arranges the getting-and-installing of the build tools and libraries required to produce Tesseract-OCR.  The final products of this build will be used by Xcode.
+**tiffconf.h** has one value with two different definitions between **arm64** and **x86_64**, and might affect you if you are building for macOS.
 
-## Building
-
-Looking inside the build directory, you'll see build_all.sh, a number of package scripts for building and configuration, and project_environment.sh, like:
-
-```zsh
-build_all.sh
-build_autoconf.sh
-...
-build_tesseract.sh
-...
-config-make-install_tesseract.sh
-...
-project_environment.sh
-```
-
-Inside build_all.sh are:
-
-1. an option to **clean-all** (delete installed products)
-1. all the packages/libraries in a build order that is correct
-
-Inside each **build_\<package\>.sh** script is the sequence of events for getting, building, and installing that package:
-
-1. download and extract
-1. preconfigure and configure
-1. make and install
-1. create the final `lipo`-ed library that Xcode will use (for the multi-architecture imaging libraries) and copy over included header files
-
-The imaging libraries can have many different compiler flags and configuration options.  These variables are defined in a separate **config-make-install_\<package\>.sh** script.  The script also works to build the same package for different combinations of architecture, platform, and target and is called repeatedly from its build_\<package\>.sh script.
-
-The build environment is created in each build_\<package\>.sh and config-make-install_\<package\>.sh script by sourcing **project_environment.sh**.
-
-## Installing
-
-The image libraries are configured to install their products in $ROOT, grouped into the three *platform architectures*: **ios_arm64**, **ios_x86_64**, **macos_x86_64**.  For some of the key components of the tesseract build, it would look like this on disc:
-
-```zsh
-Root
-├── ios_arm64
-│   ├── include
-│   │   └── tesseract
-│   │       └── capi.h
-│   └── lib
-│       └── tesseract.a
-├── ios_x86_64
-│   ├── include...
-│   └── lib
-│       └── tesseract.a
-└── macos_x86_64
-    ├── include...
-    └── lib
-        └── tesseract.a
-```
-
-From this structure:
-
-1. **ios** binaries are lipoed together into a multi-arch binary, while the **macos** binary is just renamed, like:
-
-    ```zsh
-    lipo Root/ios_arm64/lib/tesseract.a Root/ios_x86_64/lib/tesseract.a -create -output Root/lib/tesserarct.a
-    lipo Root/macos_x86_64/lib/tesseract.a -create -output Root/lib/tesserarct-macos.a
-    ```
-
-1. the header files are copied from ios_arm64
-
-    ```zsh
-    xc mkdir -p Root/include/tesseract
-    cp Root/ios_arm64/tesseract/* Root/include/tesseract
-    ```
-
-and the final Xcode-ready structure is complete:
-
-```zsh
-Root
-├── include
-│   └── tesseract
-│       └── capi.h
-└── lib
-    ├── tesseract-macos.a
-    └── tesseract.a
-```
-
-### libtiff header
-
-**tiffconf.h** has one value with two different definitions between **arm64** and **x86_64**:
-
-```zsh
+```sh
 % diff -r Root/ios_arm64/include Root/macos_x86_64/include
 diff -r Root/ios_arm64/include/tiffconf.h Root/macos_x86_64/include/tiffconf.h
 48c48
 < #define HOST_FILLORDER FILLORDER_MSB2LSB
 ---
 > #define HOST_FILLORDER FILLORDER_LSB2MSB
-```
-
-as **ios_x86_64** and **macos_x86_64** are identical:
-
-```zsh
-% diff -r Root/ios_x86_64/include Root/macos_x86_64/include
 ```
 
 From, <https://www.awaresystems.be/imaging/tiff/tifftags/fillorder.html>:
@@ -121,74 +30,32 @@ As **ios_arm64** seems the more important library, by default those headers will
 
 *If you are making a macOS app and have problems linking/referencing the API, consider adjusting this final copy.*
 
-## Packages, dependencies, prerequisites
-
-So what are all these packages for?
-
-The GNU tools **autoconf**, **automake**, **pkg-config**, and **libtool** are prerequisites for running the **./autogen.sh** scripts for both **leptonica** and **tesseract**.
-
-The image libraries **libjpeg**, **libpng**, and **libtiff**, and the **zlib** compression library, are all dependencies for **leptonica** and for **tesseract**.  Leptonica is also a dependency for **tesseract**.
-
-## zsh
-
-The scripts are written in the best zsh I know.  I set upon writing these scripts in zsh after years of getting by with bash.  To shore up my lack of knowledge around shell scripting, I started using Shellcheck in bash-mode on the zsh scripts for any insight into better coding practices and new concepts.  Trying to embrace the zsh-y way, I've started disabling some checks where I've seen clear examples from the author of zsh on how zsh does something differently than bash.
-
-### Considerations for Shell Script style
-
-- <https://google.github.io/styleguide/shellguide.html>
-- <http://kfirlavi.herokuapp.com/blog/2012/11/14/defensive-bash-programming/>
-- <https://wiki.ubuntu.com/DashAsBinSh>
-
-### Wrapping my head around word splitting
-
-<https://unix.stackexchange.com/a/26672/366399>
-
-> Zsh had arrays from the start, and its author opted for a saner language design at the expense of backward compatibility. In zsh (under the default expansion rules) $var does not perfom word splitting; if you want to store a list of words in a variable, you are meant to use an array; and if you really want word splitting, you can write $=var.
->
-> ```zsh
-> files=(foo bar qux)
-> myprogram $files
-> ```
-
-<http://zsh.sourceforge.net/FAQ/zshfaq03.html>
-
-> ...
-> after which $words is an array with the words of $sentence (note characters special to the shell, such as the ' in this example, must already be quoted), or, less standard but more reliable, turning on SH_WORD_SPLIT for one variable only:
->
-> ```zsh
-> args ${=sentence}
-> ```
-
-[2]: https://insights.stackoverflow.com/trends?tags=bash%2Czsh
-
 ## Troubleshooting
 
-```zsh
+The errors coming out of the configure step can be difficult to understand if you only read the **Step#_config.err** in the **Logs** directory.
+
+The key to debugging configure errors is to check the **config.log** for a given build in that build's **Sources** directory.
+
+Given this error running build_all.sh:
+
+```none
 macos_x86_64: configuring... ERROR running ../configure CC=...
 ...
 ...
-ERROR see /Users/zyoung/dev/tesseract-build/Logs/tesseract-4.1.1/3_config_macos_x86_64.err for more details
+ERROR see ~/$PROJECTDIR/Logs/tesseract-4.1.1/3_config_macos_x86_64.err for more details
 ```
 
 Looking at **Logs/tesseract-4.1.1/3_config_macos_x86_64.err**:
 
 ```none
-configure: error: in `/Users/zyoung/dev/tesseract-build/Sources/tesseract-4.1.1/macos_x86_64':
+configure: error: in `~/$PROJECTDIR/Sources/tesseract-4.1.1/macos_x86_64':
 configure: error: C++ compiler cannot create executables
 See `config.log' for more details
 ```
 
-And even though it's not mentioned, I've learned to check all available logs because *sometimes* the relevant info can be found outside of the ERR file.
+The last line, *See `config.log' for more details* is the true clue.
 
-Looking at **Logs/tesseract-4.1.1/3_config_macos_x86_64.out**:
-
-```none
-checking whether the C++ compiler works... no
-```
-
-Wow, looks like there could be a really big problem here, since the error indicates the issue is with the compiler directly.  In this case, looking at the OUT file might leave you really alarmed and confused.  I think part of being a good detective is understanding the significance of the clues.  While this message is very unambiguous, "the compiler doesn't work", but it doesn't provide any details that allow us to further investigate "the C++ compiler".
-
-I already know the true error to this problem and it's isn't the compiler.  Here's the telling error message from **Sources/tesseract-4.1.1/macos_x86_64/config.log**:
+Here's the telling error message from **Sources/tesseract-4.1.1/macos_x86_64/config.log**:
 
 ```none
 ...
@@ -197,7 +64,9 @@ clang: error: linker command failed with exit code 1 (use -v to see invocation)
 ...
 ```
 
-It's true that Tesseract couldn't be compiled, but that's because I just destroyed *all* macos_x86_64 binaries/libraries including **macos_x86_64/lib/libpng16.a** which is what `./configure` failed on.  And keep in mind that this true error came just after other "errors" like:
+In this case, I had just clobbered all macos_x86_64 binaries/libraries including **macos_x86_64/lib/libpng16.a**.  And this is what `./configure` failed on.
+
+Other "errors" like the following may not really be errors, it's just configure trying out different configurations:
 
 ```none
 configure:2663: /Applications/Xcode.app/Contents/Developer/usr/bin/g++ -V >&5
@@ -212,5 +81,3 @@ configure:2663: /Applications/Xcode.app/Contents/Developer/usr/bin/g++ -qversion
 clang: error: unknown argument '-qversion'; did you mean '--version'?
 clang: error: no input files
 ```
-
-which is simply `./configure` trying a number of different options to prove the version of the compiler.  So, troubleshooting will require some familiarization with this system.

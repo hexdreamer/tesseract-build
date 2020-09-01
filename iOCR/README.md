@@ -1,88 +1,190 @@
-# Configuring Xcode
+<!-- markdownlint-disable-file MD033 -->
+# Configuring Xcode to use a C/C++ API
 
-Steps I went through learning how to create an Xcode project around a C-API.
+If you're looking for help to configure Xcode to use the OCR (or any) C/C++ libraries, this might help.
 
-## Integrating Tesseract into Xcode
+This is written from my perspective of setting up the basic-iOCR project, and shows my progression of working through specific errors.
 
-### Create the project
+All references to files and XCode settings can be checked and verified in the iOCR Xcode project.
 
-1. **File** &rarr; **New Project**
+## The overview
 
-1. A **Single View App** is a great template for this guide, **Next**
+This guide will highlight 4 distinct issues I had to overcome as I was creating my first Xcode project to use the C-APIs for Leptonica and Tesseract.  The first three issues are Xcode-specific build issues, the fourth is a run-time error from one of the unit tests.
 
-1. Add **Product Name**, I've named mine *iOCR*, **Next**
+For the first three Xcode-issues, all instructions assume you are looking at the project settings:
 
-1. Choose your project's location, I chose `$PROJECTDIR`, **Create**
+1. Click on the top-level project in the Project Navigator
+1. Select the "main" target:
 
-### Write a bit of code
+    <img height="212" src="../Notes/static/setup_xcode/xcode_overview.png"/>
 
-1. **File** &rarr; **New** &rarr; **File...**
+The settings I needed to modify were under the **General** and **Build Settings** tabs.
 
-1. Choose **Swift File**, **Next**
+This overview of the Xcode project will be the basis for the following steps.
 
-1. **Save As:** **iOCR**, **Group: iOCR (folder under iOCR project)**, **Create**
+## Swift compiler error, **No such module**
 
-1. Insert this snippet into **iOCR.swift**:
+Swift cannot find my module
 
-    ```swift
-    import libleptonica
-    import libtesseract
-    ```
+```none
+No such module 'libleptonica'
+```
 
-1. Save that file, and my first error is:
+which is defined in **Root/include/module.modulemap**.  More to the point, Swift cannot find my modulemap file.
 
-    ```none
-    No such module 'libleptonica'
-    ```
+1. Click on **Build Settings**
+1. Ensure that **All** and **Combined** are selected
+1. Search for **swift compiler - search paths**
+1. Expand **Import Paths** and add the following for **Debug** and **Release**, `$(PROJECT_DIR)/../Root/include/**`.  It will expand to the full path:
 
-    <!--![no such module 'libtesseract'](../Notes/static/guide/err_no_such_module_leptonica.png)-->
-    <img height="53" src="../Notes/static/guide/err_no_such_module_leptonica.png"/>
+    <img height="212" src="../Notes/static/setup_xcode/import_search_paths.png"/>
 
-### No such module
+Once Xcode finds the modulemap, the paths in the modulemap need to be correct relative to the modulemap file itself.  My modulemap is located in **Root/include**:
 
-Our two libraries, Leptonica and Tesseract, need to be copied into the project and made known to Xcode as 2 different modules.
+```swift
+module libtesseract {
+    header "tesseract/capi.h"
+    export *
+}
 
-1. Copy over the headers into a new **dependencies** folder:
+module libleptonica {
+    header "leptonica/allheaders.h"
+    export *
+}
+```
 
-    ```zsh
-    ditto $ROOT/include/leptonica iOCR/iOCR/dependencies/include/leptonica
-    ditto $ROOT/include/tesseract iOCR/iOCR/dependencies/include/tesseract
-    ```
+and the paths **tesseract/capi.h** and **leptonica/allheaders.h** are valid from Root/include.
 
-    I'm ignoring the libs for now because the error is about modules.
+## Xcode error, **Undefined symbol**
 
-1. Right-click the iOCR folder in the project navigator and choose **Add Files to "iOCR"**:
+Now that the compiler can find the header definitions for the modules, Xcode cannot find the actual symbols to use in the project.
 
-    ![Add dependencies to iOCR folder](../Notes/static/guide/guide_add_dependencies.png)
+```none
+Ld /Users/zyoung/build/iOCR-abqtxibtrzfqvrccvbitswwkxskn/Build/Products/Debug-iphonesimulator/iOCR.app/iOCR normal x86_64 (in target 'iOCR' from project 'iOCR')
 
-1. Select the folder **iOCR/iOCR/dependencies**, check that **Create groups** is selected, **Add**
+...
 
-1. **File** &rarr; **New...** &rarr; **File**, scroll down to **Other** and choose **Empty**
+Undefined symbols for architecture x86_64:
+  "_TessPageIteratorDelete", referenced from:
+      $defer #1 () -> () in iOCR.Recognizer.getRecognizedRects() -> [iOCR.RecognizedRectangle] in Recognizer.o
 
-1. Create **iOCR/iOCR/dependencies/module.modulemap**, in the **Group: dependencies**, with the following contents:
+...
+```
 
-    ```swift
-    module libtesseract {
-        header "include/tesseract/capi.h"
-        export *
-    }
+> I am not sure exactly of the distinction between this error (which *appears* to be a linker, "Ld", error) and the next one (which is a legitimate `ld` error).  This error seems to be about Xcode using the symbols for something other than the final build products; Xcode needs to "know about" the libs, but not build upon them?
 
-    module libleptonica {
-        header "include/leptonica/allheaders.h"
-        export *
-    }
-    ```
+1. Click on **General**
+1. Expand **Frameworks, Libraries, and Embedded Content**
+1. Click the **+** button to add the following:
 
-1. My project now looks like:
+    <img height="390" src="../Notes/static/setup_xcode/add_frameworks_libraries.png"/>
 
-    <img height="241" src="../Notes/static/guide/module_final_structure_cropped.png"/>
+    > I've been experiencing this weird behavior in Xcode where I have to follow these steps TWICE for XCode to acutally add the entities.
+    >
+    > The FIRST time through, the entities are added to the Frameworks folder in the Project Navigator, but not to this list.  The SECOND time through they are added to the list.
+    >
+    > So, ***you might just need to*** go through the following two steps, and then go through them AGAIN.
 
-1. Set the **SWIFT_INCLUDE_PATHS** in the project's build settings to **$(PROJECT_DIR)/../Root/include/\*\***:
+    1. For **libc++.tbd** and **libz.tbd**, just search for them by name and click **Add**, like:
 
-    <img src="../Notes/static/guide/2_swift_include_paths_cropped.png"/>
+        <img height="462" src="../Notes/static/setup_xcode/add_libc++.png"/>
 
-    Xcode converts the **/\*\*** part at the end of the path to that **recursive** value in the bottom-right of image.
+    1. For the other libs, click **Add Other...** &rarr; **Add Files...**, navigate to **Root/lib**, and select all the libs, **Open**:
 
-1. **Product** &rarr; **Build**, and that error is cleared:
+        <img height="396" src="../Notes/static/setup_xcode/select_libraries.png"/>
 
-    <img height="200" src="../Notes/static/guide/build_succeeded.png"/>
+## Linker error, **Library not found for - ...**
+
+Now that Xcode *knows* about the libraries, it still cannot find them to link in as part of the final binary coming out of the build phase.
+
+```none
+ld: library not found for -ltiff
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+```
+
+1. Click on **Build Settings**
+1. Ensure that **All** and **Combined** are selected
+1. Search for **library search paths**
+1. Expand **Library Search Paths** and add the following for **Debug** and **Release**, `$(PROJECT_DIR)/../Root/lib/**`
+
+    <img height="212" src="../Notes/static/setup_xcode/library_search_paths.png"/>
+
+    If you happen to double-click the Debug or Release values and see a dialog like this, the **recursive** option is derived from the double-asterisk at the end of the search path (`.../lib/**`):
+
+    <img height="268" src="../Notes/static/setup_xcode/search_paths_dialog_recursive.png"/>
+
+## Add folder reference for tessdata
+
+At this point, the iOCR project is building, that clears up those 3 Xcode-specific errors.
+
+But trying to run `StraightUpRecognitionTest`, I get this run-time error:
+
+```none
+Error opening data file ~/$PROJECTDIR/Root/ios_x86_64/share/tessdata/jpn.traineddata
+Please make sure the TESSDATA_PREFIX environment variable is set to your "tessdata" directory.
+Failed loading language 'jpn'
+Tesseract couldn't load any languages!
+```
+
+I'm not sure how Xcode decided to look in **Root/ios_x86_64** as all the paths and libraries I've added came from **Root/include** and **Root/lib**, but I'm guessing it's keying-off some build/install data stored in the binary:
+
+```sh
+% grep 'Root/ios_x86_64/share/tessdata' Root/lib/libtesseract.a
+Binary file Root/lib/libtesseract.a matches
+```
+
+Anyways, my solution is to add the **share** directory to the project:
+
+1. Right-click the top-level project in Project Navigator
+1. **Add File to "iOCR"...**
+1. Navigate to **Root** and select the **share** folder
+1. Select **Create folder references**
+1. **Add**, and my project looks like:
+
+    <img height="66" src="../Notes/static/setup_xcode/add_share_folder.png"/>
+
+I believe this is required to satisfy this bit of setup code in the test:
+
+```swift
+let trainedDataFolder = Bundle.main.path(
+    forResource: "tessdata", ofType: nil, inDirectory: "share")
+```
+
+and now the test completes with **Test Succeeded**.
+
+## Weird linker error, for test file
+
+In writing this setup guide I ran into an issue where I had copied over some test code, but placed the `import` statements for the OCR modules down in the test file, like this:
+
+```swift
+import XCTest
+@testable import iOCR
+
+class iOCRTests: XCTestCase {
+
+...
+
+import libleptonica
+import libtesseract
+
+class StraightUpRecognitionTest: XCTestCase {
+
+...
+```
+
+leading to the **Undefined symbol** error from above.  I cannot reproduce it now (of course), but moving the imports up above the `@testable import` seemed to be what did the trick:
+
+```swift
+import XCTest
+import libleptonica
+import libtesseract
+@testable import iOCR
+
+class iOCRTests: XCTestCase {
+
+...
+
+class StraightUpRecognitionTest: XCTestCase {
+
+...
+```

@@ -10,7 +10,7 @@ if ! source $builddir/project_environment.sh; then
   exit 1
 fi
 
-echo '# Checking for Trained Data Language Files'
+echo 'Checking for trained data language files...'
 
 langfiles=(
   'chi_tra.traineddata'
@@ -20,7 +20,6 @@ langfiles=(
   'jpn_vert.traineddata'
 )
 
-# Download jpn and jpn_vert files
 for langfile in $langfiles; do
   if [ -f $ROOT/share/tessdata/$langfile ]; then
     echo "found $langfile"
@@ -36,11 +35,20 @@ for langfile in $langfiles; do
   print 'done'
 done
 
+export TESSDATA_PREFIX=$ROOT/share/tessdata
+
 strip_whitespace() {
   local filename=$1
 
   cat $filename | tr -d '\n' | tr -d '\f' | tr -d ' '
 }
+
+echo 'Recognizing sample images...'
+
+ASSETSDIR=$PROJECTDIR/iOCR/iOCR/Assets.xcassets
+TESTDIR=tesseractTest
+
+mkdir -p $TESTDIR; cd $TESTDIR || exit 1
 
 test_image() {
   # Run tesseract command-line program on a number of sample/test images;
@@ -56,10 +64,10 @@ test_image() {
 
   local tessOutFile=$trainedDataName
 
-  # Clear any previous and lingering state
+  # Clear any lingering state
   rm -f $tessOutFile.txt
 
-  # `$tessOutFile` param directs tesseract to create $tessOutFile.txt
+  # These params will run OCR on $image and create $tessOutFile.txt (txt is default out-type)
   tesseract $image $tessOutFile -l $trainedDataName 2>/dev/null
   got=$(strip_whitespace $tessOutFile.txt)
 
@@ -70,19 +78,13 @@ test_image() {
   fi
 }
 
-echo '# Recognizing Sample Images'
-
-ASSETSDIR=$PROJECTDIR/iOCR/iOCR/Assets.xcassets
-TESTDIR=tesseractTest
-
-mkdir -p $TESTDIR; cd $TESTDIR || exit 1
-
 vars=(
   'Japanese'
   $ASSETSDIR/japanese.imageset/test_hello_hori.png
   'jpn'
   'Hello,世界'
 )
+
 test_image $vars
 
 vars=(
@@ -91,6 +93,7 @@ vars=(
   'jpn_vert'
   'Hello,世界'
 )
+
 test_image $vars
 
 vars=(
@@ -99,6 +102,7 @@ vars=(
   'chi_tra_vert'
   '哈哈我第一個到終點了!'
 )
+
 test_image $vars
 
 vars=(
@@ -107,6 +111,7 @@ vars=(
   'eng'
   "WelcometoHexdreamer'sdreamofasimple-to-followguideforaddingaC-API,andspecificallyTesseractOCR'sC-API,intoanXcodeprojectforuseinadreamiOSmanga-readerapp."
 )
+
 test_image $vars
 
 cd ..; rm -rf $TESTDIR

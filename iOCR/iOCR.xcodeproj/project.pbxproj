@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F450772C24FEBB2F00E5A081 /* share in Resources */ = {isa = PBXBuildFile; fileRef = F450772B24FEBB2F00E5A081 /* share */; };
+		F450772D24FECE8B00E5A081 /* liblept.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49FF5ED24FE3BA9007FFA8A /* liblept.a */; };
 		F464A67024A3C57A002440AC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A66F24A3C57A002440AC /* AppDelegate.swift */; };
 		F464A67224A3C57A002440AC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A67124A3C57A002440AC /* SceneDelegate.swift */; };
 		F464A67424A3C57A002440AC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A67324A3C57A002440AC /* ContentView.swift */; };
@@ -14,16 +16,14 @@
 		F464A67924A3C57D002440AC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F464A67824A3C57D002440AC /* Preview Assets.xcassets */; };
 		F464A67C24A3C57D002440AC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F464A67A24A3C57D002440AC /* LaunchScreen.storyboard */; };
 		F464A68724A3C57D002440AC /* iOCRTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A68624A3C57D002440AC /* iOCRTests.swift */; };
-		F464B28724A6B35F002440AC /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F464B28624A6B346002440AC /* libjpeg.a */; };
-		F464B28824A6B372002440AC /* liblept.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F464B28224A6B346002440AC /* liblept.a */; };
-		F464B28924A6B372002440AC /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F464B28324A6B346002440AC /* libpng16.a */; };
-		F464B28A24A6B382002440AC /* libtesseract.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F464B28524A6B346002440AC /* libtesseract.a */; };
-		F464B28B24A6B382002440AC /* libtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F464B28424A6B346002440AC /* libtiff.a */; };
-		F464B28D24A6B39C002440AC /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F464B28C24A6B393002440AC /* libz.tbd */; };
-		F464B28F24A6B3AF002440AC /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F464B28E24A6B3A5002440AC /* libc++.tbd */; };
-		F464B93F24A6BCEE002440AC /* share in Resources */ = {isa = PBXBuildFile; fileRef = F464B93E24A6BCEE002440AC /* share */; };
-		F464B94024A6BCEE002440AC /* share in Resources */ = {isa = PBXBuildFile; fileRef = F464B93E24A6BCEE002440AC /* share */; };
 		F499D41624AAC49100B5EF87 /* Recognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F499D41524AAC49100B5EF87 /* Recognizer.swift */; };
+		F49FF5F124FE3BBB007FFA8A /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49FF5EF24FE3BA9007FFA8A /* libjpeg.a */; };
+		F49FF5F224FE3BBB007FFA8A /* liblept.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49FF5ED24FE3BA9007FFA8A /* liblept.a */; };
+		F49FF5F324FE3BBB007FFA8A /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49FF5EE24FE3BA9007FFA8A /* libpng16.a */; };
+		F49FF5F424FE3BBB007FFA8A /* libtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49FF5EC24FE3BA9007FFA8A /* libtiff.a */; };
+		F49FF5F524FE3BBB007FFA8A /* libtesseract.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49FF5F024FE3BA9007FFA8A /* libtesseract.a */; };
+		F49FF5F724FE3BCD007FFA8A /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F49FF5F624FE3BC4007FFA8A /* libc++.tbd */; };
+		F49FF5F924FE3BE9007FFA8A /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F49FF5F824FE3BD7007FFA8A /* libz.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F450772B24FEBB2F00E5A081 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../Root/share; sourceTree = "<group>"; };
 		F464A66C24A3C57A002440AC /* iOCR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOCR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F464A66F24A3C57A002440AC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F464A67124A3C57A002440AC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -50,15 +51,14 @@
 		F464A68824A3C57D002440AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F464A69124A3C57D002440AC /* iOCRUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOCRUITests.swift; sourceTree = "<group>"; };
 		F464A69324A3C57D002440AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F464B28224A6B346002440AC /* liblept.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblept.a; path = ../Root/lib/liblept.a; sourceTree = "<group>"; };
-		F464B28324A6B346002440AC /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = ../Root/lib/libpng16.a; sourceTree = "<group>"; };
-		F464B28424A6B346002440AC /* libtiff.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtiff.a; path = ../Root/lib/libtiff.a; sourceTree = "<group>"; };
-		F464B28524A6B346002440AC /* libtesseract.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtesseract.a; path = ../Root/lib/libtesseract.a; sourceTree = "<group>"; };
-		F464B28624A6B346002440AC /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = ../Root/lib/libjpeg.a; sourceTree = "<group>"; };
-		F464B28C24A6B393002440AC /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		F464B28E24A6B3A5002440AC /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
-		F464B93E24A6BCEE002440AC /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../../Root/share; sourceTree = "<group>"; };
 		F499D41524AAC49100B5EF87 /* Recognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recognizer.swift; sourceTree = "<group>"; };
+		F49FF5EC24FE3BA9007FFA8A /* libtiff.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtiff.a; path = ../Root/lib/libtiff.a; sourceTree = "<group>"; };
+		F49FF5ED24FE3BA9007FFA8A /* liblept.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblept.a; path = ../Root/lib/liblept.a; sourceTree = "<group>"; };
+		F49FF5EE24FE3BA9007FFA8A /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = ../Root/lib/libpng16.a; sourceTree = "<group>"; };
+		F49FF5EF24FE3BA9007FFA8A /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = ../Root/lib/libjpeg.a; sourceTree = "<group>"; };
+		F49FF5F024FE3BA9007FFA8A /* libtesseract.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtesseract.a; path = ../Root/lib/libtesseract.a; sourceTree = "<group>"; };
+		F49FF5F624FE3BC4007FFA8A /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		F49FF5F824FE3BD7007FFA8A /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,13 +66,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F464B28824A6B372002440AC /* liblept.a in Frameworks */,
-				F464B28F24A6B3AF002440AC /* libc++.tbd in Frameworks */,
-				F464B28D24A6B39C002440AC /* libz.tbd in Frameworks */,
-				F464B28724A6B35F002440AC /* libjpeg.a in Frameworks */,
-				F464B28A24A6B382002440AC /* libtesseract.a in Frameworks */,
-				F464B28924A6B372002440AC /* libpng16.a in Frameworks */,
-				F464B28B24A6B382002440AC /* libtiff.a in Frameworks */,
+				F49FF5F724FE3BCD007FFA8A /* libc++.tbd in Frameworks */,
+				F49FF5F424FE3BBB007FFA8A /* libtiff.a in Frameworks */,
+				F49FF5F924FE3BE9007FFA8A /* libz.tbd in Frameworks */,
+				F49FF5F524FE3BBB007FFA8A /* libtesseract.a in Frameworks */,
+				F450772D24FECE8B00E5A081 /* liblept.a in Frameworks */,
+				F49FF5F224FE3BBB007FFA8A /* liblept.a in Frameworks */,
+				F49FF5F124FE3BBB007FFA8A /* libjpeg.a in Frameworks */,
+				F49FF5F324FE3BBB007FFA8A /* libpng16.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +90,7 @@
 		F464A66324A3C57A002440AC = {
 			isa = PBXGroup;
 			children = (
+				F450772B24FEBB2F00E5A081 /* share */,
 				F464A66E24A3C57A002440AC /* iOCR */,
 				F464A68524A3C57D002440AC /* iOCRTests */,
 				F464A69024A3C57D002440AC /* iOCRUITests */,
@@ -109,7 +111,6 @@
 		F464A66E24A3C57A002440AC /* iOCR */ = {
 			isa = PBXGroup;
 			children = (
-				F464B93E24A6BCEE002440AC /* share */,
 				F464A66F24A3C57A002440AC /* AppDelegate.swift */,
 				F464A67124A3C57A002440AC /* SceneDelegate.swift */,
 				F464A67324A3C57A002440AC /* ContentView.swift */,
@@ -151,13 +152,13 @@
 		F464B28124A6B346002440AC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F464B28E24A6B3A5002440AC /* libc++.tbd */,
-				F464B28C24A6B393002440AC /* libz.tbd */,
-				F464B28624A6B346002440AC /* libjpeg.a */,
-				F464B28224A6B346002440AC /* liblept.a */,
-				F464B28324A6B346002440AC /* libpng16.a */,
-				F464B28524A6B346002440AC /* libtesseract.a */,
-				F464B28424A6B346002440AC /* libtiff.a */,
+				F49FF5F824FE3BD7007FFA8A /* libz.tbd */,
+				F49FF5F624FE3BC4007FFA8A /* libc++.tbd */,
+				F49FF5EF24FE3BA9007FFA8A /* libjpeg.a */,
+				F49FF5ED24FE3BA9007FFA8A /* liblept.a */,
+				F49FF5EE24FE3BA9007FFA8A /* libpng16.a */,
+				F49FF5F024FE3BA9007FFA8A /* libtesseract.a */,
+				F49FF5EC24FE3BA9007FFA8A /* libtiff.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -243,7 +244,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F464B93F24A6BCEE002440AC /* share in Resources */,
+				F450772C24FEBB2F00E5A081 /* share in Resources */,
 				F464A67C24A3C57D002440AC /* LaunchScreen.storyboard in Resources */,
 				F464A67924A3C57D002440AC /* Preview Assets.xcassets in Resources */,
 				F464A67624A3C57D002440AC /* Assets.xcassets in Resources */,
@@ -254,7 +255,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F464B94024A6BCEE002440AC /* share in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,10 +433,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				"LIBRARY_SEARCH_PATHS[arch=*]" = "$(PROJECT_DIR)/../Root/lib/**";
 				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.iOCR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"SWIFT_INCLUDE_PATHS[arch=*]" = "$(PROJECT_DIR)/../Root/include/**";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USE_HEADERMAP = YES;
 			};
 			name = Debug;
 		};
@@ -452,10 +455,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				"LIBRARY_SEARCH_PATHS[arch=*]" = "$(PROJECT_DIR)/../Root/lib/**";
 				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.iOCR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"SWIFT_INCLUDE_PATHS[arch=*]" = "$(PROJECT_DIR)/../Root/include/**";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USE_HEADERMAP = YES;
 			};
 			name = Release;
 		};
