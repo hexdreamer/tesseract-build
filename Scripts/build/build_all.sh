@@ -1,7 +1,7 @@
 #!/bin/zsh -f
 
-# `set -x` prints debug messages from the shell, `set +x` turns it off
-# set -x
+# We thought zlib was required, but it appears not to be.  It's hidden as 
+# .build_zlib.sh, and is commented out in the build chain.
 
 scriptpath=$0:A
 parentdir=${scriptpath%/*}
@@ -16,6 +16,8 @@ if [[ -n $1 ]] && [[ $1 == 'clean-all' ]]; then
   zsh $parentdir/build_libtiff.sh clean
   zsh $parentdir/build_leptonica.sh clean
   zsh $parentdir/build_tesseract.sh clean
+
+  # zsh $parentdir/.build_zlib.sh clean
   exit 0
 fi
 
@@ -24,6 +26,8 @@ zsh $parentdir/build_autoconf.sh || exit 1
 zsh $parentdir/build_automake.sh || exit 1
 zsh $parentdir/build_pkgconfig.sh || exit 1
 zsh $parentdir/build_libtool.sh || exit 1
+
+# zsh $parentdir/.build_zlib.sh || exit 1
 
 # Libraries for Leptonica & Tesseract
 zsh $parentdir/build_libjpeg.sh || exit 1
