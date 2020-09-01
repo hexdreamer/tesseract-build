@@ -7,7 +7,6 @@ Like, this *easy*:
 
 1. **git clone** or download this repo
 1. **cd** to the repo
-1. run **source project_environment.sh**
 1. run **$BUILDDIR/build_all.sh**
     1. wait for successful build
 1. run **./Scripts/test_tesseract.sh**, to get some language recognition data and test the build
