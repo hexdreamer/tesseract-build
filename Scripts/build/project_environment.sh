@@ -1,14 +1,14 @@
 #!/bin/zsh -f
-# shellcheck disable=SC2034
 
-# Relative to this running script named 'project_environment.sh'...
+
+# From this script named 'project_environment.sh', start stripping off the
+# last path component till we arrive at PROJECTDIR:
+#
+#   /your/personal/path/[PROJECTDIR]/Scripts/build/project_environment.sh
+
 SCRIPTNAME=$0:A
 readonly BUILDDIR=${SCRIPTNAME%/project_environment.sh}
-
-# Scripts is one dir up
 readonly SCRIPTSDIR=${BUILDDIR%/build}
-
-# And the root of the project is one dir above scripts
 readonly PROJECTDIR=${SCRIPTSDIR%/Scripts}
 
 readonly DOWNLOADS=$PROJECTDIR/Downloads
@@ -18,14 +18,15 @@ readonly SOURCES=$PROJECTDIR/Sources
 
 readonly MASTER_CMDS=$LOGS/commands.sh
 
-# TODO: why isn't this exported?, I still see Root/bin added to path, and I've grepped
-# and don't see PATH exported anywhere
+# TODO: why doesn't this seem to need to be exported?
 PATH=$ROOT/bin:$PATH
-export TESSDATA_PREFIX=$ROOT/share/tessdata
 
 _exec() {
+  # Try and execute a command, logging to itself to MASTER_CMDS, and exiting
+  # w/an error if there's a failure.
   local _status
 
+  # Make sure LOGS dir is present for MASTER_CMDS
   if ! [ -d "${LOGS}" ]; then
     mkdir -p "${LOGS}"
   fi
@@ -43,12 +44,12 @@ _exec() {
 }
 
 _exec_and_log() {
-  # Try and execute a named step in the build process, and
-  # log its stdout and stderr.
+  # Try and execute a step in the build process, logging its stdout and 
+  # stderr.
   #
-  # pkgname :: the name of the pkg being configured/installed e.g., autoconf, leptonica
-  # step :: intended to be a numbered step in the process of pkgname, e.g., 1_download, 2_configure
-  # ${@:3} :: interpreted as "the command", (all arguments that follow pkgname and step)
+  # pkgname :: the name of the pkg being configured/installed, e.g., leptonica
+  # step :: a numbered_named step, e.g., 1_download
+  # ${@:3} :: all arguments that follow pkgname and step, the command to log
   # Returns non-zero code for any error during execution.
   local pkgname=$1
   local step=$2
@@ -82,10 +83,7 @@ download() {
   local targz=$3
 
   if [ -e $DOWNLOADS/$targz ]; then
-    # Substring replacement,
-    #  'SomePath/ToTrim/SomePath/WeCareAbout'
-    #  -->
-    #     '$PROJECTDIR/SomePath/WeCareAbout'
+    # Replace the path-value of $PROJECTDIR w/literal '$PROJECTDIR', for brevity
     # shellcheck disable=SC2016
     local _downloads=${DOWNLOADS/$PROJECTDIR/'$PROJECTDIR'}
     echo "Skipped download, found $_downloads/$targz"
