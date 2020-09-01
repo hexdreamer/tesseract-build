@@ -1,3 +1,4 @@
+<!-- markdownlint-disable-file MD033 -->
 # Multilingual OCR for your for iOS or macOS project
 
 Welcome to our project, **Tesseract OCR in your Xcode Project**.  This will guide you through the process of building Tesseract OCR and using it in your Xcode project, easily.
@@ -127,28 +128,25 @@ The builds are targeted for two different processor *architectures*, **arm64** a
 
 For iOS, we can use the lipo tool to stitch the files for the two different architectures together, and then we can plug that one lib into Xcode.  But, lipo cannot cannot stitch the same architectures together, so&mdash;even if built with macOS SDK&mdash; the macos_x86_64 lib remains separate.  This will finally leave us with a set of two binary files for each library, and installed to the common location **Root/lib**:
 
-<!-- markdownlint-disable MD033 -->
 | lipo these architecture_platform libs                                        | into this final lib             |
 |------------------------------------------------------------------------------|---------------------------------|
 | `Root/ios_arm64/lib/libtesseract.a`<br/>`Root/ios_x86_64/lib/libtesseract.a` | `Root/lib/libtesseract.a`       |
 | `Root/macos_x86_64/lib/libtesseract.a`                                       | `Root/lib/libtesseract-macos.a` |
-<!-- markdownlint-enable MD033 -->
 
 Now that Tesseract is built and installed, we can test it out and see our first payoff.
 
 ## Test Tesseract
 
-To get a very quick and basic validation of our hard work, we'll ignore those installed libs for a moment and focus on a command-line (CL) tesseract program that was also built and installed.
+To get a very quick and basic validation of our hard work, we'll ignore those installed libs for a moment and focus on a command-line (CL) tesseract program that was also built and installed as a part of our process.
 
-For the CL, and lib-based, Tesseract to work, we need to get the *trained data* for the languages we want recognized.  We'll get Traditional Chinese and Japanese, both for vertical scripts, and English and Japanese, for horizontal.
+For the CL (and lib-based Xcode) Tesseract to work, we need to get the *trained data* for the languages we want recognized.  We'll get Traditional Chinese and Japanese, both for vertical scripts, and English and Japanese, for horizontal.
 
 Run **Scripts/test_tesseract.sh** to download the trained data and run a quick OCR test on these sample images:
 
-<!-- markdownlint-disable MD033 -->
 <table>
 <tr>
 <td>
-<img width="300" src=" iOCR/iOCR/Assets.xcassets/japanese.imageset/test_hello_hori.png "/>
+<img width="300" src="iOCR/iOCR/Assets.xcassets/japanese.imageset/test_hello_hori.png "/>
 </td>
 <td>
 <img height="300" src="iOCR/iOCR/Assets.xcassets/japanese_vert.imageset/test_hello_vert.png"/>
@@ -162,7 +160,6 @@ Run **Scripts/test_tesseract.sh** to download the trained data and run a quick O
 </tr>
 <tr><td>Japanese</td><td>Japanese (vert)</td><td>Chinese (trad, vert)</td><td>English</td></tr>
 </table>
-<!-- markdownlint-enable MD033 -->
 
 ```sh
 % ./Scripts/test_tesseract.sh
@@ -240,7 +237,7 @@ There is a small test and working example of these basics in **iOCRTests.swift::
 
 Open the project and run the **iOCR** target for an **iPad Pro (12.9-in)**:
 
-<img height="650" src="Notes/static/guide/ipad_app_blank_errors.png"/>
+<img height="650" src="Notes/guide/ipad_app_blank_errors.png"/>
 
 The colored rectangles, texts, and numbers are the iterated bounding boxes, utf8 texts, and confidence scores from the basics section and are now wrapped up in a **RecognizedRectangle**:
 
@@ -283,7 +280,7 @@ print recognizer.getRecognizedRects()
 
 In the Japanese sample images, we can see the text value `<*blank*>` with a confidence of 95.00%.  Those values correspond to the unexpected recognition of a single stroke inside the <span style="font-size: 1.25em">世</span> character as a whole other valid character, weird...
 
-<img height="200" src="Notes/static/guide/blank_error_cropped.png"/>
+<img height="200" src="Notes/guide/blank_error_cropped.png"/>
 
 but completely avoidable with only a little more understanding of the images.
 
@@ -296,7 +293,6 @@ var jpn_vert = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert")
 
 which uses a default DPI of 72.  These images have a DPI of 144, though.
 
-
 #### Better configuration is better recognition
 
 Simply add the correct DPI to the Recognizer:
@@ -308,13 +304,13 @@ var jpn_vert = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert",
 
 and it just works!
 
-<img height="235" src="Notes/static/guide/ipad_app_fixed_cropped.png"/>
+<img height="235" src="Notes/guide/ipad_app_fixed_cropped.png"/>
 
 This little problem-and-solution set starts to highlight some of the internal workings of Tesseract.
 
 #### Learning Tesseract
 
-Configuration can matter a lot for Tesseract.  If you're new to it, you might need to dig in if you don't immediately get good results.  Here are two resources I've consulted:
+Configuration can matter a lot for Tesseract.  If you're new to it, you might need to dig in if you don't immediately get good results.  Here are two resources we've consulted:
 
 - **Is there a Minimum / Maximum Text Size? (It won’t read screen text!)**  [https://tesseract-ocr.github.io/tessdoc/FAQ-Old#is-there-a-minimum--maximum-text-size-it-wont-read-screen-text]
 
