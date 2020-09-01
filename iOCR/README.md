@@ -1,9 +1,9 @@
 <!-- markdownlint-disable-file MD033 -->
 # Configuring Xcode to use a C/C++ API
 
-If you're looking for help to configure Xcode to use the OCR, or any, C/C++ libraries, this might help.
+If you're looking for help to configure Xcode to use the OCR (or any) C/C++ libraries, this might help.
 
-This is written from the ***perspective of the basic iOCR project***, and shows the progression of working through specific errors.
+This is written from my perspective of setting up the basic-iOCR project, and shows my progression of working through specific errors.
 
 All references to files and XCode settings can be checked and verified in the iOCR Xcode project.
 
@@ -11,11 +11,11 @@ All references to files and XCode settings can be checked and verified in the iO
 
 This guide will highlight 4 distinct issues I had to overcome as I was creating my first Xcode project to use the C-APIs for Leptonica and Tesseract.  The first three issues are Xcode-specific build issues, the fourth is a run-time error from one of the unit tests.
 
-For the first three Xcode-issues, all instructions assume you are looking at the project settings found by clicking on the top-level project in the Project Navigator, then selecting the "main" target.  We'll go between the **General** and **Build Settings** tabs:
+For the first three Xcode-issues, all instructions assume you are looking at the project settings found by clicking on the top-level project in the Project Navigator, then selecting the "main" target.  I'll go between the **General** and **Build Settings** tabs:
 
 <img height="212" src="../Notes/static/setup_xcode/xcode_overview.png"/>
 
-This view of Xcode will be the basis for the following steps.
+This overview of the Xcode project will be the basis for the following steps.
 
 ## Swift compiler error, **No such module**
 
@@ -66,7 +66,7 @@ Undefined symbols for architecture x86_64:
 ...
 ```
 
-> I am not sure exactly of the distinction between this error (which appears to be a linker, "Ld", error) and the next one (which is a legit `ld` error).  This error seems to be about Xcode using the symbols for something other than the final build products; Xcode needs to "know about" the libs, but not build upon them?
+> I am not sure exactly of the distinction between this error (which *appears* to be a linker, "Ld", error) and the next one (which is a legitimate `ld` error).  This error seems to be about Xcode using the symbols for something other than the final build products; Xcode needs to "know about" the libs, but not build upon them?
 
 1. Click on **General**
 1. Expand **Frameworks, Libraries, and Embedded Content**
@@ -76,9 +76,9 @@ Undefined symbols for architecture x86_64:
 
     > I've been experiencing this weird behavior in Xcode where I have to follow these steps TWICE for XCode to acutally add the entities.
     >
-    > The FIRST time through, the entities are added to the Frameworks folder in the Project Navigator, but not to this list.
+    > The FIRST time through, the entities are added to the Frameworks folder in the Project Navigator, but not to this list.  The SECOND time through they are added to the list.
     >
-    > So, ***you might just need to*** go through the following two steps, and then go through them AGAIN... it's just the Xcode way.
+    > So, ***you might just need to*** go through the following two steps, and then go through them AGAIN.
 
     1. For **libc++.tbd** and **libz.tbd**, just search for them by name and click **Add**, like:
 
@@ -90,7 +90,7 @@ Undefined symbols for architecture x86_64:
 
 ## Linker error, **Library not found for - ...**
 
-Now that Xcode knows about the libraries (for some purpose I don't fully understand), it still doesn't know where to find the libs to link in as part of the final binary coming out of the build phase.
+Now that Xcode *knows* about the libraries, it still cannot find them to link in as part of the final binary coming out of the build phase.
 
 ```none
 ld: library not found for -ltiff
@@ -110,10 +110,12 @@ clang: error: linker command failed with exit code 1 (use -v to see invocation)
 
 ## Add folder reference for tessdata
 
-At this point, the iOCR project is building, but trying to run `StraightUpRecognitionTest` I get this run-time error:
+At this point, the iOCR project is building, that clears up those 3 Xcode-specific errors.
+
+But trying to run `StraightUpRecognitionTest`, I get this run-time error:
 
 ```none
-Error opening data file /Users/zyoung/develop/tesseract-build-zacharysyoung/Root/ios_x86_64/share/tessdata/jpn.traineddata
+Error opening data file ~/$PROJECTDIR/Root/ios_x86_64/share/tessdata/jpn.traineddata
 Please make sure the TESSDATA_PREFIX environment variable is set to your "tessdata" directory.
 Failed loading language 'jpn'
 Tesseract couldn't load any languages!

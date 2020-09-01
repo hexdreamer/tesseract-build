@@ -42,13 +42,13 @@ Given this error running build_all.sh:
 macos_x86_64: configuring... ERROR running ../configure CC=...
 ...
 ...
-ERROR see /Users/zyoung/dev/tesseract-build/Logs/tesseract-4.1.1/3_config_macos_x86_64.err for more details
+ERROR see ~/$PROJECTDIR/Logs/tesseract-4.1.1/3_config_macos_x86_64.err for more details
 ```
 
 Looking at **Logs/tesseract-4.1.1/3_config_macos_x86_64.err**:
 
 ```none
-configure: error: in `/Users/zyoung/dev/tesseract-build/Sources/tesseract-4.1.1/macos_x86_64':
+configure: error: in `~/$PROJECTDIR/Sources/tesseract-4.1.1/macos_x86_64':
 configure: error: C++ compiler cannot create executables
 See `config.log' for more details
 ```
