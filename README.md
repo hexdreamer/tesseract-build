@@ -199,7 +199,7 @@ TessBaseAPIInit2(tessAPI, trainedDataFolder, "jpn_vert", OEM_LSTM_ONLY)
 
 #### Perform OCR
 
-Get an image and set it on the API, then configure the resolution and *page segmentation mode (PSM)*.  By default, Tesseract expects a page of text when it segments an image, and **PSM_AUTO** defines this default behavior.  All the images in this guide have been cropped to just the text, so this value makes sense for the samples in this demo/guide.
+Get an image and set it on the API, then configure the resolution and *page segmentation mode (PSM)*.  By default, Tesseract expects a page of text when it segments an image, and **PSM_AUTO** defines this default behavior.  All the images in this guide have been cropped to just the text, so this value makes sense for the samples in this guide.
 
 ```swift
 image = getImage("japanese_vertical_sample")
@@ -291,7 +291,7 @@ In the Japanese sample images, we can see the text value `<*blank*>` with a conf
 
 but completely avoidable with a little more understanding of the images.
 
-The Japanese sample images were initially created for the demo like so:
+The Japanese sample images were initially created for the guide like so:
 
 ```swift
 var jpn = Recognizer(imgName: "japanese", trainedDataName: "jpn")
