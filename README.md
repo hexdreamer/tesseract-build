@@ -1,31 +1,48 @@
 # Multilingual OCR for your for iOS or macOS project
 
-Welcome to our **Tesseract OCR in an Xcode** project.  We started this project with the very strong philosophy that it should be *easy* to see how a C or C++ library is built from source and then integrated into an app.
+Welcome to our project, **Tesseract OCR in your Xcode Project**.  This will guide you through the process of building Tesseract OCR and using it in your Xcode project, easily.
 
 Like, this *easy*:
 
 1. **git clone** or download this repo
 1. **cd** to the repo
-1. run **Scripts/build/build_all.sh**
-1. wait for successful build
-1. run **Scripts/test_tesseract.sh**: get some language recognition data and use it to test Tesseract against sample Chinese, English, and Japanese images
+1. run **source project_environment.sh**
+1. run **$BUILDDIR/build_all.sh**
+    1. wait for successful build
+1. run **./Scripts/test_tesseract.sh**, to get some language recognition data and test the build
 1. open **iOCR/iOCR.xcodeproj**
 1. run the **iOCR** target on an iPad Pro 12.9-inch simulator
 
-If you want to learn more about those steps, we've laid out the repo and included this guide to show how we:
+If you want to learn more about those steps, check out this guide and...
 
+- [Build from source](#build-from-source): get to know this repo's layout; understand the arrangement of the libraries that make up Tesseract OCR; create a build chain; configure and build!
+- [Test Tesseract](#test-tesseract): quickly and directly get to using Tesseract by running a small test; also get target language recognition data
+- [Write an app](#write-an-app): wrap the Leptonica and Tesseract C-API's into a **very basic** iPad app that shows some recognition features for traditional Chinese, English, and Japanese
 
-- [Build from source](#build-from-source): create a build chain and organize the configurations for the various tools and libraries (packages) that make up Tesseract OCR
-- [Test Tesseract](#test-tesseract): quickly and directly get to using Tesseract by running a small test, that also adds needs target language data
-- [Write an app](#write-an-app): wrap the Leptonica and Tesseract C-API's into a very basic and static iPad app that shows some recognition features for traditional Chinese, English, and Japanese
+## The project environment
+
+This guide refers to the project folder that you cloned/downloaded as **PROJECTDIR**.  All command-line work, paths, and examples are done from this base directory.
+
+The new repo looks pretty bare:
+
+```sh
+% ls
+README.md               Scripts/                project_environment.sh@
+Root/                   iOCR/
+```
+
 
 ## Build from source
 
-The Tesseract OCR library manages its image data with Leptonica, a library that manipulates common image file formats.  And Leptonica is built upon the individual libraries for some of the different image formats it supports: jpg, png, tiff.
+The high-level APIs/libraries needed to perform OCR are, in hierarchical order:
 
-Completing the sequence of building the image libraries, Leptonica, and then Tesseract requires some additional tools, like autoconf and automake from GNU.
+- **tesseract**: the main library for performing OCR
+  - **leptonica**: a library for managing image data and image manipulation
+    - **libjpeg**, **libpng**, **libtiff**: the libraries for the individual image formats
 
-The final arrangement of the packages I settled on looks like:
+There is additional tooling to support the process of building the high-level libs; packages like **autoconf** and **automake** from GNU.
+
+The final arrangement of the packages we settled on looks like:
 
 1. autoconf
 1. automake
@@ -39,7 +56,7 @@ The final arrangement of the packages I settled on looks like:
 
 ### Starting the build
 
-This guide refers to the project folder that you cloned or downloaded as **PROJECTDIR**.  For each of the packages above, the build process:
+For each of the packages above, the build process:
 
 1. downloads a package's TGZ to **Downloads**
 1. extracts that TGZ to **Sources**
