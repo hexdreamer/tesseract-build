@@ -30,6 +30,9 @@ The new repo looks pretty bare:
 % ls *
 README.md
 
+Notes:
+static/
+
 Root:
 README.md  include/
 
@@ -43,6 +46,7 @@ iOCR/           iOCR.xcodeproj/ iOCRTests/
 - All build products will be installed in **Root**; its **include** already has a modulemap file for our basic Xcode project
 - The build scripts are in **Scripts/build**; **test_tesseract.sh** will be covered later in this guide
 - **iOCR** is our basic Xcode project
+- **Notes** contains some static images for the READMEs
 
 The build scripts will also create new directories&mdash;**Downloads**, **Logs**, **Sources**&mdash;that will be populated with artifacts of the build process.
 
