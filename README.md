@@ -312,6 +312,6 @@ This little problem-and-solution set starts to highlight some of the internal wo
 
 Configuration can matter a lot for Tesseract.  If you're new to it, you might need to dig in if you don't immediately get good results.  Here are two resources we've consulted:
 
-- **Is there a Minimum / Maximum Text Size? (It won’t read screen text!)**  [https://tesseract-ocr.github.io/tessdoc/FAQ-Old#is-there-a-minimum--maximum-text-size-it-wont-read-screen-text]
+- **Is there a Minimum / Maximum Text Size? (It won’t read screen text!)**  <https://tesseract-ocr.github.io/tessdoc/FAQ-Old#is-there-a-minimum--maximum-text-size-it-wont-read-screen-text>
 
-- **Improving the quality of the output** [https://tesseract-ocr.github.io/tessdoc/ImproveQuality]
+- **Improving the quality of the output** <https://tesseract-ocr.github.io/tessdoc/ImproveQuality>
