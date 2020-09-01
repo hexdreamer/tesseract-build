@@ -1,7 +1,7 @@
 <!-- markdownlint-disable-file MD033 -->
 # Multilingual OCR for your for iOS or macOS project
 
-Welcome to our project, **Tesseract OCR in your Xcode Project**.  This will guide you through the process of building Tesseract OCR and using it in your Xcode project, easily.
+Welcome to our project, **Tesseract OCR in your Xcode Project**.  This will guide you through the process of building the Tesseract C++ library for OCR and using its API in your Xcode project, easily.
 
 Like, this *easy*:
 
@@ -15,7 +15,8 @@ Like, this *easy*:
 
 If you want to learn more about those steps, check out this guide and...
 
-- [Build from source](#build-from-source): get to know this repo's layout; understand the arrangement of the libraries that make up Tesseract OCR; create a build chain; configure and build!
+- [Learn about your environment](#the-project-environment): get to know this repo's layout
+- [Build from source](#build-from-source): understand the arrangement of the libraries that make up Tesseract OCR; create a build chain; configure and build!
 - [Test Tesseract](#test-tesseract): quickly and directly get to using Tesseract by running a small test; also get target language recognition data
 - [Write an app](#write-an-app): wrap the Leptonica and Tesseract C-API's into a **very basic** iPad app that shows some recognition features for traditional Chinese, English, and Japanese
 
@@ -42,7 +43,7 @@ iOCR:
 iOCR/           iOCR.xcodeproj/ iOCRTests/
 ```
 
-- All build products will be installed in **Root**; its **include** already has a modulemap file for our basic Xcode project
+- All build products will be installed in **Root**; the **include** director already has a modulemap file for our basic Xcode project
 - The build scripts are in **Scripts/build**; **test_tesseract.sh** will be covered later in this guide
 - **iOCR** is our basic Xcode project
 - **Notes** contains some static images for the READMEs
@@ -53,7 +54,7 @@ Let's move on to what we're building, and how it goes together.
 
 ## Build from source
 
-The top-level APIs/libraries needed to perform OCR are, in hierarchical order:
+The top-level libraries needed to perform OCR are, in hierarchical order:
 
 - **tesseract**: the main library for performing OCR
   - **leptonica**: a library for managing image data and image manipulation
