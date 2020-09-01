@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F450772C24FEBB2F00E5A081 /* share in Resources */ = {isa = PBXBuildFile; fileRef = F450772B24FEBB2F00E5A081 /* share */; };
+		F450772D24FECE8B00E5A081 /* liblept.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49FF5ED24FE3BA9007FFA8A /* liblept.a */; };
 		F464A67024A3C57A002440AC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A66F24A3C57A002440AC /* AppDelegate.swift */; };
 		F464A67224A3C57A002440AC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A67124A3C57A002440AC /* SceneDelegate.swift */; };
 		F464A67424A3C57A002440AC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A67324A3C57A002440AC /* ContentView.swift */; };
@@ -69,6 +70,7 @@
 				F49FF5F424FE3BBB007FFA8A /* libtiff.a in Frameworks */,
 				F49FF5F924FE3BE9007FFA8A /* libz.tbd in Frameworks */,
 				F49FF5F524FE3BBB007FFA8A /* libtesseract.a in Frameworks */,
+				F450772D24FECE8B00E5A081 /* liblept.a in Frameworks */,
 				F49FF5F224FE3BBB007FFA8A /* liblept.a in Frameworks */,
 				F49FF5F124FE3BBB007FFA8A /* libjpeg.a in Frameworks */,
 				F49FF5F324FE3BBB007FFA8A /* libpng16.a in Frameworks */,
@@ -434,7 +436,7 @@
 				"LIBRARY_SEARCH_PATHS[arch=*]" = "$(PROJECT_DIR)/../Root/lib/**";
 				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.iOCR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"SWIFT_INCLUDE_PATHS[arch=*]" = "";
+				"SWIFT_INCLUDE_PATHS[arch=*]" = "$(PROJECT_DIR)/../Root/include/**";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USE_HEADERMAP = YES;
@@ -456,7 +458,7 @@
 				"LIBRARY_SEARCH_PATHS[arch=*]" = "$(PROJECT_DIR)/../Root/lib/**";
 				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.iOCR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"SWIFT_INCLUDE_PATHS[arch=*]" = "";
+				"SWIFT_INCLUDE_PATHS[arch=*]" = "$(PROJECT_DIR)/../Root/include/**";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USE_HEADERMAP = YES;
