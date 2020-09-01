@@ -42,7 +42,7 @@ and the paths **tesseract/capi.h** and **leptonica/allheaders.h** are valid from
 
 ## Linker error, **Undefined symbol**
 
-Now that the compiler can find the header definitions for the modules, the linker is failing to actually find the defined symbols in the code base:
+Now that the compiler can find the header definitions for the modules, Xcode cannot find the actual symbols to use in the project.
 
 ```none
 Ld /Users/zyoung/build/iOCR-abqtxibtrzfqvrccvbitswwkxskn/Build/Products/Debug-iphonesimulator/iOCR.app/iOCR normal x86_64 (in target 'iOCR' from project 'iOCR')
@@ -55,6 +55,8 @@ Undefined symbols for architecture x86_64:
 
 ...
 ```
+
+> I am not sure exactly of the distinction between this error (which appears to be a linker error) and the next one (which is a legit `ld` error).  This error seems to be about Xcode using the symbols for something other than the final build products; Xcode needs to "know about" the libs, but not really use them?
 
 1. Click on **General**
 1. Expand **Frameworks, Libraries, and Embedded Content**
@@ -69,52 +71,103 @@ Undefined symbols for architecture x86_64:
     > So, just go through the following two steps, and then go through them AGAIN... it's just the Xcode way.
 
     1. For **libc++.tbd** and **libz.tbd**, just search for them by name and click **Add**, like:
+
         <img height="462" src="../Notes/static/setup_xcode/add_libc++.png"/>
 
     1. For the other libs, click **Add Other...** &rarr; **Add Files...**, navigate to **Root/lib**, and select all the libs:
+
         <img height="396" src="../Notes/static/setup_xcode/select_libraries.png"/>
 
 ## Linker error, **Library not found for - ...**
 
-The linker cannot locate the libraries:
+Now that Xcode knows about the libraries (for some purpose I don't fully understand), it still doesn't know where to find the libs to link in as part of the final binary coming out of the build phase.
 
 ```none
 ld: library not found for -ltiff
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 ```
 
-1. Add search paths
-    1. Add **Library Search Paths** `$(PROJECT_DIR)/../Root/lib/**`
+1. Click on **Build Settings**
+1. Ensure that **All** and **Combined** are selected
+1. Search for **library search paths**
+1. Expand **Library Search Paths** and add the following for **Debug** and **Release**, `$(PROJECT_DIR)/../Root/lib/**`
 
+    <img height="212" src="../Notes/static/setup_xcode/library_search_paths.png"/>
+
+    If you happen to double-click the Debug or Release values and see a dialog like this, the **recursive** option is derived from the double-asterisk at the end of the search path (`.../lib/**`):
+
+    <img height="268" src="../Notes/static/setup_xcode/search_paths_dialog_recursive.png"/>
+
+## Add folder reference for tessdata
+
+At this point, the iOCR project is building, but trying to run `StraightUpRecognitionTest` I get this run-time error:
+
+```none
+Error opening data file /Users/zyoung/develop/tesseract-build-zacharysyoung/Root/ios_x86_64/share/tessdata/jpn.traineddata
+Please make sure the TESSDATA_PREFIX environment variable is set to your "tessdata" directory.
+Failed loading language 'jpn'
+Tesseract couldn't load any languages!
+```
+
+I'm not sure how Xcode decided to look in **Root/ios_x86_64** as all the paths and libraries I've added came from **Root/include** and **Root/lib**, but I'm guessing it's keying-off some build/install data stored in the binary:
+
+```sh
+% grep 'Root/ios_x86_64/share/tessdata' Root/lib/libtesseract.a
+Binary file Root/lib/libtesseract.a matches
+```
+
+Anyways, my solution is to add the **share** directory to the project:
+
+1. Right-click the top-level project in Project Navigator
+1. **Add File to "iOCR"...**
+1. Navigate to **Root** and select the **share** folder
+1. Select **Create folder references**
+1. **Add**, and my project looks like:
+
+    <img height="66" src="../Notes/static/setup_xcode/add_share_folder.png"/>
+
+I believe this is required to satisfy this bit of setup code in the test:
+
+```swift
+let trainedDataFolder = Bundle.main.path(
+    forResource: "tessdata", ofType: nil, inDirectory: "share")
+```
+
+and now the test completes with **Test Succeeded**.
 
 ## Weird linker error, for test file
 
-In writing this guide I ran into a real vexing issue where I had copied over some test code, but placed the import for the test down in the file, like this:
+In writing this setup guide I ran into an issue where I had copied over some test code, but placed the `import` statements for the OCR modules down in the test file, like this:
 
 ```swift
 import XCTest
 @testable import iOCR
 
 class iOCRTests: XCTestCase {
-    ...
-}
+
+...
 
 import libleptonica
 import libtesseract
 
 class StraightUpRecognitionTest: XCTestCase {
-    func testGuideExample() {
 
-        let uiImage = UIImage(named: "japanese")!
-        ...
-        var image = pixReadMem(uint8Pointer, data.count)
+...
 ```
 
-leading to the **Undefined symbol** linker error from above.  I cannot reproduce it now (of course), but moving the imports up above the `@testable import` seemed to help:
+leading to the **Undefined symbol** error from above.  I cannot reproduce it now (of course), but moving the imports up above the `@testable import` seemed to be what did the trick:
 
 ```swift
 import XCTest
 import libleptonica
 import libtesseract
 @testable import iOCR
+
+class iOCRTests: XCTestCase {
+
+...
+
+class StraightUpRecognitionTest: XCTestCase {
+
+...
 ```

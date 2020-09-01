@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F450772C24FEBB2F00E5A081 /* share in Resources */ = {isa = PBXBuildFile; fileRef = F450772B24FEBB2F00E5A081 /* share */; };
 		F464A67024A3C57A002440AC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A66F24A3C57A002440AC /* AppDelegate.swift */; };
 		F464A67224A3C57A002440AC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A67124A3C57A002440AC /* SceneDelegate.swift */; };
 		F464A67424A3C57A002440AC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A67324A3C57A002440AC /* ContentView.swift */; };
@@ -14,10 +15,7 @@
 		F464A67924A3C57D002440AC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F464A67824A3C57D002440AC /* Preview Assets.xcassets */; };
 		F464A67C24A3C57D002440AC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F464A67A24A3C57D002440AC /* LaunchScreen.storyboard */; };
 		F464A68724A3C57D002440AC /* iOCRTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A68624A3C57D002440AC /* iOCRTests.swift */; };
-		F464B93F24A6BCEE002440AC /* share in Resources */ = {isa = PBXBuildFile; fileRef = F464B93E24A6BCEE002440AC /* share */; };
-		F464B94024A6BCEE002440AC /* share in Resources */ = {isa = PBXBuildFile; fileRef = F464B93E24A6BCEE002440AC /* share */; };
 		F499D41624AAC49100B5EF87 /* Recognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F499D41524AAC49100B5EF87 /* Recognizer.swift */; };
-		F49DDACE24EDEAFC00371E06 /* include in Resources */ = {isa = PBXBuildFile; fileRef = F49DDACD24EDEAFC00371E06 /* include */; };
 		F49FF5F124FE3BBB007FFA8A /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49FF5EF24FE3BA9007FFA8A /* libjpeg.a */; };
 		F49FF5F224FE3BBB007FFA8A /* liblept.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49FF5ED24FE3BA9007FFA8A /* liblept.a */; };
 		F49FF5F324FE3BBB007FFA8A /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49FF5EE24FE3BA9007FFA8A /* libpng16.a */; };
@@ -38,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F450772B24FEBB2F00E5A081 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../Root/share; sourceTree = "<group>"; };
 		F464A66C24A3C57A002440AC /* iOCR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOCR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F464A66F24A3C57A002440AC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F464A67124A3C57A002440AC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -51,9 +50,7 @@
 		F464A68824A3C57D002440AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F464A69124A3C57D002440AC /* iOCRUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOCRUITests.swift; sourceTree = "<group>"; };
 		F464A69324A3C57D002440AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F464B93E24A6BCEE002440AC /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../../Root/share; sourceTree = "<group>"; };
 		F499D41524AAC49100B5EF87 /* Recognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recognizer.swift; sourceTree = "<group>"; };
-		F49DDACD24EDEAFC00371E06 /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; name = include; path = ../../Root/include; sourceTree = "<group>"; };
 		F49FF5EC24FE3BA9007FFA8A /* libtiff.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtiff.a; path = ../Root/lib/libtiff.a; sourceTree = "<group>"; };
 		F49FF5ED24FE3BA9007FFA8A /* liblept.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblept.a; path = ../Root/lib/liblept.a; sourceTree = "<group>"; };
 		F49FF5EE24FE3BA9007FFA8A /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = ../Root/lib/libpng16.a; sourceTree = "<group>"; };
@@ -91,6 +88,7 @@
 		F464A66324A3C57A002440AC = {
 			isa = PBXGroup;
 			children = (
+				F450772B24FEBB2F00E5A081 /* share */,
 				F464A66E24A3C57A002440AC /* iOCR */,
 				F464A68524A3C57D002440AC /* iOCRTests */,
 				F464A69024A3C57D002440AC /* iOCRUITests */,
@@ -111,8 +109,6 @@
 		F464A66E24A3C57A002440AC /* iOCR */ = {
 			isa = PBXGroup;
 			children = (
-				F49DDACD24EDEAFC00371E06 /* include */,
-				F464B93E24A6BCEE002440AC /* share */,
 				F464A66F24A3C57A002440AC /* AppDelegate.swift */,
 				F464A67124A3C57A002440AC /* SceneDelegate.swift */,
 				F464A67324A3C57A002440AC /* ContentView.swift */,
@@ -246,10 +242,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F464B93F24A6BCEE002440AC /* share in Resources */,
+				F450772C24FEBB2F00E5A081 /* share in Resources */,
 				F464A67C24A3C57D002440AC /* LaunchScreen.storyboard in Resources */,
 				F464A67924A3C57D002440AC /* Preview Assets.xcassets in Resources */,
-				F49DDACE24EDEAFC00371E06 /* include in Resources */,
 				F464A67624A3C57D002440AC /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -258,7 +253,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F464B94024A6BCEE002440AC /* share in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
