@@ -29,7 +29,7 @@ Inside each **build_\<package\>.sh** script is the sequence of events for gettin
 1. download and extract
 1. preconfigure and configure
 1. make and install
-1. create the final `lipo`-ed library that Xcode will use (for the multi-architecture imaging libraries) and copy over included header files
+1. create the final lipo-ed library that Xcode will use (for the multi-architecture imaging libraries) and copy over included header files
 
 The imaging libraries can have many different compiler flags and configuration options.  These variables are defined in a separate **config-make-install_\<package\>.sh** script.  The script also works to build the same package for different combinations of architecture, platform, and target and is called repeatedly from its build_\<package\>.sh script.
 
