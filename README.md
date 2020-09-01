@@ -26,21 +26,36 @@ This guide refers to the project folder that you cloned/downloaded as **PROJECTD
 The new repo looks pretty bare:
 
 ```sh
-% ls
-README.md               Scripts/                project_environment.sh@
-Root/                   iOCR/
+% ls *
+README.md
+
+Root:
+README.md  include/
+
+Scripts:
+README.md          build/             test_tesseract.sh*
+
+iOCR:
+iOCR/           iOCR.xcodeproj/ iOCRTests/
 ```
 
+- All build products will be installed in **Root**; its **include** already has a modulemap file for our basic Xcode project
+- The build scripts are in **Scripts/build**; **test_tesseract.sh** will be covered later in this guide
+- **iOCR** is our basic Xcode project
+
+The build scripts will also create new directories&mdash;**Downloads**, **Logs**, **Sources**&mdash;that will be populated with artifacts of the build process.
+
+Let's move on to what we're building, and how it goes together.
 
 ## Build from source
 
-The high-level APIs/libraries needed to perform OCR are, in hierarchical order:
+The top-level APIs/libraries needed to perform OCR are, in hierarchical order:
 
 - **tesseract**: the main library for performing OCR
   - **leptonica**: a library for managing image data and image manipulation
     - **libjpeg**, **libpng**, **libtiff**: the libraries for the individual image formats
 
-There is additional tooling to support the process of building the high-level libs; packages like **autoconf** and **automake** from GNU.
+There is additional tooling to support the process of building the top-level libs; packages like **autoconf** and **automake** from GNU.
 
 The final arrangement of the packages we settled on looks like:
 
@@ -58,27 +73,29 @@ The final arrangement of the packages we settled on looks like:
 
 For each of the packages above, the build process:
 
-1. downloads a package's TGZ to **Downloads**
-1. extracts that TGZ to **Sources**
-1. configures and makes that source, then installs those build products into **Root**
+1. downloads a package's TGZ/ZIP to Downloads
+1. extracts that TGZ/ZIP to Sources
+1. configures and makes that source, then installs those build products into Root
 
-The **Scripts/build** directory contains all the shell scripts to order and execute those steps.
+The **Scripts/build** directory contains all the shell scripts to order and execute those steps.  Looking in there:
 
 ```zsh
- % ls Scripts/build 
-build_all.sh*                     build_tesseract.sh*
-build_autoconf.sh*                build_zlib.sh*
-build_automake.sh*                config-make-install_leptonica.sh
-build_leptonica.sh*               config-make-install_libjpeg.sh
-build_libjpeg.sh*                 config-make-install_libpng.sh
-build_libpng.sh*                  config-make-install_libtiff.sh
-build_libtiff.sh*                 config-make-install_tesseract.sh
-build_libtool.sh*                 project_environment.sh
-build_only_libs.sh*               utility.sh
-build_pkgconfig.sh*
+ % ls Scripts/build
+build_all.sh*
+...
+build_leptonica.sh*
+build_tesseract.sh*  
+...
+config-make-install_leptonica.sh
+config-make-install_tesseract.sh
+...
+project_environment.sh
+utility.sh
 ```
 
-Any of the **build_\<PACKAGE-NAME\>.sh** scripts can be run by itself, but the final scripts for Leptonica and Tesseract depend on previous installations.  **build_all.sh** orders and executes all this for you; running that one script will produce all the files that we will eventually need for Xcode:
+Any of the **build_PACKAGE-NAME.sh** scripts can be run by itself.  The top-level libraries also have a **config-make-install** helper script that covers the details of building and installing for multiple architectures and platforms.
+
+**build_all.sh** is the build chain; running this one script will produce all the files that we will need for Xcode:
 
 ```zsh
  % ./Scripts/build/build_all.sh
