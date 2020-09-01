@@ -5,7 +5,7 @@ If you're looking for help to configure Xcode to use a C/C++ API, this might hel
 
 This is written from the ***perspective of the basic iOCR project***, and shows the progression of working through specific errors.
 
-All references to files and XCode settings can be verified/checked/referenced in the iOCR Xcode project file.  The Xcode project has added **include** and **share**
+All references to files and XCode settings can be verified/checked/referenced in the iOCR Xcode project file.
 
 All these settings are found by clicking on your top-level project in the Project Navigator.  From there select your target:
 
@@ -13,14 +13,20 @@ All these settings are found by clicking on your top-level project in the Projec
 
 This view of Xcode will be the basis for the following steps.
 
-## Swift Compiler Error, **No such module ...**
+## Swift compiler error, **No such module**
 
-Swift cannot find my modules defined in **Root/include/module.modulemap**.
+Swift cannot find my module
+
+```none
+No such module 'libleptonica'
+```
+
+which is defined in **Root/include/module.modulemap**.  More to the point, Swift cannot find my modulemap file.
 
 1. Click on **Build Settings**
 1. Ensure that **All** and **Combined** are selected
 1. Search for **swift compiler - search paths**
-1. Expand **Import Paths** and add the following for **Debug** and **Release**, `$(PROJECT_DIR)/../Root/include/**`.  It will expand to the full path.
+1. Expand **Import Paths** and add the following for **Debug** and **Release**, `$(PROJECT_DIR)/../Root/include/**`.  It will expand to the full path:
 
     <img height="212" src="../Notes/static/setup_xcode/import_search_paths.png"/>
 
@@ -38,9 +44,9 @@ module libleptonica {
 }
 ```
 
-and the paths **tesseract/capi.h** and **leptonica/allheaders.h** are valid from the include directory.
+and the paths **tesseract/capi.h** and **leptonica/allheaders.h** are valid from Root/include.
 
-## Linker error, **Undefined symbol**
+## Xcode error, **Undefined symbol**
 
 Now that the compiler can find the header definitions for the modules, Xcode cannot find the actual symbols to use in the project.
 
@@ -56,7 +62,7 @@ Undefined symbols for architecture x86_64:
 ...
 ```
 
-> I am not sure exactly of the distinction between this error (which appears to be a linker error) and the next one (which is a legit `ld` error).  This error seems to be about Xcode using the symbols for something other than the final build products; Xcode needs to "know about" the libs, but not really use them?
+> I am not sure exactly of the distinction between this error (which appears to be a linker, "Ld", error) and the next one (which is a legit `ld` error).  This error seems to be about Xcode using the symbols for something other than the final build products; Xcode needs to "know about" the libs, but not really use them?
 
 1. Click on **General**
 1. Expand **Frameworks, Libraries, and Embedded Content**

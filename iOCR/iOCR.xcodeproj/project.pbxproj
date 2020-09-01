@@ -434,7 +434,7 @@
 				"LIBRARY_SEARCH_PATHS[arch=*]" = "$(PROJECT_DIR)/../Root/lib/**";
 				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.iOCR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"SWIFT_INCLUDE_PATHS[arch=*]" = "$(PROJECT_DIR)/../Root/include/**";
+				"SWIFT_INCLUDE_PATHS[arch=*]" = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USE_HEADERMAP = YES;
@@ -456,7 +456,7 @@
 				"LIBRARY_SEARCH_PATHS[arch=*]" = "$(PROJECT_DIR)/../Root/lib/**";
 				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.iOCR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"SWIFT_INCLUDE_PATHS[arch=*]" = "$(PROJECT_DIR)/../Root/include/**";
+				"SWIFT_INCLUDE_PATHS[arch=*]" = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USE_HEADERMAP = YES;
