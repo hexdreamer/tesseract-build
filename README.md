@@ -93,15 +93,15 @@ project_environment.sh
 utility.sh
 ```
 
-Any of the **build_PACKAGE-NAME.sh** scripts can be run by itself.  The top-level libraries also have a **config-make-install** helper script that covers the details of building and installing for multiple architectures and platforms.
+Any of the **build_PACKAGE-NAME.sh** scripts can be run by itself.  The top-level libraries also have a **config-make-install** helper script that covers the details of building and installing for multiple architectures and platforms, which we'll cover after we see the completed build.
 
 **build_all.sh** is the build chain; running this one script will produce all the files that we will need for Xcode:
 
-```zsh
+```sh
  % ./Scripts/build/build_all.sh
 
 ...
-
+(10-20 minutes later)
 ...
 
 ======== tesseract-4.1.1 ========
@@ -119,28 +119,28 @@ After a while, we see that Tesseract was finally configured, made, and installed
 
 The builds are targeted for two different processor *architectures*, **arm64** and **x86_64**.  There are also two different *platform* configurations, **ios** and **macos**.  This results in the following three files for every library, and each is needed for the following use-case:
 
-| lib name                            | use                                |
-|-------------------------------------|------------------------------------|
-| `Root/ios_arm64/lib/tesseract.a`    | running on an iOS device           |
-| `Root/ios_x86_64/lib/tesseract.a`   | running in iOS Simulator, on a Mac |
-| `Root/macos_x86_64/lib/tesseract.a` | running on a Mac (AppKit)          |
+| lib name                               | use                                |
+|----------------------------------------|------------------------------------|
+| `Root/ios_arm64/lib/libtesseract.a`    | running on an iOS device           |
+| `Root/ios_x86_64/lib/libtesseract.a`   | running in iOS Simulator, on a Mac |
+| `Root/macos_x86_64/lib/libtesseract.a` | running on a Mac (AppKit)          |
 
-Xcode's lipo tool can stitch files from **different architectures** together, but it cannot stitch the same architectures together.  This will finally leave us with a set of two binary files for each library, and installed to the common location **Root/lib**:
+For iOS, we can use the lipo tool to stitch the files for the two different architectures together, and then we can plug that one lib into Xcode.  But, lipo cannot cannot stitch the same architectures together, so&mdash;even if built with macOS SDK&mdash; the macos_x86_64 lib remains separate.  This will finally leave us with a set of two binary files for each library, and installed to the common location **Root/lib**:
 
 <!-- markdownlint-disable MD033 -->
-| lipo these architecture_platform libs                                  | into this final lib          |
-|------------------------------------------------------------------------|------------------------------|
-| `Root/ios_arm64/lib/tesseract.a`<br/>`Root/ios_x86_64/lib/tesseract.a` | `Root/lib/tesseract.a`       |
-| `Root/macos_x86_64/lib/tesseract.a`                                    | `Root/lib/tesseract-macos.a` |
+| lipo these architecture_platform libs                                        | into this final lib             |
+|------------------------------------------------------------------------------|---------------------------------|
+| `Root/ios_arm64/lib/libtesseract.a`<br/>`Root/ios_x86_64/lib/libtesseract.a` | `Root/lib/libtesseract.a`       |
+| `Root/macos_x86_64/lib/libtesseract.a`                                       | `Root/lib/libtesseract-macos.a` |
 <!-- markdownlint-enable MD033 -->
 
 Now that Tesseract is built and installed, we can test it out and see our first payoff.
 
 ## Test Tesseract
 
-We'll ignore the installed libs for a moment, and focus on a command-line (CL) tesseract program that was also built and installed.
+To get a very quick and basic validation of our hard work, we'll ignore those installed libs for a moment and focus on a command-line (CL) tesseract program that was also built and installed.
 
-For the CL or lib-based Tesseract to work, we need to get the *trained data* for the languages we want recognized.  We'll get Traditional Chinese and Japanese, both in vertical scripts, and English and Japanese, horizontal.
+For the CL, and lib-based, Tesseract to work, we need to get the *trained data* for the languages we want recognized.  We'll get Traditional Chinese and Japanese, both for vertical scripts, and English and Japanese, for horizontal.
 
 Run **Scripts/test_tesseract.sh** to download the trained data and run a quick OCR test on these sample images:
 
