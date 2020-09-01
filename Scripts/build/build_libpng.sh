@@ -29,7 +29,7 @@ print "\n======== $name ========"
 # --  Download / Extract  -----------------------------------------------------
 
 targz=$name.tar.gz
-url="https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/$targz/download"
+url="https://downloads.sourceforge.net/project/libpng/libpng16/1.6.37/$targz"
 
 download $name $url $targz
 extract $name $targz
