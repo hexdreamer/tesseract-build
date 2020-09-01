@@ -184,7 +184,7 @@ And with that little test completed, we can get into Xcode.
 
 ## Write an app
 
-If you're not familiar with the Tesseract C-API, here are the basics with figurative code samples.
+The library for Tesseract is written in C++, but we're going to use its C-API.  If you're not familiar with the Tesseract C-API, here are the basics with figurative code samples.
 
 ### Tesseract API basis
 
