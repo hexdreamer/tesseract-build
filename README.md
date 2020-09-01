@@ -115,34 +115,43 @@ ios: lipo... done.
 macos: lipo... done.
 ```
 
-The builds are targeted for two different processor *architectures*, **arm64** and **x86_64**.  There are also two different *platform* configurations, **ios** and **macos**.  This results in the following three files for every library, and each is needed for the stated uses:
+After a while, we see that Tesseract was finally configured, made, and installed.  And then there was a final **lipo** step.
+
+The builds are targeted for two different processor *architectures*, **arm64** and **x86_64**.  There are also two different *platform* configurations, **ios** and **macos**.  This results in the following three files for every library, and each is needed for the following use-case:
 
 | lib name                            | use                                |
 |-------------------------------------|------------------------------------|
-| `Root/ios_arm64/lib/libname.a`    | running in iOS                     |
-| `Root/ios_x86_64/lib/libname.a`   | running in iOS Simulator, on a mac |
-| `Root/macos_x86_64/lib/libname.a` | running on a mac                   |
+| `Root/ios_arm64/lib/tesseract.a`    | running on an iOS device           |
+| `Root/ios_x86_64/lib/tesseract.a`   | running in iOS Simulator, on a Mac |
+| `Root/macos_x86_64/lib/tesseract.a` | running on a Mac (AppKit)          |
 
-Xcode's **lipo** tool can stitch files from different architectures together, but it cannot stitch the same architectures together.  This will finally leave us with a set of two binary files for each library, and installed to the common location **Root/lib**:
+Xcode's lipo tool can stitch files from **different architectures** together, but it cannot stitch the same architectures together.  This will finally leave us with a set of two binary files for each library, and installed to the common location **Root/lib**:
 
-| lipo these formatted libs                                        | into this final lib            |
-|--------------------------------------------------------------------|---------------------------|
-| `Root/ios_arm64/lib/libname.a` <br/> `Root/ios_x86_64/lib/libname.a` | `Root/lib/libname.a`       |
-| `Root/macos_x86_64/lib/libname.a`                                   | `Root/lib/libname-macos.a` |
+<!-- markdownlint-disable MD033 -->
+| lipo these architecture_platform libs                                  | into this final lib          |
+|------------------------------------------------------------------------|------------------------------|
+| `Root/ios_arm64/lib/tesseract.a`<br/>`Root/ios_x86_64/lib/tesseract.a` | `Root/lib/tesseract.a`       |
+| `Root/macos_x86_64/lib/tesseract.a`                                    | `Root/lib/tesseract-macos.a` |
+<!-- markdownlint-enable MD033 -->
+
+Now that Tesseract is built and installed, we can test it out and see our first payoff.
 
 ## Test Tesseract
 
-Having run **build_all.sh** and successfully built Tesseract we need to provide it with the reference data it will use to recognize the characters in the language we are interested in.
+We'll ignore the installed libs for a moment, and focus on a command-line (CL) tesseract program that was also built and installed.
 
-Run **Scripts/test_tesseract.sh** to download some trained data for traditional Chinese, English and Japanese scripts, and run a quick OCR test on these sample images:
+For the CL or lib-based Tesseract to work, we need to get the *trained data* for the languages we want recognized.  We'll get Traditional Chinese and Japanese, both in vertical scripts, and English and Japanese, horizontal.
 
+Run **Scripts/test_tesseract.sh** to download the trained data and run a quick OCR test on these sample images:
+
+<!-- markdownlint-disable MD033 -->
 <table>
 <tr>
 <td>
-<img src="Notes/static/test_hello_hori.png"/>
+<img width="300" src=" iOCR/iOCR/Assets.xcassets/japanese.imageset/test_hello_hori.png "/>
 </td>
 <td>
-<img height="300" src="Notes/static/test_hello_vert.png"/>
+<img height="300" src="iOCR/iOCR/Assets.xcassets/japanese_vert.imageset/test_hello_vert.png"/>
 </td>
 <td>
 <img height="300" src="iOCR/iOCR/Assets.xcassets/chinese_traditional_vert.imageset/cropped.png"/>
@@ -153,35 +162,34 @@ Run **Scripts/test_tesseract.sh** to download some trained data for traditional 
 </tr>
 <tr><td>Japanese</td><td>Japanese (vert)</td><td>Chinese (trad, vert)</td><td>English</td></tr>
 </table>
+<!-- markdownlint-enable MD033 -->
 
-```zsh
+```sh
 % ./Scripts/test_tesseract.sh
-# Checking for Trained Data Language Files
+# Checking for trained data language files...
 downloading chi_tra.traineddata...done
 downloading chi_tra_vert.traineddata...done
 downloading eng.traineddata...done
 downloading jpn.traineddata...done
 downloading jpn_vert.traineddata...done
-# Recognizing Sample Images
+# Recognizing sample images...
 testing Japanese...passed
 testing Japanese (vert)...passed
 testing Chinese (trad, vert)...passed
 testing English...passed
 ```
 
-The images for the Japanese test were chosen because some Japanese writing will include words borrowed from English, and it's noteworthy that some English is recognized when processing exclusively for Japanese.
-
 And with that little test completed, we can get into Xcode.
 
 ## Write an app
 
-If you're not familiar with the Tesseract C-API, here are the basics&mdash;that this project builds upon&mdash;with figurative code samples.
+If you're not familiar with the Tesseract C-API, here are the basics with figurative code samples.
 
 ### Tesseract API basis
 
 #### Initialize API object
 
-Create an API object and initialize it with the trained data's parent folder, the data's filename, and an *OCR engine mode (OEM)*.  **OEM_LSTM_ONLY** is the latest neural-net recognition engine, which has some advantage in "line recognition" over the previous engine.
+Create an API object and initialize it with the trained data's parent folder, the data's filename, and an *OCR engine mode (OEM)*.  **OEM_LSTM_ONLY** is the latest neural-net recognition engine, which has some advantage in text-line recognition over the previous engine.
 
 ```swift
 tessAPI = TessBaseAPICreate()
@@ -222,7 +230,7 @@ while (TessPageIteratorNext(iterator, level) > 0) {
 }
 ```
 
-*Note:* `TessBaseAPIGetUTF8Text` must be called before the `TessPageIterator` and `TessResultIterator` methods.
+*Note:* `TessBaseAPIGetUTF8Text` must be called ***before*** the `TessPageIterator` and `TessResultIterator` methods.
 
 There is a small test and working example of these basics in **iOCRTests.swift::testGuideExample()** in the Xcode project.
 
