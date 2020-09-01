@@ -48,9 +48,18 @@ _exec_and_log() {
   # stderr.
   #
   # pkgname :: the name of the pkg being configured/installed, e.g., leptonica
-  # step :: a numbered_named step, e.g., 1_download
-  # ${@:3} :: all arguments that follow pkgname and step, the command to log
+  # step :: a numbered_named step, e.g., 0_curl
+  # ${@:3} :: the command to exec and log (all arguments that follow pkgname and step)
+  #
   # Returns non-zero code for any error during execution.
+  #
+  # Running:
+  #
+  #   _exec_and_log leptonica-1.79.0 '2_preconfig' ./autogen.sh
+  #
+  # will create the dir $LOGS/leptonica-1.79.0, then run `./autogen.sh` directing its 
+  # errors and outputs to 2_preconfig.err and 2_preconfig.out
+
   local pkgname=$1
   local step=$2
   local log_out="${LOGS}/${pkgname}/${step}.out"
