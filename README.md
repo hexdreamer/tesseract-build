@@ -199,7 +199,7 @@ TessBaseAPIInit2(tessAPI, trainedDataFolder, "jpn_vert", OEM_LSTM_ONLY)
 
 #### Perform OCR
 
-Get an image and set it on the API, then configure the resolution and *page segmentation mode (PSM)*.  By default, Tesseract expects a page of text when it segments an image, and **PSM_AUTO** defines this default behavior.  All the images in this guide have been cropped to just the text, so this value makes sense for most of samples in this demo/guide.
+Get an image and set it on the API, then configure the resolution and *page segmentation mode (PSM)*.  By default, Tesseract expects a page of text when it segments an image, and **PSM_AUTO** defines this default behavior.  All the images in this guide have been cropped to just the text, so this value makes sense for the samples in this demo/guide.
 
 ```swift
 image = getImage("japanese_vertical_sample")
@@ -211,7 +211,10 @@ TessBaseAPISetPageSegMode(tessAPI, PSM_AUTO)
 Finally, call the method that returns the recognized text in the image.
 
 ```swift
-TessBaseAPIGetUTF8Text(tessAPI)
+let txt = TessBaseAPIGetUTF8Text(tessAPI)
+print String(cString: txt!)
+
+  (String) $R3 = "Hello\n\n,世界\n"
 ```
 
 We could stop here, but there's more we can know about the text.
@@ -233,7 +236,7 @@ while (TessPageIteratorNext(iterator, level) > 0) {
 
 *Note:* `TessBaseAPIGetUTF8Text` must be called ***before*** the `TessPageIterator` and `TessResultIterator` methods.
 
-There is a small test and working example of these basics in **iOCRTests.swift::testGuideExample()** in the Xcode project.
+There is a small test and working example of these basics in **iOCRTests.swift::testGuideExample()**, the following Xcode project.
 
 ### iOCR Xcode project
 
@@ -241,9 +244,9 @@ There is a small test and working example of these basics in **iOCRTests.swift::
 
 Open the project and run the **iOCR** target for an **iPad Pro (12.9-in)**:
 
-<img height="650" src="Notes/guide/ipad_app_blank_errors.png"/>
+<img height="650" src="Notes/static/guide/ipad_app_blank_errors.png"/>
 
-The colored rectangles, texts, and numbers are the iterated bounding boxes, utf8 texts, and confidence scores from the basics section and are now wrapped up in a **RecognizedRectangle**:
+The colored rectangles, texts, and numbers are the iterated bounding boxes, utf8 texts, and confidence scores, and are now wrapped up in a **RecognizedRectangle**:
 
 ```swift
 struct RecognizedRectangle {
@@ -253,16 +256,16 @@ struct RecognizedRectangle {
 }
 ```
 
-and this struct is handled with the **Recognizer** class which exposes two main methods for getting plain text or RecognizedRectangles:
+This struct is handled with the **Recognizer** class which exposes two main methods for getting plain text or RecognizedRectangles:
 
 ```swift
 let recognizer = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 144)
-
 
 print recognizer.getAllText()
 
   (String) $R2 = "Hello\n\n,世界\n"
 
+// and...
 
 print recognizer.getRecognizedRects()
 
@@ -284,9 +287,9 @@ print recognizer.getRecognizedRects()
 
 In the Japanese sample images, we can see the text value `<*blank*>` with a confidence of 95.00%.  Those values correspond to the unexpected recognition of a single stroke inside the <span style="font-size: 1.25em">世</span> character as a whole other valid character, weird...
 
-<img height="200" src="Notes/guide/blank_error_cropped.png"/>
+<img height="200" src="Notes/static/guide/blank_error_cropped.png"/>
 
-but completely avoidable with only a little more understanding of the images.
+but completely avoidable with a little more understanding of the images.
 
 The Japanese sample images were initially created for the demo like so:
 
@@ -308,13 +311,13 @@ var jpn_vert = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert",
 
 and it just works!
 
-<img height="235" src="Notes/guide/ipad_app_fixed_cropped.png"/>
+<img height="235" src="Notes/static/guide/ipad_app_fixed_cropped.png"/>
 
 This little problem-and-solution set starts to highlight some of the internal workings of Tesseract.
 
 #### Learning Tesseract
 
-Configuration can matter a lot for Tesseract.  If you're new to it, you might need to dig in if you don't immediately get good results.  Here are two resources we've consulted:
+Configuration can matter a lot for Tesseract.  You might need to dig in if you don't immediately get good results.  Here are two resources we've consulted:
 
 - **Is there a Minimum / Maximum Text Size? (It won’t read screen text!)**  <https://tesseract-ocr.github.io/tessdoc/FAQ-Old#is-there-a-minimum--maximum-text-size-it-wont-read-screen-text>
 
