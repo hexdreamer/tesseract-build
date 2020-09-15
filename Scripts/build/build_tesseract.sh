@@ -46,7 +46,7 @@ print 'done.'
 # ios_arm64
 export ARCH='arm64'
 export TARGET='arm-apple-darwin64'
-export PLATFORM='iPhoneOS.platform/Developer/SDKs/iPhoneOS13.6.sdk'
+export PLATFORM='iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk'
 export PLATFORM_MIN_VERSION='-miphoneos-version-min=11.0'
 
 zsh $parentdir/config-make-install_tesseract.sh $name 'ios_arm64' || exit 1
@@ -54,7 +54,7 @@ zsh $parentdir/config-make-install_tesseract.sh $name 'ios_arm64' || exit 1
 # ios_x86_64
 export ARCH='x86_64'
 export TARGET='x86_64-apple-darwin'
-export PLATFORM='iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.6.sdk'
+export PLATFORM='iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk'
 export PLATFORM_MIN_VERSION='-mios-simulator-version-min=11.0'
 
 zsh $parentdir/config-make-install_tesseract.sh $name 'ios_x86_64' || exit 1
@@ -62,7 +62,7 @@ zsh $parentdir/config-make-install_tesseract.sh $name 'ios_x86_64' || exit 1
 # macos_x86_64
 export ARCH='x86_64'
 export TARGET='x86_64-apple-darwin'
-export PLATFORM='MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk'
+export PLATFORM='MacOSX.platform/Developer/SDKs/MacOSX.sdk'
 export PLATFORM_MIN_VERSION='-mmacosx-version-min=10.13'
 
 zsh $parentdir/config-make-install_tesseract.sh $name 'macos_x86_64' || exit 1

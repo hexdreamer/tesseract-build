@@ -10,7 +10,7 @@ fi
 
 # ARCH='arm64'
 # TARGET='arm-apple-darwin64'
-# PLATFORM='iPhoneOS.platform/Developer/SDKs/iPhoneOS13.6.sdk'
+# PLATFORM='iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk'
 # PLATFORM_MIN_VERSION='-miphoneos-version-min=11.0'
 
 os_arch=$1 # ios_arm64
