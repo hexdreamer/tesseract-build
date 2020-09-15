@@ -21,6 +21,11 @@ readonly MASTER_CMDS=$LOGS/commands.sh
 # TODO: why doesn't this seem to need to be exported?
 PATH=$ROOT/bin:$PATH
 
+# TODO: and this one does need to be exported??
+export TESSDATA_PREFIX=$ROOT/share/tessdata
+
+export PROMPT="(TBE) $PROMPT"
+
 _exec() {
   # Try and execute a command, logging to itself to MASTER_CMDS, and exiting
   # w/an error if there's a failure.
