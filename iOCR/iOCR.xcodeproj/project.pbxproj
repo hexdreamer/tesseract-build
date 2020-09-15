@@ -18,7 +18,6 @@
 		F464A68724A3C57D002440AC /* iOCRTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A68624A3C57D002440AC /* iOCRTests.swift */; };
 		F499D41624AAC49100B5EF87 /* Recognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F499D41524AAC49100B5EF87 /* Recognizer.swift */; };
 		F49FF5F124FE3BBB007FFA8A /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49FF5EF24FE3BA9007FFA8A /* libjpeg.a */; };
-		F49FF5F224FE3BBB007FFA8A /* liblept.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49FF5ED24FE3BA9007FFA8A /* liblept.a */; };
 		F49FF5F324FE3BBB007FFA8A /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49FF5EE24FE3BA9007FFA8A /* libpng16.a */; };
 		F49FF5F424FE3BBB007FFA8A /* libtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49FF5EC24FE3BA9007FFA8A /* libtiff.a */; };
 		F49FF5F524FE3BBB007FFA8A /* libtesseract.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49FF5F024FE3BA9007FFA8A /* libtesseract.a */; };
@@ -71,7 +70,6 @@
 				F49FF5F924FE3BE9007FFA8A /* libz.tbd in Frameworks */,
 				F49FF5F524FE3BBB007FFA8A /* libtesseract.a in Frameworks */,
 				F450772D24FECE8B00E5A081 /* liblept.a in Frameworks */,
-				F49FF5F224FE3BBB007FFA8A /* liblept.a in Frameworks */,
 				F49FF5F124FE3BBB007FFA8A /* libjpeg.a in Frameworks */,
 				F49FF5F324FE3BBB007FFA8A /* libpng16.a in Frameworks */,
 			);
@@ -208,7 +206,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1150;
-				LastUpgradeCheck = 1150;
+				LastUpgradeCheck = 1160;
 				ORGANIZATIONNAME = "Zach Young";
 				TargetAttributes = {
 					F464A66B24A3C57A002440AC = {
