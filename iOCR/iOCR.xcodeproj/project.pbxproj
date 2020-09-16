@@ -48,8 +48,6 @@
 		F464A68224A3C57D002440AC /* iOCRTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOCRTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F464A68624A3C57D002440AC /* iOCRTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOCRTests.swift; sourceTree = "<group>"; };
 		F464A68824A3C57D002440AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F464A69124A3C57D002440AC /* iOCRUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOCRUITests.swift; sourceTree = "<group>"; };
-		F464A69324A3C57D002440AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F499D41524AAC49100B5EF87 /* Recognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recognizer.swift; sourceTree = "<group>"; };
 		F49FF5EC24FE3BA9007FFA8A /* libtiff.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtiff.a; path = ../Root/lib/libtiff.a; sourceTree = "<group>"; };
 		F49FF5ED24FE3BA9007FFA8A /* liblept.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblept.a; path = ../Root/lib/liblept.a; sourceTree = "<group>"; };
@@ -91,7 +89,6 @@
 				F450772B24FEBB2F00E5A081 /* share */,
 				F464A66E24A3C57A002440AC /* iOCR */,
 				F464A68524A3C57D002440AC /* iOCRTests */,
-				F464A69024A3C57D002440AC /* iOCRUITests */,
 				F464A66D24A3C57A002440AC /* Products */,
 				F464B28124A6B346002440AC /* Frameworks */,
 			);
@@ -136,15 +133,6 @@
 				F464A68824A3C57D002440AC /* Info.plist */,
 			);
 			path = iOCRTests;
-			sourceTree = "<group>";
-		};
-		F464A69024A3C57D002440AC /* iOCRUITests */ = {
-			isa = PBXGroup;
-			children = (
-				F464A69124A3C57D002440AC /* iOCRUITests.swift */,
-				F464A69324A3C57D002440AC /* Info.plist */,
-			);
-			path = iOCRUITests;
 			sourceTree = "<group>";
 		};
 		F464B28124A6B346002440AC /* Frameworks */ = {

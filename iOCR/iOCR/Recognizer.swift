@@ -59,6 +59,8 @@ class Recognizer {
         TessBaseAPISetImage2(self.tessAPI, image)
         TessBaseAPISetSourceResolution(self.tessAPI, imgDPI)
         TessBaseAPISetPageSegMode(self.tessAPI, tessPSM)
+        
+        TessBaseAPIRecognize(self.tessAPI, nil)
     }
     
     /// Frees  Tesseract API object
@@ -81,9 +83,7 @@ class Recognizer {
 
     /// Get back all recognized objects for the set `tessPIL`
     public func getRecognizedRects() -> [RecognizedRectangle] {
-        // Prime self.tessAPI
-        _ = getAllText()
-        
+
         guard let iterator = TessBaseAPIGetIterator(self.tessAPI) else { return [] }
         defer { TessPageIteratorDelete(iterator)}
         

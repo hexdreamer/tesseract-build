@@ -38,12 +38,12 @@ class StraightUpRecognitionTest: XCTestCase {
         TessBaseAPISetSourceResolution(tessAPI, 144)       // w/Tesseract's default of 72, no text recognized
         TessBaseAPISetPageSegMode(tessAPI, PSM_AUTO)       // Let Tesseract decide how to see the image
         
-        TessBaseAPIGetUTF8Text(tessAPI)                    // Pre-req for Tess[Page|Result]Iterator calls
+        TessBaseAPIRecognize(tessAPI, nil)                    // Pre-req for Tess[Page|Result]Iterator calls
                                                            // We could get the text back from this method call
         
         let iterator = TessBaseAPIGetIterator(tessAPI)     // Get an iterator...
         let level = RIL_TEXTLINE                           // at the level of an individual "line of text"
-        
+    
         // Get text
         let txt = TessResultIteratorGetUTF8Text(iterator, level)!
         let got = String(cString:txt)
