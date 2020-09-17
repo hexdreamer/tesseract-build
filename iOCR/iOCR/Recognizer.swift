@@ -97,16 +97,15 @@ class Recognizer {
             let text = String(cString: charPtr!)
             TessDeleteText(charPtr)
             
-            // Rectangles; "offsets" are the (x,y)-point "opposite/diagonal" of origin
-            var originX: Int32 = 0
-            var originY: Int32 = 0
-            var widthOffset: Int32 = 0
-            var heightOffset: Int32 = 0
-            TessPageIteratorBoundingBox(iterator, self.tessPIL, &originX, &originY, &widthOffset, &heightOffset)
+            var x1: Int32 = 0
+            var y1: Int32 = 0
+            var x2: Int32 = 0
+            var y2: Int32 = 0
+            TessPageIteratorBoundingBox(iterator, self.tessPIL, &x1, &y1, &x2, &y2)
 
-            let width = widthOffset - originX
-            let height = heightOffset - originY
-            let cgRect = CGRect(x: CGFloat(originX), y: CGFloat(originY), width: CGFloat(width), height: CGFloat(height))
+            let width = x2 - x1
+            let height = y2 - y1
+            let cgRect = CGRect(x: CGFloat(x1), y: CGFloat(y1), width: CGFloat(width), height: CGFloat(height))
             
             // Confidence
             let confidence = TessResultIteratorConfidence(iterator, self.tessPIL)

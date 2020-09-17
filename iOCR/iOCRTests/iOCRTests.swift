@@ -55,16 +55,16 @@ class StraightUpRecognitionTest: XCTestCase {
         XCTAssertGreaterThan(confidence, 88)
         
         // Get locations/rectangles around recognized text
-        var x: Int32 = 0
-        var y: Int32 = 0
-        var wOffset: Int32 = 0
-        var hOffset: Int32 = 0
+        var x1: Int32 = 0
+        var y1: Int32 = 0
+        var x2: Int32 = 0
+        var y2: Int32 = 0
 
-        TessPageIteratorBoundingBox(iterator, level, &x, &y, &wOffset, &hOffset)
-        XCTAssertEqual(x, 10)
-        XCTAssertEqual(y, 14)
-        XCTAssertEqual(wOffset, 160)
-        XCTAssertEqual(hOffset, 43)
+        TessPageIteratorBoundingBox(iterator, level, &x1, &y1, &x2, &y2)
+        XCTAssertEqual(x1, 10)
+        XCTAssertEqual(y1, 14)
+        XCTAssertEqual(x2, 160)
+        XCTAssertEqual(y2, 43)
         
         // With RIL_TEXTLINE and PSM_AUTO, should have had only one result for this image
         XCTAssertEqual(TessPageIteratorNext(iterator, level), 0)
