@@ -64,7 +64,6 @@ class Recognizer {
         TessBaseAPIRecognize(self.tessAPI, nil)
     }
     
-    /// Frees  Tesseract API object
     deinit {
         TessBaseAPIEnd(self.tessAPI)
         TessBaseAPIDelete(self.tessAPI)

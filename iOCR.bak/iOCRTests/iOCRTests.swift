@@ -2,15 +2,16 @@
 //  iOCRTests.swift
 //  iOCRTests
 //
-//  Created by Zach Young on 9/17/20.
+//  Created by Zach Young on 6/24/20.
+//  Copyright © 2020 Zach Young. All rights reserved.
 //
 
 import XCTest
-@testable import iOCR
 
 import libleptonica
 import libtesseract
 
+@testable import iOCR
 
 class StraightUpRecognitionTest: XCTestCase {
     /// Build a recognition pipeline/chain from the bottom-up.
@@ -81,6 +82,7 @@ class iOCRRecognizerTests: XCTestCase {
         // the string, so I stripped all spaces for comparison
 
         let recognizer = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 144)
+        defer { recognizer.destroy() }
         let got = recognizer.getAllText()
 
         XCTAssertEqual(got.filter { !$0.isWhitespace }, "Hello,世界")
@@ -91,6 +93,7 @@ class iOCRRecognizerTests: XCTestCase {
         // the string, so I stripped all spaces for comparison
 
         let recognizer = Recognizer(imgName: "japanese", trainedDataName: "jpn")
+        defer { recognizer.destroy() }
         let got = recognizer.getAllText()
 
         XCTAssertEqual(got.filter { !$0.isWhitespace }, "Hello,世界")
@@ -98,6 +101,7 @@ class iOCRRecognizerTests: XCTestCase {
 
     func testChineseTraditionalVertical1() {
         let recognizer = Recognizer(imgName: "chinese_traditional_vert", trainedDataName: "chi_tra_vert")
+        defer { recognizer.destroy() }
         let got = recognizer.getAllText()
 
         XCTAssertEqual(got,
@@ -114,6 +118,7 @@ class iOCRRecognizerTests: XCTestCase {
     func testEnglishCenterJustify() {
         let recognizer = Recognizer(imgName: "english_ctr_just", trainedDataName: "eng",
                                     tessPSM: PSM_SINGLE_BLOCK, tessPIL: RIL_BLOCK)
+        defer { recognizer.destroy() }
         let got = recognizer.getAllText()
 
         // Note that the 4th-to-last line is 'foruseina'; should be 'for use in a'
@@ -147,6 +152,7 @@ app.
     func testEnglishLeftJustify() {
         let recognizer = Recognizer(imgName: "english_left_just", trainedDataName: "eng",
                                     tessPSM: PSM_SINGLE_BLOCK, tessPIL: RIL_BLOCK)
+        defer { recognizer.destroy() }
         
         // Note that the 4th-to-last line is 'for use in a'; CORRECT!
         let want = """
@@ -194,6 +200,7 @@ app.
         }
 
         // Now run test with correct DPI for only true recognitions
+        recognizer.destroy()
         recognizer = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 144)
         got = recognizer.getRecognizedRects()
         
@@ -203,6 +210,7 @@ app.
         } else {
             XCTFail(String(format: "got %d recognized rects, want 2", got.count))
         }
+
+        recognizer.destroy()
     }
 }
-

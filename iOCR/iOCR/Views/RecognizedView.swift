@@ -7,11 +7,14 @@
 //
 
 import SwiftUI
+import hexdreamsCocoa
 
+private let RECT_COLORS = [Color.red, Color.orange, Color.purple]
 
 struct RecognizedView: View {
-    let recognizer: Recognizer
-    let colors = [Color.red, Color.yellow, Color.purple]
+    public let caption: String
+    public let recognizer: Recognizer
+    
 
     var body: some View {
         let columns = [
@@ -20,44 +23,101 @@ struct RecognizedView: View {
             GridItem(.flexible(), alignment: .top),
         ]
         let recRects = recognizer.getRecognizedRects()
-        VStack {
-            GeometryReader { geo in
-                ZStack {
-                    Image(uiImage: recognizer.uiImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                                        
-                    ForEach(recRects, id: \.id) { rect in
-                        Path { path in
-                            let transform = getImageViewTransform(imgViewGeoProxy: geo)
-                            path.addRect(rect.boundingBox.applying(transform))
-                        }
-                        .stroke(colors[recRects.firstIndex(of: rect)!], lineWidth: 4)
-                    }
-                } // ZStack
-            } // GeometryReader
 
-            LazyVGrid(columns: columns, spacing: 10) {
+        ZStack {
+            RoundedRectangle(cornerRadius: 25)
+                .stroke(Color.gray)
 
-                Text("Box").font(.title2)
-                Text("Text").font(.title2)
-                Text("Confidence").font(.title2)
-
-                ForEach(recRects, id: \.id) {rect in
-                    Rectangle()
-                        .stroke(colors[recRects.firstIndex(of: rect)!], lineWidth: 6)
-                        .frame(width: 30, height: 30, alignment: .topLeading)
-                    Text(trimText(rect.text))
-                        .font(.system(size: 30))
-                    Text(String(format: "%.0f%%", rect.confidence))
-                        .font(.system(size: 20))
+            VStack {
+                Text(caption)
+                    .foregroundColor(Color.gray)
+                    .font(.title)
+                    .padding(.top, 5.0)
+                
+                GeometryReader { geo in
+                    ImageAndRects(image: recognizer.uiImage, recRects: recRects, parentViewSize: geo.size)
                 }
-            }
-            .padding()
+                
+                LazyVGrid(columns: columns, spacing: 10) {
+                    
+                    Header(text: Text("Box"))
+                    Header(text: Text("Text"))
+                    Header(text: Text("Confidence"))
+                    
+                    ForEach(recRects, id: \.id) {rect in
+                        Row(rect: rect, idx: recRects.firstIndex(of: rect)!)
+                    }
+                } // LazyVGrid
+                .padding(.bottom, 10.0)
 
-        } // VStack
-        .border(Color.orange, width: 4)
-        .frame(width:512, height:661)
+            } // VStack
+
+        } // ZStack
+        .frame(width: 505, height: 650)
+
+    }
+}
+
+struct ImageAndRects: View {
+    let image: UIImage
+    let recRects: [RecognizedRectangle]
+    let parentViewSize: CGSize
+    
+    private var imageViewTransform: CGAffineTransform {
+        let outerRect = CGRect(size: self.parentViewSize)
+        var myRect = CGRect(size: self.image.size)
+        
+        myRect = myRect.fit(rect: outerRect)
+        let scaleFactor = myRect.width / self.image.size.width
+        
+        var transform = CGAffineTransform.identity
+        
+        transform = transform.translatedBy(x: myRect.minX, y: myRect.minY)
+        transform = transform.scaledBy(x: scaleFactor, y: scaleFactor)
+        
+        return transform
+    }
+    
+    var body: some View {
+        let transform = imageViewTransform
+        ZStack {
+            Image(uiImage: self.image)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+
+            ForEach(recRects, id: \.id) { rect in
+                Path { path in
+                    path.addRect(rect.boundingBox.applying(transform))
+                }
+                .stroke(RECT_COLORS[recRects.firstIndex(of: rect)!], lineWidth: 4)
+            } // ForEach
+            
+        } // ZStack
+    }
+}
+
+struct Header: View {
+    let text: Text
+
+    var body: some View {
+        return self.text
+            .font(.title)
+            .foregroundColor(Color.gray)
+    }
+}
+
+struct Row: View {
+    let rect: RecognizedRectangle
+    let idx: Int
+
+    var body: some View {
+        Rectangle()
+            .stroke(RECT_COLORS[idx], lineWidth: 6)
+            .frame(width: 30, height: 30, alignment: .topLeading)
+        Text(trimText(rect.text))
+            .font(.title)
+        Text(String(format: "%.0f%%", rect.confidence))
+            .font(.title)
     }
     
     private func trimText(_ text: String) -> String {
@@ -75,45 +135,13 @@ struct RecognizedView: View {
         
         return String(s[range])
     }
-   
-    private func getImageViewTransform(imgViewGeoProxy: GeometryProxy) -> CGAffineTransform {
-        let img = self.recognizer.uiImage
-        let outerRect = CGRect(size: imgViewGeoProxy.size)
-        var myRect = CGRect(size: img.size)
-        
-        myRect = myRect.fit(rect: outerRect)
-        let scaleFactor = myRect.width / img.size.width
-        
-        var transform = CGAffineTransform.identity
-        
-        transform = transform.translatedBy(x: myRect.minX, y: myRect.minY)
-        transform = transform.scaledBy(x: scaleFactor, y: scaleFactor)
-        
-        return transform
-    }
 }
 
+// MARK: Preview
 import libtesseract
 
 struct RecognizedView_Previews: PreviewProvider {
     static var previews: some View {
-        let columns = [GridItem(.flexible()), GridItem(.flexible())]
-        LazyVGrid(columns: columns) {
-            RecognizedView(
-                recognizer: Recognizer(imgName: "japanese", trainedDataName: "jpn", imgDPI: 144)
-            )
-            RecognizedView(
-                recognizer: Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 144)
-            )
-            RecognizedView(
-                recognizer: Recognizer(imgName: "chinese_traditional_vert", trainedDataName: "chi_tra_vert"))
-            
-            RecognizedView(
-                recognizer: Recognizer(
-                    imgName: "english_left_just_square", trainedDataName: "eng",
-                    tessPSM: PSM_SINGLE_BLOCK, tessPIL: RIL_BLOCK
-                )
-            )
-        }
+        ContentView()
     }
 }

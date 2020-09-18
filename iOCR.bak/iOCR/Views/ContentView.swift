@@ -2,7 +2,8 @@
 //  ContentView.swift
 //  iOCR
 //
-//  Created by Zach Young on 9/17/20.
+//  Created by Zach Young on 6/24/20.
+//  Copyright © 2020 Zach Young. All rights reserved.
 //
 
 import SwiftUI
@@ -13,25 +14,18 @@ import libtesseract
 struct ContentView: View {
     
     var body: some View {
-        let columns = [
-            GridItem(.flexible(), spacing: 0),
-            GridItem(.flexible(), spacing: 0),
-        ]
+        let columns = [GridItem(.flexible()), GridItem(.flexible())]
         
         LazyVGrid(columns: columns) {
             RecognizedView(
-                caption: "Japanese (horizontal)",
                 recognizer: Recognizer(imgName: "japanese", trainedDataName: "jpn", imgDPI: 144))
             RecognizedView(
-                caption: "Japanese (vertical)",
-                recognizer: Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 72)
+                recognizer: Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 144)
             )
             RecognizedView(
-                caption: "Traditional Chinese",
                 recognizer: Recognizer(imgName: "chinese_traditional_vert", trainedDataName: "chi_tra_vert"))
             
             RecognizedView(
-                caption: "English (left-justified)",
                 recognizer: Recognizer(
                     imgName: "english_left_just_square", trainedDataName: "eng",
                     tessPSM: PSM_SINGLE_BLOCK, tessPIL: RIL_BLOCK
