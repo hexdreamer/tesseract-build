@@ -18,11 +18,11 @@ If you want to learn more about those steps, check out this guide and...
 - [Learn about your environment](#the-project-environment): get to know this repo's layout
 - [Build from source](#build-from-source): understand the arrangement of the libraries that make up Tesseract OCR; create a build chain; configure and build!
 - [Test Tesseract](#test-tesseract): quickly and directly get to using Tesseract by running a small test; also get target language recognition data
-- [Write an app](#write-an-app): wrap the Leptonica and Tesseract C-API's in Swift and make a **very basic** iPad app that shows some recognition features for traditional Chinese, English, and Japanese
+- [Write an app](#write-an-app): wrap the Leptonica and Tesseract C-API's in Swift and make a very basic iPad app that shows some recognition features for traditional Chinese, English, and Japanese
 
 ## The project environment
 
-This guide refers to the project folder that you cloned/downloaded as **PROJECTDIR**.  All command-line work, paths, and examples are from this base directory.
+This guide refers to the project directory that you cloned/downloaded as **PROJECTDIR**.  All command-line work, paths, and examples are from this base directory.
 
 The new repo looks pretty bare:
 
@@ -130,25 +130,30 @@ The builds are targeted for two different processor *architectures*, **arm64** a
 | `Root/ios_x86_64/lib/libtesseract.a`   | running in iOS Simulator, on a Mac |
 | `Root/macos_x86_64/lib/libtesseract.a` | running on a Mac (AppKit)          |
 
-For iOS, we can use the lipo tool to stitch the files for the two different architectures together, and then we can plug that one lib into Xcode.  But, lipo cannot cannot stitch the same architectures together: the macos_x86_64 lib was built for the macOS platform, but its x86_64 architecture is the same as in the ios_x86_64 lib, so the macos_x86_64 lib is left as a separate file.  This will finally leave us with a set of two binary files for each library, and installed to the common location **Root/lib**:
+For iOS, we can use the lipo tool to stitch the files for the two different architectures (arm64 and x86_64) together, and then we can plug that one lib into Xcode.  But, lipo cannot cannot stitch the same architectures together, so the macos_x86_64 lib is left as a separate file.  This will finally leave us with a set of two binary files for each library, and installed to the common location **Root/lib**:
 
 | lipo these architecture_platform libs                                        | into this final lib             |
 |------------------------------------------------------------------------------|---------------------------------|
 | `Root/ios_arm64/lib/libtesseract.a`<br/>`Root/ios_x86_64/lib/libtesseract.a` | `Root/lib/libtesseract.a`       |
 | `Root/macos_x86_64/lib/libtesseract.a`                                       | `Root/lib/libtesseract-macos.a` |
 
-Now that Tesseract is built and installed, we can test it out and see our first payoff.
+Now that Tesseract is built and installed, we can test it out and see some payoff for all this hard work.
 
 ## Test Tesseract
 
 To get a very quick and basic validation of our hard work, we'll ignore those installed libs for a moment and focus on a command-line (CL) tesseract program that was also built and installed as a part of our process.
 
-For the CL (and lib-based Xcode) Tesseract to work, we need to get the *trained data* for the languages we want recognized.  We'll get Traditional Chinese and Japanese, both for vertical scripts, and English and Japanese, for horizontal.  The data is downloaded to **Root/share/tessdata**.  For this test, the data is made known to the CL tesseract program by exporting an environment variable, `export TESSDATA_PREFIX=$ROOT/share/tessdata`, in the test script.
+For the CL (and lib-based Xcode) Tesseract to work, we need to get the *trained data* for the languages we want recognized.  We'll get Traditional Chinese (vertical), Japanese (horizontal and vertical), and English.
+
+The data is downloaded to **Root/share/tessdata**.  For this test, the data is made known to the CL tesseract program by exporting an environment variable, `export TESSDATA_PREFIX=$ROOT/share/tessdata`, in the test script.
 
 Run **Scripts/test_tesseract.sh** to download the trained data and run a quick OCR test on these sample images:
 
 <table>
 <tr>
+<td>
+<img height="300" src="iOCR/iOCR/Assets.xcassets/chinese_traditional_vert.imageset/cropped.png"/>
+</td>
 <td>
 <img width="300" src="iOCR/iOCR/Assets.xcassets/japanese.imageset/test_hello_hori.png "/>
 </td>
@@ -156,13 +161,14 @@ Run **Scripts/test_tesseract.sh** to download the trained data and run a quick O
 <img height="300" src="iOCR/iOCR/Assets.xcassets/japanese_vert.imageset/test_hello_vert.png"/>
 </td>
 <td>
-<img height="300" src="iOCR/iOCR/Assets.xcassets/chinese_traditional_vert.imageset/cropped.png"/>
-</td>
-<td>
 <img height="300" src="iOCR/iOCR/Assets.xcassets/english_left_just_square.imageset/hexdreams.png"/>
 </td>
 </tr>
-<tr><td>Japanese</td><td>Japanese (vert)</td><td>Chinese (trad, vert)</td><td>English</td></tr>
+<tr>
+<td>Chinese (trad, vert)</td>
+<td>Japanese</td>
+<td>Japanese (vert)</td>
+<td>English</td></tr>
 </table>
 
 ```sh
@@ -194,7 +200,7 @@ The following Swift excerpts were taken from **testGuideExample()** in **iOCR/iO
 
 #### Initialize API handler
 
-Create an API handler and initialize it with the trained data's parent folder, the data's filename, and an *OCR engine mode (OEM)*.  **OEM_LSTM_ONLY** is the latest neural-net recognition engine, which has some advantage in text-line recognition over the previous engine.
+Create an API handler and initialize it with the trained data's parent folder, the trained data's language name, and an *OCR engine mode (OEM)*.  **OEM_LSTM_ONLY** is the latest neural-net recognition engine, which has some advantage in text-line recognition over the previous engine.
 
 ```swift
 let tessAPI = TessBaseAPICreate()!
@@ -203,9 +209,16 @@ TessBaseAPIInit2(tessAPI, trainedDataFolder, "jpn_vert", OEM_LSTM_ONLY)
 
 **TessBaseAPIInit2()** is one of 4 API initializers, and lets us set the OEM.
 
+For the API to be able to find the **tessdata** parent-folder, we added **Root/share** as a folder reference, then:
+
+```swift
+let trainedDataFolder = Bundle.main.path(
+            forResource: "tessdata", ofType: nil, inDirectory: "share")
+```
+
 #### Prepare the image
 
-Tesseract uses Leptonica's **PIX** image format, so we need to get a pointer to a byte string of some UIImage data and pass the pointer to **pixReadMem()**:
+We use **TessBaseAPISetImage2()** to set the image, and that API requires the image to be in Leptonica's **PIX** format, so we need to get a pointer to a byte string of some UIImage data and pass that pointer to **pixReadMem()**:
 
 ```swift
 let uiImage = UIImage(named: "japanese_vert")!
@@ -218,7 +231,7 @@ var image = pixReadMem(uint8Pointer, data.count)
 
 #### Image settings & Perform OCR
 
-Set our image, the resolution, and *page segmentation mode (PSM)*.  PSM defines how Tesseract sees or treats the image, like 'Assume a single column of text of variable sizes' or 'Treat the image as a single word'.  All the images in this guide have been cropped to just the text, and letting Tesseract figure this out for itself (**PSM_AUTO**) works just fine.
+Set our image, the resolution, and *page segmentation mode (PSM)*.  PSM defines how Tesseract sees or treats the image, like 'Assume a single column of text of variable sizes' or 'Treat the image as a single word'.  All the images in this guide have been cropped to just the text, and letting Tesseract figure this out for itself (**PSM_AUTO**) works just fine:
 
 ```swift
 TessBaseAPISetImage2(tessAPI, image)
@@ -244,7 +257,7 @@ We could stop here, but there's more we can know about the text.
 
 #### Iterate over results
 
-The API can recognizes varying *levels* of text in this top-down order: blocks, paragraphs, lines, words, symbols.  **RIL_TEXTLINE** is the *ResultIteratorLevel* for working with individual lines of text.  Here we're using a textline iterator and getting the (x1,y1) and (x2,y2) coordinates of the recognized line's bounding box:
+The API can recognize varying *levels* of text in this top-down order: blocks, paragraphs, lines, words, symbols.  **RIL_TEXTLINE** is the *ResultIteratorLevel* for working with individual lines of text.  Here we're using a textline iterator and getting the (x1,y1) and (x2,y2) coordinates of the recognized line's bounding box:
 
 ```swift
 let iterator = TessBaseAPIGetIterator(tessAPI)
@@ -260,19 +273,24 @@ TessPageIteratorBoundingBox(iterator, level, &x1, &y1, &x2, &y2)
 
 *Note:* `TessBaseAPIGetUTF8Text()` or `TessBaseApiRecognize()` must be called ***before*** the `TessPageIterator` and `TessResultIterator` methods.
 
-There is a small test and working example of these basics in **iOCRTests.swift::testGuideExample()**, the following Xcode project.
+There is a small test and full working example of these basics in **iOCRTests.swift::testGuideExample()**, in the following Xcode project.
 
 ### iOCR Xcode project
 
 **PROJECTDIR/iOCR/iOCR.xcodeproj** is an example of putting everything together into a working project and running an app in the simulator that shows off those API basics.
 
-Open the project and run the **iOCR** target for an **iPad Pro (12.9-in)**.
+Open the project and run the **iOCR** target for an **iPad Pro (12.9-in)** (some of the UI was coded specifically for that device's screen size).
 
 <img height="683" src="Notes/static/guide/ipad_app_all_good.png"/>
 
-All four sample images were run through Tesseract at the **TEXTLINE** level.  We can also see between horizontal and vertical Japanese, and vertical Chinese, that the results of a "line" vary depending on some combination of language and the text's orientation; specifically <span style="font-size: 1.1em">Hello</span> and <span style="font-size: 1.1em">,世界</span> being recognized as two separate lines.
+<!--
+We can also see between horizontal and vertical Japanese, and vertical Chinese, that the results of a "line" varies depending on some combination of language and the text's orientation:
 
-Each card consists of a sample image against a gray background.  Colored rectangles drawn on top of the image represent lines that Tesseract recognized.  Each recognized line is also represented in the table below the image.  The recognized line's bounding box, utf8 text, and confidence score are wrapped up in a **RecognizedRectangle**:
+- In the horizontal Japanese and vertical Chinese examples, we get what we'd expect
+- In the vertical Japanese example, <span style="font-size: 1.1em">Hello</span> and <span style="font-size: 1.1em">,世界</span> are recognized as two separate lines
+-->
+
+Each of the four cards consists of a sample image against a gray background; images were run through Tesseract at the **TEXTLINE** level.  Colored rectangles drawn on top of the image represent lines that Tesseract recognized.  Each recognized line is also represented in the table below the image.  The recognized line's bounding box, utf8 text, and confidence score are wrapped up in a **RecognizedRectangle**:
 
 ```swift
 struct RecognizedRectangle: Equatable {
@@ -283,7 +301,9 @@ struct RecognizedRectangle: Equatable {
 }
 ```
 
-The **Recognizer** class manages that struct, along with all the API setup and teardown.  It has two main methods, `getAllText()` and `getRecognizedRects()`, for getting all text and/or RecognizedRectangles.  We'll create a recognizer:
+The **Recognizer** class manages that struct, along with all the API setup and teardown.  It has two main methods, `getAllText()` and `getRecognizedRects()`, for getting all text and/or RecognizedRectangles.  
+
+We create a recognizer:
 
 ```swift
 let recognizer = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 144)
