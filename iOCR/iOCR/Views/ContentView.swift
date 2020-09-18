@@ -24,7 +24,7 @@ struct ContentView: View {
                 recognizer: Recognizer(imgName: "japanese", trainedDataName: "jpn", imgDPI: 144))
             RecognizedView(
                 caption: "Japanese (vertical)",
-                recognizer: Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 72)
+                recognizer: Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 144)
             )
             RecognizedView(
                 caption: "Traditional Chinese",

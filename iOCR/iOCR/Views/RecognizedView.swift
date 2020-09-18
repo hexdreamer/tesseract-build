@@ -6,6 +6,7 @@
 //  Copyright © 2020 Zach Young. All rights reserved.
 //
 
+import CoreText
 import SwiftUI
 import hexdreamsCocoa
 
@@ -18,15 +19,15 @@ struct RecognizedView: View {
 
     var body: some View {
         let columns = [
-            GridItem(.flexible(), alignment: .top),
-            GridItem(.flexible(), alignment: .top),
-            GridItem(.flexible(), alignment: .top),
+            GridItem(.flexible(), spacing: 0, alignment: .top),
+            GridItem(.flexible(), spacing: 0, alignment: .top),
+            GridItem(.flexible(), spacing: 0, alignment: .top),
         ]
         let recRects = recognizer.getRecognizedRects()
 
         ZStack {
             RoundedRectangle(cornerRadius: 25)
-                .stroke(Color.gray)
+                .stroke(Color.black)
 
             VStack {
                 Text(caption)
@@ -53,8 +54,7 @@ struct RecognizedView: View {
             } // VStack
 
         } // ZStack
-        .frame(width: 505, height: 650)
-
+        .frame(width: 500, height: 650)
     }
 }
 
@@ -81,9 +81,14 @@ struct ImageAndRects: View {
     var body: some View {
         let transform = imageViewTransform
         ZStack {
+            RoundedRectangle(cornerRadius: /*@START_MENU_TOKEN@*/25.0/*@END_MENU_TOKEN@*/)
+                .fill(Color(red: 0.85, green: 0.85, blue: 0.85, opacity: 1.0))
+                .frame(maxWidth: parentViewSize.width-15, maxHeight: parentViewSize.height-15)
+
             Image(uiImage: self.image)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
+                .frame(maxWidth: parentViewSize.width-25, maxHeight: parentViewSize.height-25)
 
             ForEach(recRects, id: \.id) { rect in
                 Path { path in
@@ -120,6 +125,7 @@ struct Row: View {
             .font(.title)
     }
     
+    /// Get rid of newlines; truncate at 40 chars (for long-form English example)
     private func trimText(_ text: String) -> String {
         let trimLen = 40
         var s = text
