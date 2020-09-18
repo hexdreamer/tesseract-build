@@ -186,9 +186,6 @@ And with that little test completed, we can get into Xcode.
 
 The main API for Tesseract is in C++, but Swift doesn't support C++.  Swift does support C APIs, and Tesseract also has a C-API, so we'll use that. 
 
-## !! Take these links out, just saving fo the moment !!
-<https://stackoverflow.com/a/33055890/246801> &rarr; <http://clang.llvm.org/docs/Modules.html>
-
 If you're not familiar with the Tesseract API, here are the basics with figurative code samples.
 
 ### Tesseract API basics, in Swift
@@ -267,18 +264,19 @@ There is a small test and working example of these basics in **iOCRTests.swift::
 
 ### iOCR Xcode project
 
-**PROJECTDIR/iOCR/iOCR.xcodeproj** is an example of putting everything together into a working project and running an app in the simulator that highlights those API basics.
+**PROJECTDIR/iOCR/iOCR.xcodeproj** is an example of putting everything together into a working project and running an app in the simulator that shows off those API basics.
 
-Open the project and run the **iOCR** target for an **iPad Pro (12.9-in)**:
+Open the project and run the **iOCR** target for an **iPad Pro (12.9-in)**.
 
-*Dress up the views, to ratify exactly what's-what: what's the image and whats the recognized text?, big grey border around image, and refer to border in textual description*
+<img height="683" src="Notes/static/guide/ipad_app_all_good.png"/>
 
-<img height="650" src="Notes/static/guide/ipad_app_blank_errors.png"/>
+All four sample images were run through Tesseract at the **TEXTLINE** level.  We can also see between horizontal and vertical Japanese, and vertical Chinese, that the results of a "line" vary depending on some combination of language and the text's orientation; specifically <span style="font-size: 1.1em">Hello</span> and <span style="font-size: 1.1em">,世界</span> being recognized as two separate lines.
 
-The colored rectangles, texts, and numbers are the iterated bounding boxes, utf8 texts, and confidence scores, and are now wrapped up in a **RecognizedRectangle**:
+Each card consists of a sample image against a gray background.  Colored rectangles drawn on top of the image represent lines that Tesseract recognized.  Each recognized line is also represented in the table below the image.  The recognized line's bounding box, utf8 text, and confidence score are wrapped up in a **RecognizedRectangle**:
 
 ```swift
-struct RecognizedRectangle {
+struct RecognizedRectangle: Equatable {
+    let id = UUID()
     public var text: String
     public var boundingBox: CGRect
     public var confidence: Float
@@ -291,7 +289,7 @@ The **Recognizer** class manages that struct, along with all the API setup and t
 let recognizer = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 144)
 ```
 
-and, for simplicity, call these methods in the debugger:
+and, to simply show the results, call these methods in the debugger:
 
 ```none
 print recognizer.getAllText()
@@ -304,11 +302,13 @@ print recognizer.getRecognizedRects()
 
   ([iOCR.RecognizedRectangle]) $R8 = 2 values {
     [0] = {
+      id = {}
       text = "Hello\n\n"
       boundingBox = (origin = (x = 9, y = 12), size = (width = 22, height = 166))
       confidence = 88.5363388
     }
     [1] = {
+      id = {}
       text = ",世界\n"
       boundingBox = (origin = (x = 7, y = 210), size = (width = 30, height = 83))
       confidence = 78.3088684
@@ -316,42 +316,33 @@ print recognizer.getRecognizedRects()
 }
 ```
 
-#### A weird rectangle and \<\*blank\*\>
-
-In the Japanese sample images, we can see the text value `<*blank*>` with a confidence of 95.00%.  Those values correspond to the unexpected recognition of a single stroke inside the <span style="font-size: 1.25em">世</span> character as a whole other valid character, weird...
-
-<img height="200" src="Notes/static/guide/blank_error_cropped.png"/>
-
-but completely avoidable with a little more understanding of the image properties, as we'll see next.
-
-The Japanese sample images were initially created for the guide like so:
-
-```swift
-var jpn = Recognizer(imgName: "japanese", trainedDataName: "jpn")
-var jpn_vert = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert")
-```
-
-which uses a default DPI of 72.  These images have a DPI of 144, though.
+Everything looks good, now.
 
 #### Better configuration is better recognition
 
-Simply add the correct DPI to the Recognizer:
+But&mdash;to make a point about better configuration making for better recognition&mdash;with a small, ***bad*** tweak we can get an odd result:
 
-```swift
-var jpn = Recognizer(imgName: "japanese", trainedDataName: "jpn", imgDPI: 144)
-var jpn_vert = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 144)
-```
+ 1. Open **ContentView.swift**
+ 1. Locate the **Recognizer** for vertical Japanese
+ 1. Change the **imgDPI** from the correct value of 144 to the incorrect value of **72**
 
-and it just works!
+  ```swift
+  RecognizedView(
+      caption: "Japanese (vertical)",
+      recognizer: Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 72)
+  )
+  ```
 
-<img height="235" src="Notes/static/guide/ipad_app_fixed_cropped.png"/>
+Re-run the app and we can see the text value `<*blank*>` with a confidence of 95%.  This value corresponds to the unexpected recognition of a single stroke inside the <span style="font-size: 1.1em">世</span> character as a whole other valid character:
 
-This little problem-and-solution set starts to highlight some of the internal workings of Tesseract.
+<img height="404" src="Notes/static/guide/ipad_app_bad_blank_cropped.png"/>
 
 #### Learning Tesseract
 
-Configuration can matter a lot for Tesseract.  You might need to dig in if you don't immediately get good results.  Here are two resources we've consulted:
+Configuration can matter a lot for Tesseract.  You might need to dig in if you don't immediately get good results.  Two resources we've consulted to get a quick picture of this configuration landscape were:
 
 - **Is there a Minimum / Maximum Text Size? (It won’t read screen text!)**  <https://tesseract-ocr.github.io/tessdoc/FAQ-Old#is-there-a-minimum--maximum-text-size-it-wont-read-screen-text>
 
 - **Improving the quality of the output** <https://tesseract-ocr.github.io/tessdoc/ImproveQuality>
+
+The [Tesseract User Group](https://groups.google.com/g/tesseract-ocr) and its [Github Issues](https://github.com/tesseract-ocr/tesseract/issues) are also good resources.

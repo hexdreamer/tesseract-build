@@ -15,7 +15,6 @@ private let RECT_COLORS = [Color.red, Color.orange, Color.purple]
 struct RecognizedView: View {
     public let caption: String
     public let recognizer: Recognizer
-    
 
     var body: some View {
         let columns = [
