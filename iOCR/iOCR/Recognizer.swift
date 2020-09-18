@@ -15,7 +15,8 @@ import libtesseract
 
 /// A unit of recognition that includes the recognized text, the text's location and size (in the image's coordinate space),
 /// and the API's confidence in the recognition.
-struct RecognizedRectangle {
+struct RecognizedRectangle: Equatable {
+    let id = UUID()
     public var text: String
     public var boundingBox: CGRect
     public var confidence: Float
@@ -64,7 +65,7 @@ class Recognizer {
     }
     
     /// Frees  Tesseract API object
-    public func destroy() {
+    deinit {
         TessBaseAPIEnd(self.tessAPI)
         TessBaseAPIDelete(self.tessAPI)
     }

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,6 +16,8 @@
 		F464A67924A3C57D002440AC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F464A67824A3C57D002440AC /* Preview Assets.xcassets */; };
 		F464A67C24A3C57D002440AC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F464A67A24A3C57D002440AC /* LaunchScreen.storyboard */; };
 		F464A68724A3C57D002440AC /* iOCRTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F464A68624A3C57D002440AC /* iOCRTests.swift */; };
+		F4727EC725140E8000616CC0 /* hexdreamsCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = F4727EC625140E8000616CC0 /* hexdreamsCocoa */; };
+		F47EC8FF25133C08008E57AB /* RecognizedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47EC8FE25133C08008E57AB /* RecognizedView.swift */; };
 		F499D41624AAC49100B5EF87 /* Recognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F499D41524AAC49100B5EF87 /* Recognizer.swift */; };
 		F49FF5F124FE3BBB007FFA8A /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49FF5EF24FE3BA9007FFA8A /* libjpeg.a */; };
 		F49FF5F324FE3BBB007FFA8A /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49FF5EE24FE3BA9007FFA8A /* libpng16.a */; };
@@ -48,6 +50,7 @@
 		F464A68224A3C57D002440AC /* iOCRTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOCRTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F464A68624A3C57D002440AC /* iOCRTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOCRTests.swift; sourceTree = "<group>"; };
 		F464A68824A3C57D002440AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F47EC8FE25133C08008E57AB /* RecognizedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognizedView.swift; sourceTree = "<group>"; };
 		F499D41524AAC49100B5EF87 /* Recognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recognizer.swift; sourceTree = "<group>"; };
 		F49FF5EC24FE3BA9007FFA8A /* libtiff.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtiff.a; path = ../Root/lib/libtiff.a; sourceTree = "<group>"; };
 		F49FF5ED24FE3BA9007FFA8A /* liblept.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblept.a; path = ../Root/lib/liblept.a; sourceTree = "<group>"; };
@@ -67,6 +70,7 @@
 				F49FF5F424FE3BBB007FFA8A /* libtiff.a in Frameworks */,
 				F49FF5F924FE3BE9007FFA8A /* libz.tbd in Frameworks */,
 				F49FF5F524FE3BBB007FFA8A /* libtesseract.a in Frameworks */,
+				F4727EC725140E8000616CC0 /* hexdreamsCocoa in Frameworks */,
 				F450772D24FECE8B00E5A081 /* liblept.a in Frameworks */,
 				F49FF5F124FE3BBB007FFA8A /* libjpeg.a in Frameworks */,
 				F49FF5F324FE3BBB007FFA8A /* libpng16.a in Frameworks */,
@@ -108,12 +112,12 @@
 			children = (
 				F464A66F24A3C57A002440AC /* AppDelegate.swift */,
 				F464A67124A3C57A002440AC /* SceneDelegate.swift */,
-				F464A67324A3C57A002440AC /* ContentView.swift */,
-				F464A67524A3C57D002440AC /* Assets.xcassets */,
-				F464A67A24A3C57D002440AC /* LaunchScreen.storyboard */,
-				F464A67D24A3C57D002440AC /* Info.plist */,
-				F464A67724A3C57D002440AC /* Preview Content */,
 				F499D41524AAC49100B5EF87 /* Recognizer.swift */,
+				F47EC8FD25133BC5008E57AB /* Views */,
+				F464A67524A3C57D002440AC /* Assets.xcassets */,
+				F464A67D24A3C57D002440AC /* Info.plist */,
+				F464A67A24A3C57D002440AC /* LaunchScreen.storyboard */,
+				F464A67724A3C57D002440AC /* Preview Content */,
 			);
 			path = iOCR;
 			sourceTree = "<group>";
@@ -149,6 +153,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		F47EC8FD25133BC5008E57AB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F464A67324A3C57A002440AC /* ContentView.swift */,
+				F47EC8FE25133C08008E57AB /* RecognizedView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -165,6 +178,9 @@
 			dependencies = (
 			);
 			name = iOCR;
+			packageProductDependencies = (
+				F4727EC625140E8000616CC0 /* hexdreamsCocoa */,
+			);
 			productName = iOCR;
 			productReference = F464A66C24A3C57A002440AC /* iOCR.app */;
 			productType = "com.apple.product-type.application";
@@ -215,6 +231,9 @@
 				Base,
 			);
 			mainGroup = F464A66324A3C57A002440AC;
+			packageReferences = (
+				F4727EC525140E8000616CC0 /* XCRemoteSwiftPackageReference "hexdreamsCocoa" */,
+			);
 			productRefGroup = F464A66D24A3C57A002440AC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -255,6 +274,7 @@
 				F464A67024A3C57A002440AC /* AppDelegate.swift in Sources */,
 				F464A67224A3C57A002440AC /* SceneDelegate.swift in Sources */,
 				F464A67424A3C57A002440AC /* ContentView.swift in Sources */,
+				F47EC8FF25133C08008E57AB /* RecognizedView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,6 +437,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"iOCR/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOCR/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -439,6 +460,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"iOCR/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOCR/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -526,6 +548,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F4727EC525140E8000616CC0 /* XCRemoteSwiftPackageReference "hexdreamsCocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hexdreamer/hexdreamsCocoa.git";
+			requirement = {
+				branch = trunk;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F4727EC625140E8000616CC0 /* hexdreamsCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F4727EC525140E8000616CC0 /* XCRemoteSwiftPackageReference "hexdreamsCocoa" */;
+			productName = hexdreamsCocoa;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F464A66424A3C57A002440AC /* Project object */;
 }

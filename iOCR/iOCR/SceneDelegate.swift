@@ -20,34 +20,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-
-        var jpn = Recognizer(imgName: "japanese", trainedDataName: "jpn", imgDPI: 144)
-        var jpn_vert = Recognizer(imgName: "japanese_vert", trainedDataName: "jpn_vert", imgDPI: 144)
-        var chi_trad_vert = Recognizer(imgName: "chinese_traditional_vert", trainedDataName: "chi_tra_vert")
-
-        /// This sample image isn't so normal in its format, it's one run-on sentence wrapped around 8 ines.
-        /// Something like a speech bubble from an English comic would probably be a much better sample.
-        var eng = Recognizer(
-            imgName: "english_left_just_square", trainedDataName: "eng",
-            tessPSM: PSM_SINGLE_BLOCK, tessPIL: RIL_BLOCK
-        )
-        
-        _ = jpn.getRecognizedRects()
-        _ = jpn_vert.getRecognizedRects()
-        _ = chi_trad_vert.getRecognizedRects()
-        _ = eng.getRecognizedRects()
-        
-        defer {
-            jpn.destroy()
-            jpn_vert.destroy()
-            chi_trad_vert.destroy()
-            eng.destroy()
-        }
         
         // Create the SwiftUI view that provides the window contents.
-        let contentView = ContentView(
-            jpn: jpn, jpn_vert: jpn_vert, chi_trad_vert: chi_trad_vert, eng: eng
-        )
+        let contentView = ContentView()
  
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
