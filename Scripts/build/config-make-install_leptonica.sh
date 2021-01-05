@@ -70,18 +70,18 @@ config_flags=(
   '--without-libwebp'
 )
 
-xc mkdir -p $SOURCES/leptonica-1.79.0/$os_arch || exit 1
-xc cd $SOURCES/leptonica-1.79.0/$os_arch || exit 1
+xc mkdir -p $SOURCES/leptonica-1.80.0/$os_arch || exit 1
+xc cd $SOURCES/leptonica-1.80.0/$os_arch || exit 1
 
 print -n 'configuring... '
-xl leptonica-1.79.0 "3_config_$os_arch" ../configure $config_flags || exit 1
+xl leptonica-1.80.0 "3_config_$os_arch" ../configure $config_flags || exit 1
 print -n 'done, '
 
 print -n 'making... '
-xl leptonica-1.79.0 "4_clean_$os_arch" make clean || exit 1
-xl leptonica-1.79.0 "4_make_$os_arch" make || exit 1
+xl leptonica-1.80.0 "4_clean_$os_arch" make clean || exit 1
+xl leptonica-1.80.0 "4_make_$os_arch" make || exit 1
 print -n 'done, '
 
 print -n 'installing... '
-xl leptonica-1.79.0 "5_install_$os_arch" make install || exit 1
+xl leptonica-1.80.0 "5_install_$os_arch" make install || exit 1
 print 'done.'

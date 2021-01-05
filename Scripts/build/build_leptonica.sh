@@ -22,21 +22,21 @@ if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
   exit 0
 fi
 
-print "\n======== leptonica-1.79.0 ========"
+print "\n======== leptonica-1.80.0 ========"
 
 # --  Download / Extract  -----------------------------------------------------
 
-targz=leptonica-1.79.0.tar.gz
-url="https://github.com/DanBloomberg/leptonica/releases/download/1.79.0/$targz"
+targz=leptonica-1.80.0.tar.gz
+url="https://github.com/DanBloomberg/leptonica/releases/download/1.80.0/$targz"
 
-download leptonica-1.79.0 $url $targz || exit 1
-extract leptonica-1.79.0 $targz || exit 1
+download leptonica-1.80.0 $url $targz || exit 1
+extract leptonica-1.80.0 $targz || exit 1
 
 # --  Preconfigure  -----------------------------------------------------------
 
 print -n 'Preconfiguring... '
-xc cd $SOURCES/leptonica-1.79.0 || exit 1
-xl leptonica-1.79.0 '2_preconfig' ./autogen.sh || exit 1
+xc cd $SOURCES/leptonica-1.80.0 || exit 1
+xl leptonica-1.80.0 '2_preconfig' ./autogen.sh || exit 1
 print 'done.'
 
 # --  Config / Make / Install  ------------------------------------------------
@@ -70,14 +70,14 @@ zsh $parentdir/config-make-install_leptonica.sh 'macos_x86_64' || exit 1
 xc mkdir -p $ROOT/lib
 
 print -n 'ios: lipo... '
-xl leptonica-1.79.0 '6_lipo_ios' \
+xl leptonica-1.80.0 '6_lipo_ios' \
   xcrun lipo $ROOT/ios_arm64/lib/liblept.a $ROOT/ios_x86_64/lib/liblept.a \
   -create -output $ROOT/lib/liblept.a ||
   exit 1
 print 'done.'
 
 print -n 'macos: lipo... '
-xl leptonica-1.79.0 '6_lipo_macos' \
+xl leptonica-1.80.0 '6_lipo_macos' \
   xcrun lipo $ROOT/macos_x86_64/lib/liblept.a \
   -create -output $ROOT/lib/liblept-macos.a ||
   exit 1
