@@ -26,8 +26,8 @@ print "\n======== leptonica-1.79.0 ========"
 
 # --  Download / Extract  -----------------------------------------------------
 
-targz=leptonica-1.80.0.tar.gz
-url="https://github.com/DanBloomberg/leptonica/releases/download/1.80.0/$targz"
+targz=leptonica-1.79.0.tar.gz
+url="https://github.com/DanBloomberg/leptonica/releases/download/1.79.0/$targz"
 
 download leptonica-1.79.0 $url $targz || exit 1
 extract leptonica-1.79.0 $targz || exit 1
