@@ -14,7 +14,7 @@ fi
 if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
   deleted=$(find $ROOT -name '*jpeg*' -prune -print -exec rm -rf {} \;)
   if [[ -n $deleted ]]; then
-    echo "$scriptname: deleting..."
+    echo "$scriptname: deleted:"
     echo $deleted
   else
     echo "$scriptname: clean"
