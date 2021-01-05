@@ -22,7 +22,7 @@ if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
   exit 0
 fi
 
-name='tiff-4.1.0'
+name='tiff-4.2.0'
 
 print "\n======== $name ========"
 

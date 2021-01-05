@@ -1,5 +1,9 @@
 # Miscellaneous
 
+## Tesseract Version / Source
+
+Not the clearest to find, but we're using 4.1.1, and [the manual](https://tesseract-ocr.github.io/tessdoc/) has a link to the TARGZ file.
+
 ## libtiff header
 
 **tiffconf.h** has one value with two different definitions between **arm64** and **x86_64**, and might affect you if you are building for macOS.

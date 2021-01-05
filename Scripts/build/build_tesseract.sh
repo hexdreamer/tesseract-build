@@ -22,6 +22,7 @@ if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
   exit 0
 fi
 
+# Check out this page for version updates: https://tesseract-ocr.github.io/tessdoc/
 name='tesseract-4.1.1'
 
 print "\n======== $name ========"
