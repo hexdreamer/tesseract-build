@@ -1,5 +1,53 @@
 # Miscellaneous
 
+## Getting a build up in 30 minutes ?!!?
+
+1. Change all `arm-apple-darwin64` to `arm64-apple-ios14.3`
+
+## Building on Apple Silicon
+
+- Make four different os_platform-named libraries, just about how to make XCode use the "simulator" lib for running the Simulator
+- Make 5 different products--iOS arm64, Sim arm64, Sim x86, macOS arm64, macOS x86--lipo'd into 3 libs--iOS, Sim, macOS.
+
+- [iOS 14, lipo error while creating library for both device and simulator
+](https://stackoverflow.com/questions/64022291/ios-14-lipo-error-while-creating-library-for-both-device-and-simulator)
+
+  And the answer is to not include arm64 in the simulator library
+
+- [How to build a static library on M1 mac that supports iOS simulator on Intel mac?](https://stackoverflow.com/questions/65564805/how-to-build-a-static-library-on-m1-mac-that-supports-ios-simulator-on-intel-mac)
+
+  > It seems that I have to build a xcframework which contains binaries for different destinations.
+  > So I tried to build different slices and hope to bundle them as a xcframework. But I finally found I don't know how to build the x86_64 slice with a M1 Mac.
+
+- [](https://developer.apple.com/forums/thread/656509?answerId=634370022#634370022)
+
+  > ```none
+  > EXCLUDED_ARCHS[sdk=iphoneos*] = x86_64
+  > EXCLUDED_ARCHS[sdk=iphonesimulator*] = arm64
+  > ARCHS[sdk=iphoneos*] = arm64
+  > ARCHS[sdk=iphonesimulator*] = x86_64
+  > VALID_ARCHS[sdk=iphoneos*] = arm64
+  > VALID_ARCHS[sdk=iphonesimulator*] = x86_64
+  > ```
+  >
+  >  My specific build ***intel*** based macOS environment
+
+Buiding XCode project ArchTest for Simulator:
+
+```none
+CompileSwift normal arm64 /Users/zyoung/develop/ArchTest/ArchTest/ArchTest.swift (in target 'ArchTest' from project 'ArchTest')
+    cd /Users/zyoung/develop/ArchTest
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift -frontend -c -primary-file /Users/zyoung/develop/ArchTest/ArchTest/ArchTest.swift -emit-module-path /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphonesimulator/ArchTest.build/Objects-normal/arm64/ArchTest\~partial.swiftmodule -emit-module-doc-path /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphonesimulator/ArchTest.build/Objects-normal/arm64/ArchTest\~partial.swiftdoc -emit-module-source-info-path /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphonesimulator/ArchTest.build/Objects-normal/arm64/ArchTest\~partial.swiftsourceinfo -serialize-diagnostics-path /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphonesimulator/ArchTest.build/Objects-normal/arm64/ArchTest.dia -emit-dependencies-path /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphonesimulator/ArchTest.build/Objects-normal/arm64/ArchTest.d -emit-reference-dependencies-path /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphonesimulator/ArchTest.build/Objects-normal/arm64/ArchTest.swiftdeps -target arm64-apple-ios14.3-simulator -Xllvm -aarch64-use-tbi -enable-objc-interop -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator14.3.sdk -I /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Products/Debug-iphonesimulator -F /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Products/Debug-iphonesimulator -enable-testing -g -module-cache-path /Users/zyoung/build/ModuleCache.noindex -swift-version 5 -enforce-exclusivity\=checked -Onone -D DEBUG -serialize-debugging-options -Xcc -working-directory -Xcc /Users/zyoung/develop/ArchTest -enable-anonymous-context-mangled-names -Xcc -I/Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphonesimulator/ArchTest.build/swift-overrides.hmap -Xcc -iquote -Xcc /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphonesimulator/ArchTest.build/ArchTest-generated-files.hmap -Xcc -I/Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphonesimulator/ArchTest.build/ArchTest-own-target-headers.hmap -Xcc -I/Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphonesimulator/ArchTest.build/ArchTest-all-target-headers.hmap -Xcc -iquote -Xcc /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphonesimulator/ArchTest.build/ArchTest-project-headers.hmap -Xcc -I/Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphonesimulator/ArchTest.build/DerivedSources-normal/arm64 -Xcc -I/Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphonesimulator/ArchTest.build/DerivedSources/arm64 -Xcc -I/Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphonesimulator/ArchTest.build/DerivedSources -Xcc -DDEBUG\=1 -target-sdk-version 14.3 -parse-as-library -module-name ArchTest -o /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphonesimulator/ArchTest.build/Objects-normal/arm64/ArchTest.o -index-store-path /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Index/DataStore -index-system-modules
+  ```
+  
+  Buiding XCode project ArchTest for Simulator:
+
+  ```none
+  CompileSwift normal arm64 /Users/zyoung/develop/ArchTest/ArchTest/ArchTest.swift (in target 'ArchTest' from project 'ArchTest')
+    cd /Users/zyoung/develop/ArchTest
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift -frontend -c -primary-file /Users/zyoung/develop/ArchTest/ArchTest/ArchTest.swift -emit-module-path /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphoneos/ArchTest.build/Objects-normal/arm64/ArchTest\~partial.swiftmodule -emit-module-doc-path /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphoneos/ArchTest.build/Objects-normal/arm64/ArchTest\~partial.swiftdoc -emit-module-source-info-path /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphoneos/ArchTest.build/Objects-normal/arm64/ArchTest\~partial.swiftsourceinfo -serialize-diagnostics-path /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphoneos/ArchTest.build/Objects-normal/arm64/ArchTest.dia -emit-dependencies-path /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphoneos/ArchTest.build/Objects-normal/arm64/ArchTest.d -emit-reference-dependencies-path /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphoneos/ArchTest.build/Objects-normal/arm64/ArchTest.swiftdeps -target arm64-apple-ios14.3 -Xllvm -aarch64-use-tbi -enable-objc-interop -stack-check -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.3.sdk -I /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Products/Debug-iphoneos -F /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Products/Debug-iphoneos -enable-testing -g -module-cache-path /Users/zyoung/build/ModuleCache.noindex -swift-version 5 -enforce-exclusivity\=checked -Onone -D DEBUG -serialize-debugging-options -Xcc -working-directory -Xcc /Users/zyoung/develop/ArchTest -enable-anonymous-context-mangled-names -Xcc -I/Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphoneos/ArchTest.build/swift-overrides.hmap -Xcc -iquote -Xcc /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphoneos/ArchTest.build/ArchTest-generated-files.hmap -Xcc -I/Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphoneos/ArchTest.build/ArchTest-own-target-headers.hmap -Xcc -I/Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphoneos/ArchTest.build/ArchTest-all-target-headers.hmap -Xcc -iquote -Xcc /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphoneos/ArchTest.build/ArchTest-project-headers.hmap -Xcc -I/Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Products/Debug-iphoneos/include -Xcc -I/Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphoneos/ArchTest.build/DerivedSources-normal/arm64 -Xcc -I/Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphoneos/ArchTest.build/DerivedSources/arm64 -Xcc -I/Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphoneos/ArchTest.build/DerivedSources -Xcc -DDEBUG\=1 -target-sdk-version 14.3 -parse-as-library -module-name ArchTest -o /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Build/Intermediates.noindex/ArchTest.build/Debug-iphoneos/ArchTest.build/Objects-normal/arm64/ArchTest.o -embed-bitcode-marker -index-store-path /Users/zyoung/build/ArchTest-ejeyjimwgatdsjbppaofjbvsggtj/Index/DataStore -index-system-modules
+  ```
+
 ## Tesseract Version / Source
 
 Not the clearest to find, but we're using 4.1.1, and [the manual](https://tesseract-ocr.github.io/tessdoc/) has a link to the TARGZ file.
