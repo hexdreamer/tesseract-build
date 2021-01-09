@@ -3,7 +3,7 @@
 
 
 # Get current iOS configuration
-current_ios_arm = """# ios_arm64
+current_ios_arm64 = """# ios_arm64
 export ARCH='arm64'
 export TARGET='arm-apple-darwin64'
 export PLATFORM='iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk'
@@ -12,7 +12,7 @@ export PLATFORM_MIN_VERSION='-miphoneos-version-min=11.0'
 zsh $parentdir/config-make-install_libjpeg.sh $name 'ios_arm64' $dirname || exit 1"""
 
 # Transform to new iOS arm64 target
-updated_ios_arm64 = current_ios_arm.replace('arm-apple-darwin64', 'arm64-apple-ios14.3')
+updated_ios_arm64 = current_ios_arm64.replace('arm-apple-darwin64', 'arm64-apple-ios14.3')
 updated_ios_arm64 = updated_ios_arm64.replace('11.0', '14.3')
 
 # Transform to new iOS arm64 Simulator target
@@ -30,6 +30,7 @@ export PLATFORM_MIN_VERSION='-mios-simulator-version-min=11.0'
 zsh $parentdir/config-make-install_libjpeg.sh $name 'ios_x86_64' $dirname || exit 1"""
 
 updated_ios_x86_64_sim = current_ios_x86_64_sim.replace('11.0', '14.3')
+updated_ios_x86_64_sim = updated_ios_x86_64_sim.replace('ios_x86_64', 'ios_x86_64_sim')
 
 # Get current macOS x86 configuration
 current_macos_x86_64 = """# macos_x86_64
@@ -48,8 +49,39 @@ new_macos_arm64 = current_macos_x86_64.replace('x86_64-apple-darwin', 'arm64-app
 new_macos_arm64 = new_macos_arm64.replace('x86_64', 'arm64')
 new_macos_arm64 = new_macos_arm64.replace('10.13', '11.0')
 
-print(updated_ios_arm64 + '\n')
-print(new_ios_arm64_sim + '\n')
-print(updated_ios_x86_64_sim + '\n')
-print(new_macos_arm64 + '\n')
-print(updated_macos_x86_64 + '\n')
+# print(updated_ios_arm64 + '\n')
+# print(new_ios_arm64_sim + '\n')
+# print(updated_ios_x86_64_sim + '\n')
+# print(new_macos_arm64 + '\n')
+# print(updated_macos_x86_64 + '\n')
+
+with open('build_libjpeg.sh') as f:
+    text = f.read()
+
+    text = text.replace(current_ios_arm64, updated_ios_arm64 + '\n\n' + new_ios_arm64_sim + '\n')
+
+    text = text.replace(current_ios_x86_64_sim, updated_ios_x86_64_sim)
+
+    text = text.replace(current_macos_x86_64, updated_macos_x86_64 + '\n\n' + new_macos_arm64)
+
+with open('build_libjpeg.sh', 'w') as f:
+    f.write(text)
+
+"""
+print -n 'lipo: ios... '
+xl $name '5_ios_lipo' \
+  xcrun lipo $ROOT/ios_arm64/lib/libjpeg.a \
+  -create -output $ROOT/lib/libjpeg-ios.a
+print 'done.'
+
+xl $name '5_sim_lipo' \
+  xcrun lipo $ROOT/ios_arm64_sim/lib/libjpeg.a $ROOT/ios_x86_64_sim/lib/libjpeg.a \
+  -create -output $ROOT/lib/libjpeg-sim.a
+print 'done.'
+
+print -n 'lipo: macos... '
+xl $name '5_macos_lipo' \
+  xcrun lipo $ROOT/macos_x86_64/lib/libjpeg.a $ROOT/macos_arm64/lib/libjpeg.a \
+  -create -output $ROOT/lib/libjpeg-macos.a
+print 'done.'
+"""
