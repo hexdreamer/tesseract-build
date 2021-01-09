@@ -74,6 +74,7 @@ xl $name '5_ios_lipo' \
   -create -output $ROOT/lib/libjpeg-ios.a
 print 'done.'
 
+print -n 'lipo: sim... '
 xl $name '5_sim_lipo' \
   xcrun lipo $ROOT/ios_arm64_sim/lib/libjpeg.a $ROOT/ios_x86_64_sim/lib/libjpeg.a \
   -create -output $ROOT/lib/libjpeg-sim.a
@@ -82,6 +83,20 @@ print 'done.'
 print -n 'lipo: macos... '
 xl $name '5_macos_lipo' \
   xcrun lipo $ROOT/macos_x86_64/lib/libjpeg.a $ROOT/macos_arm64/lib/libjpeg.a \
+  -create -output $ROOT/lib/libjpeg-macos.a
+print 'done.'
+"""
+
+"""
+print -n 'lipo: ios... '
+xl $name '5_ios_lipo' \
+  xcrun lipo $ROOT/ios_arm64/lib/libjpeg.a $ROOT/ios_x86_64/lib/libjpeg.a \
+  -create -output $ROOT/lib/libjpeg.a
+print 'done.'
+
+print -n 'lipo: macos... '
+xl $name '5_macos_lipo' \
+  xcrun lipo $ROOT/macos_x86_64/lib/libjpeg.a \
   -create -output $ROOT/lib/libjpeg-macos.a
 print 'done.'
 """
