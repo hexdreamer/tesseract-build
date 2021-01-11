@@ -3,13 +3,13 @@
 import re
 
 fnames_and_libs = [
-  # ('leptonica', 'liblept'),
-  ('libtiff', 'libtiff'),
-  # ('libjpeg', 'libjpeg'),
-  # ('libpng', 'libpng16')
+  ('leptonica', 'liblept', '6'),
+  # ('libtiff', 'libtiff', '5'),
+  # ('libjpeg', 'libjpeg', '5'),
+  # ('libpng', 'libpng16', '5')
 ]
 
-for fname, libname in fnames_and_libs:
+for fname, libname, lipo_step in fnames_and_libs:
   build_script = f'build_{fname}.sh'
   with open(build_script) as f:
     text = f.read()
@@ -76,35 +76,40 @@ zsh $parentdir/config-make-install_{fname}.sh $name 'macos_x86_64' || exit 1"""
     ## -- LIPO ----------------------------------------------------------------
     current_lipo = f"""
 print -n 'lipo: ios... '
-xl $name '5_ios_lipo' \\
+xl $name '{lipo_step}_ios_lipo' \\
   xcrun lipo $ROOT/ios_arm64/lib/{libname}.a $ROOT/ios_x86_64/lib/{libname}.a \\
-  -create -output $ROOT/lib/{libname}.a
+  -create -output $ROOT/lib/{libname}.a ||
+  exit 1
 print 'done.'
 
 print -n 'lipo: macos... '
-xl $name '5_macos_lipo' \\
+xl $name '{lipo_step}_macos_lipo' \\
   xcrun lipo $ROOT/macos_x86_64/lib/{libname}.a \\
-  -create -output $ROOT/lib/{libname}-macos.a
+  -create -output $ROOT/lib/{libname}-macos.a ||
+  exit 1
 print 'done.'
 """
 
     new_lipo = f"""
 print -n 'lipo: ios... '
-xl $name '5_ios_lipo' \\
+xl $name '{lipo_step}_ios_lipo' \\
   xcrun lipo $ROOT/ios_arm64/lib/{libname}.a \\
-  -create -output $ROOT/lib/{libname}-ios.a
+  -create -output $ROOT/lib/{libname}-ios.a ||
+  exit 1
 print 'done.'
 
 print -n 'lipo: sim... '
-xl $name '5_sim_lipo' \\
+xl $name '{lipo_step}_sim_lipo' \\
   xcrun lipo $ROOT/ios_arm64_sim/lib/{libname}.a $ROOT/ios_x86_64_sim/lib/{libname}.a \\
-  -create -output $ROOT/lib/{libname}-sim.a
+  -create -output $ROOT/lib/{libname}-sim.a ||
+  exit 1
 print 'done.'
 
 print -n 'lipo: macos... '
-xl $name '5_macos_lipo' \\
+xl $name '{lipo_step}_macos_lipo' \\
   xcrun lipo $ROOT/macos_x86_64/lib/{libname}.a $ROOT/macos_arm64/lib/{libname}.a \\
-  -create -output $ROOT/lib/{libname}-macos.a
+  -create -output $ROOT/lib/{libname}-macos.a ||
+  exit 1
 print 'done.'
 """
     assert current_lipo in text, current_lipo

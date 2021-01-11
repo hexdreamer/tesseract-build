@@ -83,19 +83,22 @@ xc mkdir -p $ROOT/lib
 print -n 'lipo: ios... '
 xl $name '5_ios_lipo' \
   xcrun lipo $ROOT/ios_arm64/lib/libpng16.a \
-  -create -output $ROOT/lib/libpng16-ios.a
+  -create -output $ROOT/lib/libpng16-ios.a ||
+  exit 1
 print 'done.'
 
 print -n 'lipo: sim... '
 xl $name '5_sim_lipo' \
   xcrun lipo $ROOT/ios_arm64_sim/lib/libpng16.a $ROOT/ios_x86_64_sim/lib/libpng16.a \
-  -create -output $ROOT/lib/libpng16-sim.a
+  -create -output $ROOT/lib/libpng16-sim.a ||
+  exit 1
 print 'done.'
 
 print -n 'lipo: macos... '
 xl $name '5_macos_lipo' \
   xcrun lipo $ROOT/macos_x86_64/lib/libpng16.a $ROOT/macos_arm64/lib/libpng16.a \
-  -create -output $ROOT/lib/libpng16-macos.a
+  -create -output $ROOT/lib/libpng16-macos.a ||
+  exit 1
 print 'done.'
 
 xc cd $ROOT/lib

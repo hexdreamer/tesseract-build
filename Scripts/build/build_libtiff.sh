@@ -86,19 +86,22 @@ xc mkdir -p $ROOT/lib
 print -n 'lipo: ios... '
 xl $name '5_ios_lipo' \
   xcrun lipo $ROOT/ios_arm64/lib/libtiff.a \
-  -create -output $ROOT/lib/libtiff-ios.a
+  -create -output $ROOT/lib/libtiff-ios.a ||
+  exit 1
 print 'done.'
 
 print -n 'lipo: sim... '
 xl $name '5_sim_lipo' \
   xcrun lipo $ROOT/ios_arm64_sim/lib/libtiff.a $ROOT/ios_x86_64_sim/lib/libtiff.a \
-  -create -output $ROOT/lib/libtiff-sim.a
+  -create -output $ROOT/lib/libtiff-sim.a ||
+  exit 1
 print 'done.'
 
 print -n 'lipo: macos... '
 xl $name '5_macos_lipo' \
   xcrun lipo $ROOT/macos_x86_64/lib/libtiff.a $ROOT/macos_arm64/lib/libtiff.a \
-  -create -output $ROOT/lib/libtiff-macos.a
+  -create -output $ROOT/lib/libtiff-macos.a ||
+  exit 1
 print 'done.'
 
 # --  Copy headers  -----------------------------------------------------------
