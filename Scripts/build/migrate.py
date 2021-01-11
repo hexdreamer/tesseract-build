@@ -4,12 +4,12 @@ import re
 
 fnames_and_libs = [
   # ('leptonica', 'liblept'),
-  ('libjpeg', 'libjpeg'),
-  # ('libpng', 'libpng16')
+  # ('libjpeg', 'libjpeg'),
+  ('libpng', 'libpng16')
 ]
 
 for fname, libname in fnames_and_libs:
-  build_script = f'build_{fname}.sh.ref'
+  build_script = f'build_{fname}.sh'
   with open(build_script) as f:
     text = f.read()
 
@@ -22,7 +22,7 @@ export TARGET='arm-apple-darwin64'
 export PLATFORM='iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk'
 export PLATFORM_MIN_VERSION='-miphoneos-version-min=11.0'
 
-zsh $parentdir/config-make-install_{fname}.sh $name 'ios_arm64' $dirname || exit 1"""
+zsh $parentdir/config-make-install_{fname}.sh $name 'ios_arm64' || exit 1"""
 
     # Transform to new iOS arm64 target
     updated_ios_arm64 = current_ios_arm64.replace('arm-apple-darwin64', 'arm64-apple-ios14.3')
@@ -40,7 +40,7 @@ export TARGET='x86_64-apple-darwin'
 export PLATFORM='iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk'
 export PLATFORM_MIN_VERSION='-mios-simulator-version-min=11.0'
 
-zsh $parentdir/config-make-install_{fname}.sh $name 'ios_x86_64' $dirname || exit 1"""
+zsh $parentdir/config-make-install_{fname}.sh $name 'ios_x86_64' || exit 1"""
 
     updated_ios_x86_64_sim = current_ios_x86_64_sim.replace('11.0', '14.3')
     updated_ios_x86_64_sim = updated_ios_x86_64_sim.replace('ios_x86_64', 'ios_x86_64_sim')
@@ -52,7 +52,7 @@ export TARGET='x86_64-apple-darwin'
 export PLATFORM='MacOSX.platform/Developer/SDKs/MacOSX.sdk'
 export PLATFORM_MIN_VERSION='-mmacosx-version-min=10.13'
 
-zsh $parentdir/config-make-install_{fname}.sh $name 'macos_x86_64' $dirname || exit 1"""
+zsh $parentdir/config-make-install_{fname}.sh $name 'macos_x86_64' || exit 1"""
 
     # Update current configuration to new target name
     updated_macos_x86_64 = current_macos_x86_64.replace('x86_64-apple-darwin', 'x86_64-apple-macos10.13')
@@ -64,12 +64,12 @@ zsh $parentdir/config-make-install_{fname}.sh $name 'macos_x86_64' $dirname || e
 
     # Replace
     assert current_ios_arm64 in text, current_ios_arm64
-    text = text.replace(current_ios_arm64, updated_ios_arm64 + '\n\n' + new_ios_arm64_sim + '\n')
+    text = text.replace(current_ios_arm64, updated_ios_arm64 + '\n\n' + new_ios_arm64_sim)
 
-    assert current_ios_x86_64_sim in text
+    assert current_ios_x86_64_sim in text, current_ios_x86_64_sim
     text = text.replace(current_ios_x86_64_sim, updated_ios_x86_64_sim)
 
-    assert current_macos_x86_64 in text
+    assert current_macos_x86_64 in text, current_macos_x86_64
     text = text.replace(current_macos_x86_64, updated_macos_x86_64 + '\n\n' + new_macos_arm64)
 
     ## -- LIPO ----------------------------------------------------------------

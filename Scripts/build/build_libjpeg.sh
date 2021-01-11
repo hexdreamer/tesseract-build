@@ -53,7 +53,6 @@ export PLATFORM_MIN_VERSION='-miphoneos-version-min=14.3'
 
 zsh $parentdir/config-make-install_libjpeg.sh $name 'ios_arm64_sim' $dirname || exit 1
 
-
 # ios_x86_64_sim
 export ARCH='x86_64'
 export TARGET='x86_64-apple-darwin'
@@ -103,5 +102,3 @@ print 'done.'
 
 xc mkdir -p $ROOT/include
 xc cp $ROOT/ios_arm64/include/j*.h $ROOT/include
-
-find $ROOT -name '*jpeg*' -prune -print
