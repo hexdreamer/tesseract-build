@@ -65,20 +65,17 @@ print -n 'lipo: ios... '
 xl $name '5_ios_lipo' \
   xcrun lipo $ROOT/ios_arm64/lib/libpng16.a $ROOT/ios_x86_64/lib/libpng16.a \
   -create -output $ROOT/lib/libpng16.a
-
-xc cd $ROOT/lib
-xc ln -fs libpng16.a libpng.a
-
 print 'done.'
 
 print -n 'lipo: macos... '
 xl $name '5_macos_lipo' \
   xcrun lipo $ROOT/macos_x86_64/lib/libpng16.a \
   -create -output $ROOT/lib/libpng16-macos.a
+print 'done.'
 
 xc cd $ROOT/lib
+xc ln -fs libpng16.a libpng.a
 xc ln -fs libpng16-macos.a libpng-macos.a
-print 'done.'
 
 # --  Copy headers  -----------------------------------------------------------
 
