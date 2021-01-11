@@ -4,8 +4,9 @@ import re
 
 fnames_and_libs = [
   # ('leptonica', 'liblept'),
+  ('libtiff', 'libtiff'),
   # ('libjpeg', 'libjpeg'),
-  ('libpng', 'libpng16')
+  # ('libpng', 'libpng16')
 ]
 
 for fname, libname in fnames_and_libs:
