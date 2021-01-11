@@ -13,7 +13,8 @@ fi
 # PLATFORM='iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk'
 # PLATFORM_MIN_VERSION='-miphoneos-version-min=11.0'
 
-os_arch=$1 # ios_arm64
+name=$1    # leptonica-1.80.0
+os_arch=$2 # ios_arm64
 
 print -n "$os_arch: "
 
@@ -70,18 +71,18 @@ config_flags=(
   '--without-libwebp'
 )
 
-xc mkdir -p $SOURCES/leptonica-1.80.0/$os_arch || exit 1
-xc cd $SOURCES/leptonica-1.80.0/$os_arch || exit 1
+xc mkdir -p $SOURCES/$name/$os_arch || exit 1
+xc cd $SOURCES/$name/$os_arch || exit 1
 
 print -n 'configuring... '
-xl leptonica-1.80.0 "3_config_$os_arch" ../configure $config_flags || exit 1
+xl $name "3_config_$os_arch" ../configure $config_flags || exit 1
 print -n 'done, '
 
 print -n 'making... '
-xl leptonica-1.80.0 "4_clean_$os_arch" make clean || exit 1
-xl leptonica-1.80.0 "4_make_$os_arch" make || exit 1
+xl $name "4_clean_$os_arch" make clean || exit 1
+xl $name "4_make_$os_arch" make || exit 1
 print -n 'done, '
 
 print -n 'installing... '
-xl leptonica-1.80.0 "5_install_$os_arch" make install || exit 1
+xl $name "5_install_$os_arch" make install || exit 1
 print 'done.'
