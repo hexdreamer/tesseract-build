@@ -3,10 +3,11 @@
 import re
 
 fnames_and_libs = [
-  ('leptonica', 'liblept', '6'),
+  # ('leptonica', 'liblept', '6'),
   # ('libtiff', 'libtiff', '5'),
   # ('libjpeg', 'libjpeg', '5'),
-  # ('libpng', 'libpng16', '5')
+  # ('libpng', 'libpng16', '5'),
+  ('tesseract', 'libtesseract', '6')
 ]
 
 for fname, libname, lipo_step in fnames_and_libs:
