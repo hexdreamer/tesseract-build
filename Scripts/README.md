@@ -1,6 +1,49 @@
 # Miscellaneous
 
-## Getting a build up in 30 minutes ?!!?
+## Problem with -lrt lib in Tesseract make
+
+Main problem is:
+
+```none
+warning: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: archive library: .libs/libtesseract_opencl.a the table of contents is empty (no object file members in the library define global symbols)
+ld: library not found for -lrt
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+make[2]: *** [tesseract] Error 1
+make[1]: *** [all-recursive] Error 1
+make: *** [all] Error 2
+```
+
+This `-lrt` option is for an old library.  Searched online and the common solution for `ld: library not found for -lrt` and `clang: error: linker command failed with exit code 1 (use -v to see invocation)` is "take it out".
+
+Trying to find where this option comes from in the config/make process:
+
+```none
+tesseract-4.1.1 % grep -r -- '-lrt' *
+autom4te.cache/output.0:        LIBS="$LIBS -lsocket -lnsl -lrt -lxnet"
+autom4te.cache/output.1:        LIBS="$LIBS -lsocket -lnsl -lrt -lxnet"
+autom4te.cache/output.3:        LIBS="$LIBS -lsocket -lnsl -lrt -lxnet"
+autom4te.cache/output.2:        LIBS="$LIBS -lsocket -lnsl -lrt -lxnet"
+configure:        LIBS="$LIBS -lsocket -lnsl -lrt -lxnet"
+configure.ac:        LIBS="$LIBS -lsocket -lnsl -lrt -lxnet"
+ios_arm64/src/api/Makefile:am__append_12 = -lrt
+src/api/Makefile.am:tesseract_LDADD += -lrt
+src/api/Makefile.in:@ADD_RT_TRUE@am__append_12 = -lrt
+```
+
+```none
+tesseract-4.1.1 % ll src/api/Makefile.*
+-rw-r--r--  1 zyoung  staff   3.2K Dec 26  2019 src/api/Makefile.am
+-rw-r--r--  1 zyoung  staff    46K Jan 12 12:23 src/api/Makefile.in
+```
+
+**Makefile.in** is derived from **Makefile.am**, so looking at the very last 3 lines in Makefile.am:
+
+```none
+tesseract-4.1.1 % tail -n3 src/api/Makefile.am
+if ADD_RT
+tesseract_LDADD += -lrt
+endif
+```
 
 1. Change all `arm-apple-darwin64` to `arm64-apple-ios14.3`
 

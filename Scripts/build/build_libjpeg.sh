@@ -39,7 +39,7 @@ extract $name $targz $dirname
 
 # Special override till GNU config catches up with new Apple targets
 print -- "--**!!**-- Overriding \$SOURCES/$dirname/config.sub"
-echo 'echo $1' > $SOURCES/$dirname/config.sub
+echo "echo 'arm-apple-darwin64'" > $SOURCES/$dirname/config.sub
 
 
 # ios_arm64

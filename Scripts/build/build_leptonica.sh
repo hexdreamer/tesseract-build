@@ -44,7 +44,7 @@ print 'done.'
 
 # Special override till GNU config catches up with new Apple targets
 print -- "--**!!**-- Overriding \$SOURCES/$name/config/config.sub"
-echo 'echo $1' > $SOURCES/$name/config/config.sub
+echo "echo 'arm-apple-darwin64'" > $SOURCES/$name/config/config.sub
 
 # ios_arm64
 export ARCH='arm64'
