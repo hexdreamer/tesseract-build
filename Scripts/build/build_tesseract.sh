@@ -37,10 +37,10 @@ extract $name $targz || exit 1
 
 # --  Preconfigure  -----------------------------------------------------------
 
-# print -n 'Preconfiguring... '
-# xc cd $SOURCES/$name || exit 1
-# xl $name '2_preconfig' ./autogen.sh || exit 1
-# print 'done.'
+print -n 'Preconfiguring... '
+xc cd $SOURCES/$name || exit 1
+xl $name '2_preconfig' ./autogen.sh || exit 1
+print 'done.'
 
 # --  Config / Make / Install  ------------------------------------------------
 
