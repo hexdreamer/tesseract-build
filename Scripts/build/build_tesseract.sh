@@ -37,16 +37,20 @@ extract $name $targz || exit 1
 
 # --  Preconfigure  -----------------------------------------------------------
 
-print -n 'Preconfiguring... '
-xc cd $SOURCES/$name || exit 1
-xl $name '2_preconfig' ./autogen.sh || exit 1
-print 'done.'
+# print -n 'Preconfiguring... '
+# xc cd $SOURCES/$name || exit 1
+# xl $name '2_preconfig' ./autogen.sh || exit 1
+# print 'done.'
 
 # --  Config / Make / Install  ------------------------------------------------
 
 # Special override till GNU config catches up with new Apple targets
 print -- "--**!!**-- Overriding \$SOURCES/$name/config/config.sub"
 echo 'echo $1' > $SOURCES/$name/config/config.sub
+
+# Very special override to fix a new clang error since adding new M1/Big Sur targets
+print -- "--**!!**-- Overriding \$SOURCES/$name/src/api/Makefile.am"
+sed -i .bak 's/tesseract_LDADD.*/echo warn: Replaced lrt lib with this message!/' $SOURCES/$name/src/api/Makefile.am
 
 # ios_arm64
 export ARCH='arm64'
