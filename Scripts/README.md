@@ -45,7 +45,24 @@ tesseract_LDADD += -lrt
 endif
 ```
 
-1. Change all `arm-apple-darwin64` to `arm64-apple-ios14.3`
+The solution ended up being to have **config.sub** spit out `arm-apple-darwin64`, that way the **configure** script would catch `*darwin*` as a host it expected and set the correct `ADD_RT_*` flags:
+
+```sh
+...
+*darwin*)
+  OPENCL_LIBS=""
+  OPENCL_INC=""
+  if false; then
+    ADD_RT_TRUE=
+    ADD_RT_FALSE='#'
+  else
+    ADD_RT_TRUE='#'
+    ADD_RT_FALSE=
+  fi
+...
+```
+
+The `TARGET` parameter remains like `arm64-apple-iphoneos14.3`.
 
 ## Building on Apple Silicon
 
