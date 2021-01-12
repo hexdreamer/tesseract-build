@@ -43,7 +43,7 @@ strip_whitespace() {
   cat $filename | tr -d '\n' | tr -d '\f' | tr -d ' '
 }
 
-echo 'Recognizing sample images...'
+echo "Recognizing sample images with $(which tesseract)..."
 
 ASSETSDIR=$PROJECTDIR/iOCR/iOCR/Assets.xcassets
 TESTDIR=tesseractTest

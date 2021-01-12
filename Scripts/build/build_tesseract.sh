@@ -123,4 +123,12 @@ xc ditto $ROOT/ios_arm64/share/tessdata $ROOT/share/tessdata
 
 # --  Copy tesseract command-line program  ------------------------------------
 
-cp $ROOT/macos_x86_64/bin/tesseract $ROOT/bin/
+print -n 'tesseract command-line: copying... '
+cp $ROOT/macos_arm64/bin/tesseract $ROOT/bin/tesseract-arm64
+cp $ROOT/macos_x86_64/bin/tesseract $ROOT/bin/tesseract-x86_64
+
+print -n 'sym-linking to arm64 binary... '
+cd $ROOT/bin || exit 1
+ln -fs tesseract-arm64 tesseract
+
+print 'done.'
