@@ -113,8 +113,11 @@ xl $name '{lipo_step}_macos_lipo' \\
   exit 1
 print 'done.'
 """
+
+    # Replace
     assert current_lipo in text, current_lipo
     text = text.replace(current_lipo, new_lipo)
 
+  # Save new configs
   with open(build_script, 'w') as f:
       f.write(text)
