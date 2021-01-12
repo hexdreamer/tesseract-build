@@ -122,15 +122,15 @@ macos: lipo... done.
 
 After a while, we see that Tesseract was finally configured, made, and installed.  And then there was a final **lipo** step.
 
-The builds are targeted for two different processor *architectures*, **arm64** and **x86_64**.  There are also three different *platform* configurations, **ios**, **macos**, and **sim** (simulator).  This results in the following three files for every library, and each is needed for the following use-case:
+The builds are targeted for two different processor *architectures*, **arm64** and **x86_64**.  There are also three different *platform* configurations, **ios**, **macos**, and **ios_sim** (simulator).  This results in the following three files for every library, and each is needed for the following use-case:
 
-| lib name                               | use                                       |
-|----------------------------------------|-------------------------------------------|
-| `Root/ios_arm64/lib/libtesseract.a`    | running on an iOS device                  |
-| `Root/sim_arm64/lib/libtesseract.a`    | running in iOS Simulator, on an M1 Mac    |
-| `Root/sim_x86_64/lib/libtesseract.a`   | running in iOS Simulator, on an Intel Mac |
-| `Root/macos_arm64/lib/libtesseract.a`  | running on an M1 Mac (AppKit)             |
-| `Root/macos_x86_64/lib/libtesseract.a` | running on an Intel Mac (AppKit)          |
+| lib name                                 | use                                       |
+|------------------------------------------|-------------------------------------------|
+| `Root/ios_arm64/lib/libtesseract.a`      | running on an iOS device                  |
+| `Root/ios_arm64_sim/lib/libtesseract.a`  | running in iOS Simulator, on an M1 Mac    |
+| `Root/ios_x86_64_sim/lib/libtesseract.a` | running in iOS Simulator, on an Intel Mac |
+| `Root/macos_arm64/lib/libtesseract.a`    | running on an M1 Mac (AppKit)             |
+| `Root/macos_x86_64/lib/libtesseract.a`   | running on an Intel Mac (AppKit)          |
 
 For iOS, we can use the lipo tool to stitch the files for the two different architectures (arm64 and x86_64) together, and then we can plug that one lib into Xcode.  This will finally leave us with a set of three binary files for each library, and installed to the common location **Root/lib**:
 
