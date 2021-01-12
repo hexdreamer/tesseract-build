@@ -36,6 +36,11 @@ extract $name $targz
 
 # --  Config / Make / Install  ------------------------------------------------
 
+# Special override till GNU config catches up with new Apple targets
+print -- "--**!!**-- Overriding \$SOURCES/$name/config.sub"
+echo 'echo $1' > $SOURCES/$name/config.sub
+
+
 # ios_arm64
 export ARCH='arm64'
 export TARGET='arm64-apple-ios14.3'
