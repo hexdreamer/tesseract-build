@@ -24,13 +24,17 @@ This overview of the Xcode project will be the basis for the following steps.
 
 ## Swift compiler error, **No such module**
 
-Swift cannot find my module
-
-```none
-No such module 'libleptonica'
+```
+CompileSwift normal arm64 /Users/zyoung/develop/tesseract-build/iOCR/Shared/RecognizedView.swift (in target 'iOCR (iOS)' from project 'iOCR')
+    cd /Users/zyoung/develop/tesseract-build/iOCR
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift -frontend -c -primary-file /Users/zyoung/develop/tesseract-build/iOCR/Shared/RecognizedView.swift
+    ...
+    ...
+/Users/zyoung/develop/tesseract-build/iOCR/Shared/RecognizedView.swift:145:8: error: no such module 'libtesseract'
+import libtesseract
 ```
 
-which is defined in **Root/include/module.modulemap**.  More to the point, Swift cannot find my modulemap file.
+Swift cannot find my modules libleptonica and libtesseract which are defined in **Root/include/module.modulemap**.  More to the point, Swift cannot find my modulemap file.
 
 1. Click on **Build Settings**
 1. Ensure that **All** and **Combined** are selected
@@ -39,7 +43,18 @@ which is defined in **Root/include/module.modulemap**.  More to the point, Swift
 
     <img height="212" src="../Notes/static/setup_xcode/import_search_paths.png"/>
 
-Once Xcode finds the modulemap, the paths in the modulemap need to be correct relative to the modulemap file itself.  My modulemap is located in **Root/include**:
+This will add include-options to the **Compile Swift source files** step:
+
+```none
+CompileSwift normal arm64 /Users/zyoung/develop/tesseract-build/iOCR/Shared/RecognizedView.swift (in target 'iOCR (iOS)' from project 'iOCR')
+    cd /Users/zyoung/develop/tesseract-build/iOCR
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift -frontend -c -primary-file /Users/zyoung/develop/tesseract-build/iOCR/Shared/RecognizedView.swift
+    ...
+    -I /Users/zyoung/develop/tesseract-build/iOCR/../Root/include -I /Users/zyoung/develop/tesseract-build/iOCR/../Root/include/leptonica -I /Users/zyoung/develop/tesseract-build/iOCR/../Root/include/libltdl -I /Users/zyoung/develop/tesseract-build/iOCR/../Root/include/libpng16 -I /Users/zyoung/develop/tesseract-build/iOCR/../Root/include/tesseract
+    ...
+```
+
+My modulemap is located in **Root/include**:
 
 ```swift
 module libtesseract {
@@ -54,6 +69,36 @@ module libleptonica {
 ```
 
 and the paths **tesseract/capi.h** and **leptonica/allheaders.h** are valid from Root/include.
+
+## Xcode error, **Undefined symbols for architecture**
+
+```
+Showing All Messages
+Ld /Users/zyoung/build/iOCR-fuhsouqsasqfewdpvtdhsyrctgbu/Build/Products/Debug-iphoneos/iOCR.app/iOCR normal (in target 'iOCR (iOS)' from project 'iOCR')
+    cd /Users/zyoung/develop/tesseract-build/iOCR
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -target arm64-apple-ios14.0 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.3.sdk -L/Users/zyoung/build/iOCR-fuhsouqsasqfewdpvtdhsyrctgbu/Build/Products/Debug-iphoneos -F/Users/zyoung/build/iOCR-fuhsouqsasqfewdpvtdhsyrctgbu/Build/Products/Debug-iphoneos -filelist /Users/zyoung/build/iOCR-fuhsouqsasqfewdpvtdhsyrctgbu/Build/Intermediates.noindex/iOCR.build/Debug-iphoneos/iOCR\ \(iOS\).build/Objects-normal/arm64/iOCR.LinkFileList -Xlinker -rpath -Xlinker @executable_path/Frameworks -dead_strip -Xlinker -object_path_lto -Xlinker /Users/zyoung/build/iOCR-fuhsouqsasqfewdpvtdhsyrctgbu/Build/Intermediates.noindex/iOCR.build/Debug-iphoneos/iOCR\ \(iOS\).build/Objects-normal/arm64/iOCR_lto.o -Xlinker -export_dynamic -Xlinker -no_deduplicate -fembed-bitcode-marker -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /Users/zyoung/build/iOCR-fuhsouqsasqfewdpvtdhsyrctgbu/Build/Intermediates.noindex/iOCR.build/Debug-iphoneos/iOCR\ \(iOS\).build/Objects-normal/arm64/iOCR.swiftmodule -Xlinker -no_adhoc_codesign -Xlinker -dependency_info -Xlinker /Users/zyoung/build/iOCR-fuhsouqsasqfewdpvtdhsyrctgbu/Build/Intermediates.noindex/iOCR.build/Debug-iphoneos/iOCR\ \(iOS\).build/Objects-normal/arm64/iOCR_dependency_info.dat -o /Users/zyoung/build/iOCR-fuhsouqsasqfewdpvtdhsyrctgbu/Build/Products/Debug-iphoneos/iOCR.app/iOCR -Xlinker -add_ast_path -Xlinker /Users/zyoung/build/iOCR-fuhsouqsasqfewdpvtdhsyrctgbu/Build/Intermediates.noindex/hexdreamsCocoa.build/Debug-iphoneos/hexdreamsCocoa.build/Objects-normal/arm64/hexdreamsCocoa.swiftmodule
+
+Undefined symbols for architecture arm64:
+  "_TessPageIteratorDelete", referenced from:
+      $defer #1 () -> () in iOCR.Recognizer.getRecognizedRects() -> [iOCR.RecognizedRectangle] in Recognizer.o
+  "_TessPageIteratorBoundingBox", referenced from:
+      iOCR.Recognizer.getRecognizedRects() -> [iOCR.RecognizedRectangle] in Recognizer.o
+  ...
+ld: symbol(s) not found for architecture arm64
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+```
+
+
+-ljpeg-ios -llept-ios -lpng16-ios -ltesseract-ios -ltiff-ios
+
+
+
+## Xcode error, Link iOCR **ld: library not found**
+
+```
+ld: library not found for -ljpeg-ios
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+```
 
 ## Xcode error, **Undefined symbol**
 

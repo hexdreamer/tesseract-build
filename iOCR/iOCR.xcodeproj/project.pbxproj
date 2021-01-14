@@ -3,77 +3,77 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F46F4A3E2514354B00208431 /* iOCRApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46F4A3D2514354B00208431 /* iOCRApp.swift */; };
-		F46F4A402514354B00208431 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46F4A3F2514354B00208431 /* ContentView.swift */; };
-		F46F4A422514354C00208431 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F46F4A412514354C00208431 /* Assets.xcassets */; };
-		F46F4A452514354C00208431 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F46F4A442514354C00208431 /* Preview Assets.xcassets */; };
-		F46F4A502514354C00208431 /* iOCRTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46F4A4F2514354C00208431 /* iOCRTests.swift */; };
-		F46F4A72251436E000208431 /* RecognizedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46F4A70251436E000208431 /* RecognizedView.swift */; };
-		F46F4A792514371600208431 /* Recognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46F4A782514371600208431 /* Recognizer.swift */; };
-		F46F4A8F25143C0D00208431 /* hexdreamsCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = F46F4A8E25143C0D00208431 /* hexdreamsCocoa */; };
-		F46F4AA12514406000208431 /* liblept.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F46F4A9C2514406000208431 /* liblept.a */; };
-		F46F4AA22514406000208431 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F46F4A9D2514406000208431 /* libjpeg.a */; };
-		F46F4AA32514406000208431 /* libtesseract.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F46F4A9E2514406000208431 /* libtesseract.a */; };
-		F46F4AA42514406000208431 /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F46F4A9F2514406000208431 /* libpng16.a */; };
-		F46F4AA52514406000208431 /* libtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F46F4AA02514406000208431 /* libtiff.a */; };
-		F46F4AA72514407500208431 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F46F4AA62514407500208431 /* libc++.tbd */; };
-		F46F4AAB2514407E00208431 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F46F4AAA2514407E00208431 /* libz.tbd */; };
-		F46F4AAF2514414E00208431 /* share in Resources */ = {isa = PBXBuildFile; fileRef = F46F4AAE2514414E00208431 /* share */; };
+		F44D7DE525B0FEC600FF8379 /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44D7DE425B0FEC600FF8379 /* Tests_iOS.swift */; };
+		F44D7DF025B0FEC600FF8379 /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44D7DEF25B0FEC600FF8379 /* Tests_macOS.swift */; };
+		F44D7DF225B0FEC600FF8379 /* iOCRApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44D7DC925B0FEC500FF8379 /* iOCRApp.swift */; };
+		F44D7DF325B0FEC600FF8379 /* iOCRApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44D7DC925B0FEC500FF8379 /* iOCRApp.swift */; };
+		F44D7DF425B0FEC600FF8379 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44D7DCA25B0FEC500FF8379 /* ContentView.swift */; };
+		F44D7DF525B0FEC600FF8379 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44D7DCA25B0FEC500FF8379 /* ContentView.swift */; };
+		F44D7DF625B0FEC600FF8379 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F44D7DCB25B0FEC600FF8379 /* Assets.xcassets */; };
+		F44D7DF725B0FEC600FF8379 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F44D7DCB25B0FEC600FF8379 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		F46F4A4C2514354C00208431 /* PBXContainerItemProxy */ = {
+		F44D7DE125B0FEC600FF8379 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = F46F4A322514354B00208431 /* Project object */;
+			containerPortal = F44D7DC425B0FEC500FF8379 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = F46F4A392514354B00208431;
-			remoteInfo = iOCR;
+			remoteGlobalIDString = F44D7DCF25B0FEC600FF8379;
+			remoteInfo = "iOCR (iOS)";
+		};
+		F44D7DEC25B0FEC600FF8379 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F44D7DC425B0FEC500FF8379 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F44D7DD725B0FEC600FF8379;
+			remoteInfo = "iOCR (macOS)";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		F46F4A3A2514354B00208431 /* iOCR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOCR.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F46F4A3D2514354B00208431 /* iOCRApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOCRApp.swift; sourceTree = "<group>"; };
-		F46F4A3F2514354B00208431 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		F46F4A412514354C00208431 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		F46F4A442514354C00208431 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		F46F4A462514354C00208431 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F46F4A4B2514354C00208431 /* iOCRTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOCRTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		F46F4A4F2514354C00208431 /* iOCRTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOCRTests.swift; sourceTree = "<group>"; };
-		F46F4A512514354C00208431 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F46F4A70251436E000208431 /* RecognizedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecognizedView.swift; sourceTree = "<group>"; };
-		F46F4A782514371600208431 /* Recognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Recognizer.swift; path = ../../iOCR.bak/iOCR/Recognizer.swift; sourceTree = "<group>"; };
-		F46F4A9C2514406000208431 /* liblept.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblept.a; path = ../Root/lib/liblept.a; sourceTree = "<group>"; };
-		F46F4A9D2514406000208431 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = ../Root/lib/libjpeg.a; sourceTree = "<group>"; };
-		F46F4A9E2514406000208431 /* libtesseract.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtesseract.a; path = ../Root/lib/libtesseract.a; sourceTree = "<group>"; };
-		F46F4A9F2514406000208431 /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = ../Root/lib/libpng16.a; sourceTree = "<group>"; };
-		F46F4AA02514406000208431 /* libtiff.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtiff.a; path = ../Root/lib/libtiff.a; sourceTree = "<group>"; };
-		F46F4AA62514407500208431 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
-		F46F4AAA2514407E00208431 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		F46F4AAE2514414E00208431 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../Root/share; sourceTree = "<group>"; };
+		F44D7DC925B0FEC500FF8379 /* iOCRApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOCRApp.swift; sourceTree = "<group>"; };
+		F44D7DCA25B0FEC500FF8379 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		F44D7DCB25B0FEC600FF8379 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F44D7DD025B0FEC600FF8379 /* iOCR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOCR.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F44D7DD325B0FEC600FF8379 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F44D7DD825B0FEC600FF8379 /* iOCR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOCR.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F44D7DDA25B0FEC600FF8379 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F44D7DDB25B0FEC600FF8379 /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
+		F44D7DE025B0FEC600FF8379 /* Tests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F44D7DE425B0FEC600FF8379 /* Tests_iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_iOS.swift; sourceTree = "<group>"; };
+		F44D7DE625B0FEC600FF8379 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F44D7DEB25B0FEC600FF8379 /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F44D7DEF25B0FEC600FF8379 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
+		F44D7DF125B0FEC600FF8379 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		F46F4A372514354B00208431 /* Frameworks */ = {
+		F44D7DCD25B0FEC600FF8379 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F46F4AAB2514407E00208431 /* libz.tbd in Frameworks */,
-				F46F4AA72514407500208431 /* libc++.tbd in Frameworks */,
-				F46F4AA12514406000208431 /* liblept.a in Frameworks */,
-				F46F4AA22514406000208431 /* libjpeg.a in Frameworks */,
-				F46F4AA32514406000208431 /* libtesseract.a in Frameworks */,
-				F46F4AA42514406000208431 /* libpng16.a in Frameworks */,
-				F46F4AA52514406000208431 /* libtiff.a in Frameworks */,
-				F46F4A8F25143C0D00208431 /* hexdreamsCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F46F4A482514354C00208431 /* Frameworks */ = {
+		F44D7DD525B0FEC600FF8379 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F44D7DDD25B0FEC600FF8379 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F44D7DE825B0FEC600FF8379 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -83,139 +83,173 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		F46F4A312514354B00208431 = {
+		F44D7DC325B0FEC500FF8379 = {
 			isa = PBXGroup;
 			children = (
-				F46F4AAE2514414E00208431 /* share */,
-				F46F4A3C2514354B00208431 /* iOCR */,
-				F46F4A4E2514354C00208431 /* iOCRTests */,
-				F46F4A3B2514354B00208431 /* Products */,
-				F46F4A9B2514405F00208431 /* Frameworks */,
+				F44D7DC825B0FEC500FF8379 /* Shared */,
+				F44D7DD225B0FEC600FF8379 /* iOS */,
+				F44D7DD925B0FEC600FF8379 /* macOS */,
+				F44D7DE325B0FEC600FF8379 /* Tests iOS */,
+				F44D7DEE25B0FEC600FF8379 /* Tests macOS */,
+				F44D7DD125B0FEC600FF8379 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		F46F4A3B2514354B00208431 /* Products */ = {
+		F44D7DC825B0FEC500FF8379 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				F46F4A3A2514354B00208431 /* iOCR.app */,
-				F46F4A4B2514354C00208431 /* iOCRTests.xctest */,
+				F44D7DC925B0FEC500FF8379 /* iOCRApp.swift */,
+				F44D7DCA25B0FEC500FF8379 /* ContentView.swift */,
+				F44D7DCB25B0FEC600FF8379 /* Assets.xcassets */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		F44D7DD125B0FEC600FF8379 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F44D7DD025B0FEC600FF8379 /* iOCR.app */,
+				F44D7DD825B0FEC600FF8379 /* iOCR.app */,
+				F44D7DE025B0FEC600FF8379 /* Tests iOS.xctest */,
+				F44D7DEB25B0FEC600FF8379 /* Tests macOS.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		F46F4A3C2514354B00208431 /* iOCR */ = {
+		F44D7DD225B0FEC600FF8379 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				F46F4A3D2514354B00208431 /* iOCRApp.swift */,
-				F46F4A782514371600208431 /* Recognizer.swift */,
-				F46F4A7C2514372500208431 /* Views */,
-				F46F4A412514354C00208431 /* Assets.xcassets */,
-				F46F4A462514354C00208431 /* Info.plist */,
-				F46F4A432514354C00208431 /* Preview Content */,
+				F44D7DD325B0FEC600FF8379 /* Info.plist */,
 			);
-			path = iOCR;
+			path = iOS;
 			sourceTree = "<group>";
 		};
-		F46F4A432514354C00208431 /* Preview Content */ = {
+		F44D7DD925B0FEC600FF8379 /* macOS */ = {
 			isa = PBXGroup;
 			children = (
-				F46F4A442514354C00208431 /* Preview Assets.xcassets */,
+				F44D7DDA25B0FEC600FF8379 /* Info.plist */,
+				F44D7DDB25B0FEC600FF8379 /* macOS.entitlements */,
 			);
-			path = "Preview Content";
+			path = macOS;
 			sourceTree = "<group>";
 		};
-		F46F4A4E2514354C00208431 /* iOCRTests */ = {
+		F44D7DE325B0FEC600FF8379 /* Tests iOS */ = {
 			isa = PBXGroup;
 			children = (
-				F46F4A4F2514354C00208431 /* iOCRTests.swift */,
-				F46F4A512514354C00208431 /* Info.plist */,
+				F44D7DE425B0FEC600FF8379 /* Tests_iOS.swift */,
+				F44D7DE625B0FEC600FF8379 /* Info.plist */,
 			);
-			path = iOCRTests;
+			path = "Tests iOS";
 			sourceTree = "<group>";
 		};
-		F46F4A7C2514372500208431 /* Views */ = {
+		F44D7DEE25B0FEC600FF8379 /* Tests macOS */ = {
 			isa = PBXGroup;
 			children = (
-				F46F4A3F2514354B00208431 /* ContentView.swift */,
-				F46F4A70251436E000208431 /* RecognizedView.swift */,
+				F44D7DEF25B0FEC600FF8379 /* Tests_macOS.swift */,
+				F44D7DF125B0FEC600FF8379 /* Info.plist */,
 			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		F46F4A9B2514405F00208431 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				F46F4AAA2514407E00208431 /* libz.tbd */,
-				F46F4AA62514407500208431 /* libc++.tbd */,
-				F46F4A9D2514406000208431 /* libjpeg.a */,
-				F46F4A9C2514406000208431 /* liblept.a */,
-				F46F4A9F2514406000208431 /* libpng16.a */,
-				F46F4A9E2514406000208431 /* libtesseract.a */,
-				F46F4AA02514406000208431 /* libtiff.a */,
-			);
-			name = Frameworks;
+			path = "Tests macOS";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F46F4A392514354B00208431 /* iOCR */ = {
+		F44D7DCF25B0FEC600FF8379 /* iOCR (iOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F46F4A5F2514354C00208431 /* Build configuration list for PBXNativeTarget "iOCR" */;
+			buildConfigurationList = F44D7DFA25B0FEC600FF8379 /* Build configuration list for PBXNativeTarget "iOCR (iOS)" */;
 			buildPhases = (
-				F46F4A362514354B00208431 /* Sources */,
-				F46F4A372514354B00208431 /* Frameworks */,
-				F46F4A382514354B00208431 /* Resources */,
+				F44D7DCC25B0FEC600FF8379 /* Sources */,
+				F44D7DCD25B0FEC600FF8379 /* Frameworks */,
+				F44D7DCE25B0FEC600FF8379 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = iOCR;
-			packageProductDependencies = (
-				F46F4A8E25143C0D00208431 /* hexdreamsCocoa */,
-			);
-			productName = iOCR;
-			productReference = F46F4A3A2514354B00208431 /* iOCR.app */;
+			name = "iOCR (iOS)";
+			productName = "iOCR (iOS)";
+			productReference = F44D7DD025B0FEC600FF8379 /* iOCR.app */;
 			productType = "com.apple.product-type.application";
 		};
-		F46F4A4A2514354C00208431 /* iOCRTests */ = {
+		F44D7DD725B0FEC600FF8379 /* iOCR (macOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F46F4A622514354C00208431 /* Build configuration list for PBXNativeTarget "iOCRTests" */;
+			buildConfigurationList = F44D7DFD25B0FEC600FF8379 /* Build configuration list for PBXNativeTarget "iOCR (macOS)" */;
 			buildPhases = (
-				F46F4A472514354C00208431 /* Sources */,
-				F46F4A482514354C00208431 /* Frameworks */,
-				F46F4A492514354C00208431 /* Resources */,
+				F44D7DD425B0FEC600FF8379 /* Sources */,
+				F44D7DD525B0FEC600FF8379 /* Frameworks */,
+				F44D7DD625B0FEC600FF8379 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				F46F4A4D2514354C00208431 /* PBXTargetDependency */,
 			);
-			name = iOCRTests;
-			productName = iOCRTests;
-			productReference = F46F4A4B2514354C00208431 /* iOCRTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
+			name = "iOCR (macOS)";
+			productName = "iOCR (macOS)";
+			productReference = F44D7DD825B0FEC600FF8379 /* iOCR.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F44D7DDF25B0FEC600FF8379 /* Tests iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F44D7E0025B0FEC600FF8379 /* Build configuration list for PBXNativeTarget "Tests iOS" */;
+			buildPhases = (
+				F44D7DDC25B0FEC600FF8379 /* Sources */,
+				F44D7DDD25B0FEC600FF8379 /* Frameworks */,
+				F44D7DDE25B0FEC600FF8379 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F44D7DE225B0FEC600FF8379 /* PBXTargetDependency */,
+			);
+			name = "Tests iOS";
+			productName = "Tests iOS";
+			productReference = F44D7DE025B0FEC600FF8379 /* Tests iOS.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		F44D7DEA25B0FEC600FF8379 /* Tests macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F44D7E0325B0FEC600FF8379 /* Build configuration list for PBXNativeTarget "Tests macOS" */;
+			buildPhases = (
+				F44D7DE725B0FEC600FF8379 /* Sources */,
+				F44D7DE825B0FEC600FF8379 /* Frameworks */,
+				F44D7DE925B0FEC600FF8379 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F44D7DED25B0FEC600FF8379 /* PBXTargetDependency */,
+			);
+			name = "Tests macOS";
+			productName = "Tests macOS";
+			productReference = F44D7DEB25B0FEC600FF8379 /* Tests macOS.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		F46F4A322514354B00208431 /* Project object */ = {
+		F44D7DC425B0FEC500FF8379 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1200;
-				LastUpgradeCheck = 1200;
+				LastSwiftUpdateCheck = 1230;
+				LastUpgradeCheck = 1230;
 				TargetAttributes = {
-					F46F4A392514354B00208431 = {
-						CreatedOnToolsVersion = 12.0;
+					F44D7DCF25B0FEC600FF8379 = {
+						CreatedOnToolsVersion = 12.3;
 					};
-					F46F4A4A2514354C00208431 = {
-						CreatedOnToolsVersion = 12.0;
-						TestTargetID = F46F4A392514354B00208431;
+					F44D7DD725B0FEC600FF8379 = {
+						CreatedOnToolsVersion = 12.3;
+					};
+					F44D7DDF25B0FEC600FF8379 = {
+						CreatedOnToolsVersion = 12.3;
+						TestTargetID = F44D7DCF25B0FEC600FF8379;
+					};
+					F44D7DEA25B0FEC600FF8379 = {
+						CreatedOnToolsVersion = 12.3;
+						TestTargetID = F44D7DD725B0FEC600FF8379;
 					};
 				};
 			};
-			buildConfigurationList = F46F4A352514354B00208431 /* Build configuration list for PBXProject "iOCR" */;
+			buildConfigurationList = F44D7DC725B0FEC500FF8379 /* Build configuration list for PBXProject "iOCR" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -223,32 +257,44 @@
 				en,
 				Base,
 			);
-			mainGroup = F46F4A312514354B00208431;
-			packageReferences = (
-				F46F4A8D25143C0D00208431 /* XCRemoteSwiftPackageReference "hexdreamsCocoa" */,
-			);
-			productRefGroup = F46F4A3B2514354B00208431 /* Products */;
+			mainGroup = F44D7DC325B0FEC500FF8379;
+			productRefGroup = F44D7DD125B0FEC600FF8379 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F46F4A392514354B00208431 /* iOCR */,
-				F46F4A4A2514354C00208431 /* iOCRTests */,
+				F44D7DCF25B0FEC600FF8379 /* iOCR (iOS) */,
+				F44D7DD725B0FEC600FF8379 /* iOCR (macOS) */,
+				F44D7DDF25B0FEC600FF8379 /* Tests iOS */,
+				F44D7DEA25B0FEC600FF8379 /* Tests macOS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		F46F4A382514354B00208431 /* Resources */ = {
+		F44D7DCE25B0FEC600FF8379 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F46F4AAF2514414E00208431 /* share in Resources */,
-				F46F4A452514354C00208431 /* Preview Assets.xcassets in Resources */,
-				F46F4A422514354C00208431 /* Assets.xcassets in Resources */,
+				F44D7DF625B0FEC600FF8379 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F46F4A492514354C00208431 /* Resources */ = {
+		F44D7DD625B0FEC600FF8379 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F44D7DF725B0FEC600FF8379 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F44D7DDE25B0FEC600FF8379 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F44D7DE925B0FEC600FF8379 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -258,37 +304,57 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		F46F4A362514354B00208431 /* Sources */ = {
+		F44D7DCC25B0FEC600FF8379 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F46F4A402514354B00208431 /* ContentView.swift in Sources */,
-				F46F4A72251436E000208431 /* RecognizedView.swift in Sources */,
-				F46F4A3E2514354B00208431 /* iOCRApp.swift in Sources */,
-				F46F4A792514371600208431 /* Recognizer.swift in Sources */,
+				F44D7DF425B0FEC600FF8379 /* ContentView.swift in Sources */,
+				F44D7DF225B0FEC600FF8379 /* iOCRApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F46F4A472514354C00208431 /* Sources */ = {
+		F44D7DD425B0FEC600FF8379 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F46F4A502514354C00208431 /* iOCRTests.swift in Sources */,
+				F44D7DF525B0FEC600FF8379 /* ContentView.swift in Sources */,
+				F44D7DF325B0FEC600FF8379 /* iOCRApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F44D7DDC25B0FEC600FF8379 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F44D7DE525B0FEC600FF8379 /* Tests_iOS.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F44D7DE725B0FEC600FF8379 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F44D7DF025B0FEC600FF8379 /* Tests_macOS.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		F46F4A4D2514354C00208431 /* PBXTargetDependency */ = {
+		F44D7DE225B0FEC600FF8379 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F46F4A392514354B00208431 /* iOCR */;
-			targetProxy = F46F4A4C2514354C00208431 /* PBXContainerItemProxy */;
+			target = F44D7DCF25B0FEC600FF8379 /* iOCR (iOS) */;
+			targetProxy = F44D7DE125B0FEC600FF8379 /* PBXContainerItemProxy */;
+		};
+		F44D7DED25B0FEC600FF8379 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F44D7DD725B0FEC600FF8379 /* iOCR (macOS) */;
+			targetProxy = F44D7DEC25B0FEC600FF8379 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		F46F4A5D2514354C00208431 /* Debug */ = {
+		F44D7DF825B0FEC600FF8379 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -339,17 +405,15 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
-		F46F4A5E2514354C00208431 /* Release */ = {
+		F44D7DF925B0FEC600FF8379 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -394,159 +458,244 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		F44D7DFB25B0FEC600FF8379 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 68PACZTRF4;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = iOS/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.pokkinandpup.iOCR;
+				PRODUCT_NAME = iOCR;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F44D7DFC25B0FEC600FF8379 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 68PACZTRF4;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = iOS/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.pokkinandpup.iOCR;
+				PRODUCT_NAME = iOCR;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		F46F4A602514354C00208431 /* Debug */ = {
+		F44D7DFE25B0FEC600FF8379 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"iOCR/Preview Content\"";
+				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 68PACZTRF4;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				"HEADER_SEARCH_PATHS[arch=*]" = "";
-				INFOPLIST_FILE = iOCR/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				INFOPLIST_FILE = macOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"@executable_path/Frameworks",
+					"@executable_path/../Frameworks",
 				);
-				"LIBRARY_SEARCH_PATHS[arch=*]" = "$(PROJECT_DIR)/../Root/lib/**";
-				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.iOCR;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				"SWIFT_INCLUDE_PATHS[arch=*]" = "$(PROJECT_DIR)/../Root/include/**";
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pokkinandpup.iOCR;
+				PRODUCT_NAME = iOCR;
+				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		F46F4A612514354C00208431 /* Release */ = {
+		F44D7DFF25B0FEC600FF8379 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"iOCR/Preview Content\"";
+				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 68PACZTRF4;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = iOCR/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				INFOPLIST_FILE = macOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"@executable_path/Frameworks",
+					"@executable_path/../Frameworks",
 				);
-				"LIBRARY_SEARCH_PATHS[arch=*]" = "$(PROJECT_DIR)/../Root/lib/**";
-				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.iOCR;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				"SWIFT_INCLUDE_PATHS[arch=*]" = "$(PROJECT_DIR)/../Root/include/**";
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pokkinandpup.iOCR;
+				PRODUCT_NAME = iOCR;
+				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
-		F46F4A632514354C00208431 /* Debug */ = {
+		F44D7E0125B0FEC600FF8379 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 68PACZTRF4;
-				INFOPLIST_FILE = iOCRTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				INFOPLIST_FILE = "Tests iOS/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.iOCRTests;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pokkinandpup.Tests-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOCR.app/iOCR";
+				TEST_TARGET_NAME = "iOCR (iOS)";
 			};
 			name = Debug;
 		};
-		F46F4A642514354C00208431 /* Release */ = {
+		F44D7E0225B0FEC600FF8379 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 68PACZTRF4;
-				INFOPLIST_FILE = iOCRTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				INFOPLIST_FILE = "Tests iOS/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = hexdreams.iOCRTests;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pokkinandpup.Tests-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOCR.app/iOCR";
+				TEST_TARGET_NAME = "iOCR (iOS)";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F44D7E0425B0FEC600FF8379 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 68PACZTRF4;
+				INFOPLIST_FILE = "Tests macOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pokkinandpup.Tests-macOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "iOCR (macOS)";
+			};
+			name = Debug;
+		};
+		F44D7E0525B0FEC600FF8379 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 68PACZTRF4;
+				INFOPLIST_FILE = "Tests macOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pokkinandpup.Tests-macOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "iOCR (macOS)";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F46F4A352514354B00208431 /* Build configuration list for PBXProject "iOCR" */ = {
+		F44D7DC725B0FEC500FF8379 /* Build configuration list for PBXProject "iOCR" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F46F4A5D2514354C00208431 /* Debug */,
-				F46F4A5E2514354C00208431 /* Release */,
+				F44D7DF825B0FEC600FF8379 /* Debug */,
+				F44D7DF925B0FEC600FF8379 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F46F4A5F2514354C00208431 /* Build configuration list for PBXNativeTarget "iOCR" */ = {
+		F44D7DFA25B0FEC600FF8379 /* Build configuration list for PBXNativeTarget "iOCR (iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F46F4A602514354C00208431 /* Debug */,
-				F46F4A612514354C00208431 /* Release */,
+				F44D7DFB25B0FEC600FF8379 /* Debug */,
+				F44D7DFC25B0FEC600FF8379 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F46F4A622514354C00208431 /* Build configuration list for PBXNativeTarget "iOCRTests" */ = {
+		F44D7DFD25B0FEC600FF8379 /* Build configuration list for PBXNativeTarget "iOCR (macOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F46F4A632514354C00208431 /* Debug */,
-				F46F4A642514354C00208431 /* Release */,
+				F44D7DFE25B0FEC600FF8379 /* Debug */,
+				F44D7DFF25B0FEC600FF8379 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F44D7E0025B0FEC600FF8379 /* Build configuration list for PBXNativeTarget "Tests iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F44D7E0125B0FEC600FF8379 /* Debug */,
+				F44D7E0225B0FEC600FF8379 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F44D7E0325B0FEC600FF8379 /* Build configuration list for PBXNativeTarget "Tests macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F44D7E0425B0FEC600FF8379 /* Debug */,
+				F44D7E0525B0FEC600FF8379 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		F46F4A8D25143C0D00208431 /* XCRemoteSwiftPackageReference "hexdreamsCocoa" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/hexdreamer/hexdreamsCocoa.git";
-			requirement = {
-				branch = trunk;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		F46F4A8E25143C0D00208431 /* hexdreamsCocoa */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F46F4A8D25143C0D00208431 /* XCRemoteSwiftPackageReference "hexdreamsCocoa" */;
-			productName = hexdreamsCocoa;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = F46F4A322514354B00208431 /* Project object */;
+	rootObject = F44D7DC425B0FEC500FF8379 /* Project object */;
 }
