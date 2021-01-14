@@ -114,10 +114,14 @@ Downloading... done.
 Extracting... done.
 Preconfiguring... done.
 ios_arm64: configuring... done, making... done, installing... done.
-ios_x86_64: configuring... done, making... done, installing... done.
+ios_arm64_sim: configuring... done, making... done, installing... done.
+ios_x86_64_sim: configuring... done, making... done, installing... done.
 macos_x86_64: configuring... done, making... done, installing... done.
-ios: lipo... done.
-macos: lipo... done.
+macos_arm64: configuring... done, making... done, installing... done.
+lipo: ios... done.
+lipo: sim... done.
+lipo: macos... done.
+tesseract command-line: copying... sym-linking to arm64 binary... done.
 ```
 
 After a while, we see that Tesseract was finally configured, made, and installed.  And then there was a final **lipo** step.
