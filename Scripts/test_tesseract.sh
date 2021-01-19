@@ -62,6 +62,16 @@ test_image() {
 
   print -n "testing $testName..."
 
+  if ! [ -f $image ]; then
+    echo "ERROR could not find image file $image"
+    return
+  fi
+
+  if ! [ -f "$TESSDATA_PREFIX/$trainedDataName.traineddata" ]; then
+    echo "ERROR could not find language file $TESSDATA_PREFIX/$trainedDataName.traineddata"
+    return
+  fi
+
   local tessOutFile=$trainedDataName
 
   # Clear any lingering state

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,6 +15,15 @@
 		F44D7DF525B0FEC600FF8379 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44D7DCA25B0FEC500FF8379 /* ContentView.swift */; };
 		F44D7DF625B0FEC600FF8379 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F44D7DCB25B0FEC600FF8379 /* Assets.xcassets */; };
 		F44D7DF725B0FEC600FF8379 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F44D7DCB25B0FEC600FF8379 /* Assets.xcassets */; };
+		F44D7E0D25B0FFBD00FF8379 /* Recognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44D7E0C25B0FFBD00FF8379 /* Recognizer.swift */; };
+		F44D7E0E25B0FFBD00FF8379 /* Recognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44D7E0C25B0FFBD00FF8379 /* Recognizer.swift */; };
+		F44D7E1425B0FFF300FF8379 /* RecognizedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44D7E1325B0FFF300FF8379 /* RecognizedView.swift */; };
+		F44D7E1525B0FFF300FF8379 /* RecognizedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44D7E1325B0FFF300FF8379 /* RecognizedView.swift */; };
+		F44D7E1C25B1009100FF8379 /* hexdreamsCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = F44D7E1B25B1009100FF8379 /* hexdreamsCocoa */; };
+		F44D7E4425B103C000FF8379 /* share in Resources */ = {isa = PBXBuildFile; fileRef = F44D7E4325B103C000FF8379 /* share */; };
+		F44D7E4525B103C000FF8379 /* share in Resources */ = {isa = PBXBuildFile; fileRef = F44D7E4325B103C000FF8379 /* share */; };
+		F4BD753925B78DEC000A4AF4 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F4BD753825B78DEC000A4AF4 /* libc++.tbd */; };
+		F4BD753F25B78DF5000A4AF4 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F4BD753E25B78DF5000A4AF4 /* libz.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +58,11 @@
 		F44D7DEB25B0FEC600FF8379 /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F44D7DEF25B0FEC600FF8379 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		F44D7DF125B0FEC600FF8379 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F44D7E0C25B0FFBD00FF8379 /* Recognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recognizer.swift; sourceTree = "<group>"; };
+		F44D7E1325B0FFF300FF8379 /* RecognizedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognizedView.swift; sourceTree = "<group>"; };
+		F44D7E4325B103C000FF8379 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../Root/share; sourceTree = "<group>"; };
+		F4BD753825B78DEC000A4AF4 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.3.sdk/usr/lib/libc++.tbd"; sourceTree = DEVELOPER_DIR; };
+		F4BD753E25B78DF5000A4AF4 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.3.sdk/usr/lib/libz.tbd; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +70,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F4BD753925B78DEC000A4AF4 /* libc++.tbd in Frameworks */,
+				F4BD753F25B78DF5000A4AF4 /* libz.tbd in Frameworks */,
+				F44D7E1C25B1009100FF8379 /* hexdreamsCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,12 +103,14 @@
 		F44D7DC325B0FEC500FF8379 = {
 			isa = PBXGroup;
 			children = (
+				F44D7E4325B103C000FF8379 /* share */,
 				F44D7DC825B0FEC500FF8379 /* Shared */,
 				F44D7DD225B0FEC600FF8379 /* iOS */,
 				F44D7DD925B0FEC600FF8379 /* macOS */,
 				F44D7DE325B0FEC600FF8379 /* Tests iOS */,
 				F44D7DEE25B0FEC600FF8379 /* Tests macOS */,
 				F44D7DD125B0FEC600FF8379 /* Products */,
+				F4BD753725B78DEC000A4AF4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,6 +120,8 @@
 				F44D7DC925B0FEC500FF8379 /* iOCRApp.swift */,
 				F44D7DCA25B0FEC500FF8379 /* ContentView.swift */,
 				F44D7DCB25B0FEC600FF8379 /* Assets.xcassets */,
+				F44D7E0C25B0FFBD00FF8379 /* Recognizer.swift */,
+				F44D7E1325B0FFF300FF8379 /* RecognizedView.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -151,6 +172,15 @@
 			path = "Tests macOS";
 			sourceTree = "<group>";
 		};
+		F4BD753725B78DEC000A4AF4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F4BD753E25B78DF5000A4AF4 /* libz.tbd */,
+				F4BD753825B78DEC000A4AF4 /* libc++.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -167,6 +197,9 @@
 			dependencies = (
 			);
 			name = "iOCR (iOS)";
+			packageProductDependencies = (
+				F44D7E1B25B1009100FF8379 /* hexdreamsCocoa */,
+			);
 			productName = "iOCR (iOS)";
 			productReference = F44D7DD025B0FEC600FF8379 /* iOCR.app */;
 			productType = "com.apple.product-type.application";
@@ -258,6 +291,9 @@
 				Base,
 			);
 			mainGroup = F44D7DC325B0FEC500FF8379;
+			packageReferences = (
+				F44D7E1A25B1009100FF8379 /* XCRemoteSwiftPackageReference "hexdreamsCocoa" */,
+			);
 			productRefGroup = F44D7DD125B0FEC600FF8379 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -275,6 +311,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F44D7E4425B103C000FF8379 /* share in Resources */,
 				F44D7DF625B0FEC600FF8379 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -283,6 +320,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F44D7E4525B103C000FF8379 /* share in Resources */,
 				F44D7DF725B0FEC600FF8379 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -308,6 +346,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F44D7E1425B0FFF300FF8379 /* RecognizedView.swift in Sources */,
+				F44D7E0D25B0FFBD00FF8379 /* Recognizer.swift in Sources */,
 				F44D7DF425B0FEC600FF8379 /* ContentView.swift in Sources */,
 				F44D7DF225B0FEC600FF8379 /* iOCRApp.swift in Sources */,
 			);
@@ -317,6 +357,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F44D7E1525B0FFF300FF8379 /* RecognizedView.swift in Sources */,
+				F44D7E0E25B0FFBD00FF8379 /* Recognizer.swift in Sources */,
 				F44D7DF525B0FEC600FF8379 /* ContentView.swift in Sources */,
 				F44D7DF325B0FEC600FF8379 /* iOCRApp.swift in Sources */,
 			);
@@ -405,10 +447,33 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../Root/lib/**";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
+					"-ljpeg-ios",
+					"-llept-ios",
+					"-lpng16-ios",
+					"-ltesseract-ios",
+					"-ltiff-ios",
+				);
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
+					"-ljpeg-sim",
+					"-ltesseract-sim",
+					"-lpng16-sim",
+					"-ltiff-sim",
+					"-llept-sim",
+				);
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-ljpeg-macos",
+					"-ltesseract-macos",
+					"-lpng16-macos",
+					"-ltiff-macos",
+					"-llept-macos",
+				);
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				"SWIFT_INCLUDE_PATHS[arch=*]" = "$(PROJECT_DIR)/../Root/include/**";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -458,9 +523,32 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../Root/lib/**";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
+					"-ljpeg-ios",
+					"-llept-ios",
+					"-lpng16-ios",
+					"-ltesseract-ios",
+					"-ltiff-ios",
+				);
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
+					"-ljpeg-sim",
+					"-ltesseract-sim",
+					"-lpng16-sim",
+					"-ltiff-sim",
+					"-llept-sim",
+				);
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-ljpeg-macos",
+					"-ltesseract-macos",
+					"-lpng16-macos",
+					"-ltiff-macos",
+					"-llept-macos",
+				);
 				SWIFT_COMPILATION_MODE = wholemodule;
+				"SWIFT_INCLUDE_PATHS[arch=*]" = "$(PROJECT_DIR)/../Root/include/**";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
 			name = Release;
@@ -474,7 +562,7 @@
 				DEVELOPMENT_TEAM = 68PACZTRF4;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -496,7 +584,7 @@
 				DEVELOPMENT_TEAM = 68PACZTRF4;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -696,6 +784,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F44D7E1A25B1009100FF8379 /* XCRemoteSwiftPackageReference "hexdreamsCocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hexdreamer/hexdreamsCocoa.git";
+			requirement = {
+				branch = trunk;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F44D7E1B25B1009100FF8379 /* hexdreamsCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F44D7E1A25B1009100FF8379 /* XCRemoteSwiftPackageReference "hexdreamsCocoa" */;
+			productName = hexdreamsCocoa;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F44D7DC425B0FEC500FF8379 /* Project object */;
 }

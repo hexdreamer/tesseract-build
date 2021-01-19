@@ -34,7 +34,7 @@ CompileSwift normal arm64 /Users/zyoung/develop/tesseract-build/iOCR/Shared/Reco
 import libtesseract
 ```
 
-Swift cannot find my modules libleptonica and libtesseract which are defined in **Root/include/module.modulemap**.  More to the point, Swift cannot find my modulemap file.
+Swift cannot find my modules **libleptonica** and **libtesseract** which are defined in **Root/include/module.modulemap**.  More to the point, Swift cannot find my modulemap file.
 
 1. Click on **Build Settings**
 1. Ensure that **All** and **Combined** are selected
