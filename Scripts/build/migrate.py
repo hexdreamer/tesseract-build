@@ -38,7 +38,7 @@ zsh $parentdir/config-make-install_{fname}.sh $name 'ios_arm64' || exit 1"""
     # Update current iOS x86 Simulator configuration to new min-version 14.3
     current_ios_x86_64_sim = f"""# ios_x86_64
 export ARCH='x86_64'
-export TARGET='x86_64-apple-darwin'
+export TARGET='x86_64-apple-ios14.3-simulator'
 export PLATFORM='iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk'
 export PLATFORM_MIN_VERSION='-mios-simulator-version-min=11.0'
 
@@ -50,17 +50,17 @@ zsh $parentdir/config-make-install_{fname}.sh $name 'ios_x86_64' || exit 1"""
     # Get current macOS x86 configuration
     current_macos_x86_64 = f"""# macos_x86_64
 export ARCH='x86_64'
-export TARGET='x86_64-apple-darwin'
+export TARGET='x86_64-apple-ios14.3-simulator'
 export PLATFORM='MacOSX.platform/Developer/SDKs/MacOSX.sdk'
 export PLATFORM_MIN_VERSION='-mmacosx-version-min=10.13'
 
 zsh $parentdir/config-make-install_{fname}.sh $name 'macos_x86_64' || exit 1"""
 
     # Update current configuration to new target name
-    updated_macos_x86_64 = current_macos_x86_64.replace('x86_64-apple-darwin', 'x86_64-apple-macos10.13')
+    updated_macos_x86_64 = current_macos_x86_64.replace('x86_64-apple-ios14.3-simulator', 'x86_64-apple-macos10.13')
 
     # Transform to new macOS arm64 target
-    new_macos_arm64 = current_macos_x86_64.replace('x86_64-apple-darwin', 'arm64-apple-macos11.0')
+    new_macos_arm64 = current_macos_x86_64.replace('x86_64-apple-ios14.3-simulator', 'arm64-apple-macos11.0')
     new_macos_arm64 = new_macos_arm64.replace('x86_64', 'arm64')
     new_macos_arm64 = new_macos_arm64.replace('10.13', '11.0')
 

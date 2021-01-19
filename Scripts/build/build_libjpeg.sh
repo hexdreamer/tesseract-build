@@ -60,7 +60,7 @@ zsh $parentdir/config-make-install_libjpeg.sh $name 'ios_arm64_sim' $dirname || 
 
 # ios_x86_64_sim
 export ARCH='x86_64'
-export TARGET='x86_64-apple-darwin'
+export TARGET='x86_64-apple-ios14.3-simulator'
 export PLATFORM='iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk'
 export PLATFORM_MIN_VERSION='-mios-simulator-version-min=14.3'
 
