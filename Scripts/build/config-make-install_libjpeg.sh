@@ -84,7 +84,7 @@ print -n 'done, '
 lib=$ROOT/$os_arch/lib/libjpeg.a
 if [ -f $lib ]; then
   if {
-    info=$(lipo -info $pkg_lib) &&
+    info=$(lipo -info $lib) &&
       [[ $info =~ 'Non-fat file' ]] &&
       [[ $info =~ $ARCH ]]
   }; then
