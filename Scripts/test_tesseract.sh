@@ -45,7 +45,7 @@ strip_whitespace() {
 
 echo "Recognizing sample images with $(which tesseract)..."
 
-ASSETSDIR=$PROJECTDIR/iOCR/iOCR/Assets.xcassets
+ASSETSDIR=$PROJECTDIR/iOCR/Shared/Assets.xcassets
 TESTDIR=tesseractTest
 
 mkdir -p $TESTDIR; cd $TESTDIR || exit 1
