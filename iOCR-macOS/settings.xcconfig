@@ -1,0 +1,13 @@
+//:configuration = Debug
+OTHER_LDFLAGS[sdk=iphoneos*] = -ljpeg-ios -llept-ios -lpng16-ios -ltesseract-ios -ltiff-ios
+OTHER_LDFLAGS[sdk=iphonesimulator*] = -ljpeg-sim -ltesseract-sim -lpng16-sim -ltiff-sim -llept-sim
+OTHER_LDFLAGS[sdk=macosx*] = -ljpeg-macos -ltesseract-macos -lpng16-macos -ltiff-macos -llept-macos
+LIBRARY_SEARCH_PATHS = $(PROJECT_DIR)/../Root/lib/**
+SWIFT_INCLUDE_PATHS = $(PROJECT_DIR)/../Root/include/**
+
+//:configuration = Release
+OTHER_LDFLAGS[sdk=iphoneos*] = -ljpeg-ios -llept-ios -lpng16-ios -ltesseract-ios -ltiff-ios
+OTHER_LDFLAGS[sdk=iphonesimulator*] = -ljpeg-sim -ltesseract-sim -lpng16-sim -ltiff-sim -llept-sim
+OTHER_LDFLAGS[sdk=macosx*] = -ljpeg-macos -ltesseract-macos -lpng16-macos -ltiff-macos -llept-macos
+LIBRARY_SEARCH_PATHS = $(PROJECT_DIR)/../Root/lib/**
+SWIFT_INCLUDE_PATHS = $(PROJECT_DIR)/../Root/include/**
