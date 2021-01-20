@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "hexdreamsCocoa",
+        "repositoryURL": "https://github.com/hexdreamer/hexdreamsCocoa.git",
+        "state": {
+          "branch": "trunk",
+          "revision": "42e0d30ebcb841a8fb48b74d2dbf7d6b60904cfa",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
