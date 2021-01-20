@@ -11,7 +11,6 @@
 		F4F4DE4225B8E0970062BB04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4F4DE4125B8E0970062BB04 /* Assets.xcassets */; };
 		F4F4DE4525B8E0970062BB04 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4F4DE4425B8E0970062BB04 /* Preview Assets.xcassets */; };
 		F4F4DE5025B8E0970062BB04 /* iOCR_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F4DE4F25B8E0970062BB04 /* iOCR_iOSTests.swift */; };
-		F4F4DE5B25B8E0970062BB04 /* iOCR_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F4DE5A25B8E0970062BB04 /* iOCR_iOSUITests.swift */; };
 		F4F4DE6D25B8E7AF0062BB04 /* Recognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F4DE6B25B8E7AF0062BB04 /* Recognizer.swift */; };
 		F4F4DEA125B8E8290062BB04 /* RecognizedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F4DE9F25B8E8290062BB04 /* RecognizedView.swift */; };
 		F4F4DEAA25B8E8680062BB04 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F4DEA925B8E8680062BB04 /* ContentView.swift */; };
@@ -49,8 +48,6 @@
 		F4F4DE4F25B8E0970062BB04 /* iOCR_iOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOCR_iOSTests.swift; sourceTree = "<group>"; };
 		F4F4DE5125B8E0970062BB04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F4F4DE5625B8E0970062BB04 /* iOCR-iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "iOCR-iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		F4F4DE5A25B8E0970062BB04 /* iOCR_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOCR_iOSUITests.swift; sourceTree = "<group>"; };
-		F4F4DE5C25B8E0970062BB04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F4F4DE6B25B8E7AF0062BB04 /* Recognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recognizer.swift; sourceTree = "<group>"; };
 		F4F4DE9F25B8E8290062BB04 /* RecognizedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecognizedView.swift; sourceTree = "<group>"; };
 		F4F4DEA925B8E8680062BB04 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = ../../../../../.Trash/ContentView.swift; sourceTree = "<group>"; };
@@ -94,7 +91,6 @@
 				F4F4DEFD25B8EDEC0062BB04 /* share */,
 				F4F4DE3C25B8E0970062BB04 /* iOCR-iOS */,
 				F4F4DE4E25B8E0970062BB04 /* iOCR-iOSTests */,
-				F4F4DE5925B8E0970062BB04 /* iOCR-iOSUITests */,
 				F4F4DE3B25B8E0970062BB04 /* Products */,
 				F4F4DF0525B8EF470062BB04 /* Frameworks */,
 			);
@@ -139,15 +135,6 @@
 				F4F4DE5125B8E0970062BB04 /* Info.plist */,
 			);
 			path = "iOCR-iOSTests";
-			sourceTree = "<group>";
-		};
-		F4F4DE5925B8E0970062BB04 /* iOCR-iOSUITests */ = {
-			isa = PBXGroup;
-			children = (
-				F4F4DE5A25B8E0970062BB04 /* iOCR_iOSUITests.swift */,
-				F4F4DE5C25B8E0970062BB04 /* Info.plist */,
-			);
-			path = "iOCR-iOSUITests";
 			sourceTree = "<group>";
 		};
 		F4F4DE9E25B8E8290062BB04 /* Views */ = {
@@ -324,7 +311,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4F4DE5B25B8E0970062BB04 /* iOCR_iOSUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
