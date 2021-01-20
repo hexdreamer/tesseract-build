@@ -1,6 +1,4 @@
 <!-- markdownlint-disable-file MD033 -->
-Like I'm talking to myself, friendly, conversational... a good emotional guide: "I tried this, I tried that, it didn't work, finally found out how to here" Hints to myself
-After each phase of discovery, write out details and research for that phase of discovery
 # Multilingual OCR for Swift and your iOS/macOS project
 
 Welcome to our project, **Tesseract OCR in your Xcode Project**.  This will guide you through the process of building the Tesseract OCR library and using its API from Swift in your Xcode project, easily.
