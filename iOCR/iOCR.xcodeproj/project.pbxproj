@@ -15,11 +15,6 @@
 		F46F4A72251436E000208431 /* RecognizedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46F4A70251436E000208431 /* RecognizedView.swift */; };
 		F46F4A792514371600208431 /* Recognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46F4A782514371600208431 /* Recognizer.swift */; };
 		F46F4A8F25143C0D00208431 /* hexdreamsCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = F46F4A8E25143C0D00208431 /* hexdreamsCocoa */; };
-		F46F4AA12514406000208431 /* liblept.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F46F4A9C2514406000208431 /* liblept.a */; };
-		F46F4AA22514406000208431 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F46F4A9D2514406000208431 /* libjpeg.a */; };
-		F46F4AA32514406000208431 /* libtesseract.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F46F4A9E2514406000208431 /* libtesseract.a */; };
-		F46F4AA42514406000208431 /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F46F4A9F2514406000208431 /* libpng16.a */; };
-		F46F4AA52514406000208431 /* libtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F46F4AA02514406000208431 /* libtiff.a */; };
 		F46F4AA72514407500208431 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F46F4AA62514407500208431 /* libc++.tbd */; };
 		F46F4AAB2514407E00208431 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F46F4AAA2514407E00208431 /* libz.tbd */; };
 		F46F4AAF2514414E00208431 /* share in Resources */ = {isa = PBXBuildFile; fileRef = F46F4AAE2514414E00208431 /* share */; };
@@ -47,11 +42,6 @@
 		F46F4A512514354C00208431 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F46F4A70251436E000208431 /* RecognizedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecognizedView.swift; sourceTree = "<group>"; };
 		F46F4A782514371600208431 /* Recognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Recognizer.swift; path = ../../iOCR.bak/iOCR/Recognizer.swift; sourceTree = "<group>"; };
-		F46F4A9C2514406000208431 /* liblept.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblept.a; path = ../Root/lib/liblept.a; sourceTree = "<group>"; };
-		F46F4A9D2514406000208431 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = ../Root/lib/libjpeg.a; sourceTree = "<group>"; };
-		F46F4A9E2514406000208431 /* libtesseract.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtesseract.a; path = ../Root/lib/libtesseract.a; sourceTree = "<group>"; };
-		F46F4A9F2514406000208431 /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = ../Root/lib/libpng16.a; sourceTree = "<group>"; };
-		F46F4AA02514406000208431 /* libtiff.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtiff.a; path = ../Root/lib/libtiff.a; sourceTree = "<group>"; };
 		F46F4AA62514407500208431 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		F46F4AAA2514407E00208431 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		F46F4AAE2514414E00208431 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../Root/share; sourceTree = "<group>"; };
@@ -64,11 +54,6 @@
 			files = (
 				F46F4AAB2514407E00208431 /* libz.tbd in Frameworks */,
 				F46F4AA72514407500208431 /* libc++.tbd in Frameworks */,
-				F46F4AA12514406000208431 /* liblept.a in Frameworks */,
-				F46F4AA22514406000208431 /* libjpeg.a in Frameworks */,
-				F46F4AA32514406000208431 /* libtesseract.a in Frameworks */,
-				F46F4AA42514406000208431 /* libpng16.a in Frameworks */,
-				F46F4AA52514406000208431 /* libtiff.a in Frameworks */,
 				F46F4A8F25143C0D00208431 /* hexdreamsCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -147,11 +132,6 @@
 			children = (
 				F46F4AAA2514407E00208431 /* libz.tbd */,
 				F46F4AA62514407500208431 /* libc++.tbd */,
-				F46F4A9D2514406000208431 /* libjpeg.a */,
-				F46F4A9C2514406000208431 /* liblept.a */,
-				F46F4A9F2514406000208431 /* libpng16.a */,
-				F46F4A9E2514406000208431 /* libtesseract.a */,
-				F46F4AA02514406000208431 /* libtiff.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -343,6 +323,27 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
+					"-ljpeg-ios",
+					"-llept-ios",
+					"-lpng16-ios",
+					"-ltesseract-ios",
+					"-ltiff-ios",
+				);
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
+					"-ljpeg-sim",
+					"-llept-sim",
+					"-lpng16-sim",
+					"-ltesseract-sim",
+					"-ltiff-sim",
+				);
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-ljpeg-macos",
+					"-llept-macos",
+					"-lpng16-macos",
+					"-ltesseract-macos",
+					"-ltiff-macos",
+				);
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -397,6 +398,27 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
+					"-ljpeg-ios",
+					"-llept-ios",
+					"-lpng16-ios",
+					"-ltesseract-ios",
+					"-ltiff-ios",
+				);
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
+					"-ljpeg-sim",
+					"-llept-sim",
+					"-lpng16-sim",
+					"-ltesseract-sim",
+					"-ltiff-sim",
+				);
+				"OTHER_LDFLAGS[sdk=macosx*]" = (
+					"-ljpeg-macos",
+					"-llept-macos",
+					"-lpng16-macos",
+					"-ltesseract-macos",
+					"-ltiff-macos",
+				);
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
