@@ -12,7 +12,15 @@ fi
 
 echo 'Checking for trained data language files...'
 
-langfiles=(
+# langfilesV3=(
+#   'eng.traineddata'
+#   'jpn.traineddata'
+#   'jpn_vert.traineddata'
+# )
+# https://github.com/tesseract-ocr/tessdata/raw/master/
+
+
+langfilesV4=(
   'chi_tra.traineddata'
   'chi_tra_vert.traineddata'
   'eng.traineddata'
@@ -20,7 +28,7 @@ langfiles=(
   'jpn_vert.traineddata'
 )
 
-for langfile in $langfiles; do
+for langfile in $langfilesV4; do
   if [ -f $ROOT/share/tessdata/$langfile ]; then
     echo "found $langfile"
     continue
