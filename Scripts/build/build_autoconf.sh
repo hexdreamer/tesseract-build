@@ -24,7 +24,7 @@ if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
       -print -exec rm -rf {} \; | sort
   )
   if [[ -n $deleted ]]; then
-    echo "$scriptname: deleting..."
+    echo "$scriptname: deleted:"
     echo $deleted
   else
     echo "$scriptname: clean"

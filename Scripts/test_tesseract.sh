@@ -51,9 +51,9 @@ strip_whitespace() {
   cat $filename | tr -d '\n' | tr -d '\f' | tr -d ' '
 }
 
-echo 'Recognizing sample images...'
+echo "Recognizing sample images with $(which tesseract)..."
 
-ASSETSDIR=$PROJECTDIR/iOCR/iOCR/Assets.xcassets
+ASSETSDIR=$PROJECTDIR/iOCR/Shared/Assets.xcassets
 TESTDIR=tesseractTest
 
 mkdir -p $TESTDIR; cd $TESTDIR || exit 1
@@ -69,6 +69,16 @@ test_image() {
   local whtspcStrippedWant=$4
 
   print -n "testing $testName..."
+
+  if ! [ -f $image ]; then
+    echo "ERROR could not find image file $image"
+    return
+  fi
+
+  if ! [ -f "$TESSDATA_PREFIX/$trainedDataName.traineddata" ]; then
+    echo "ERROR could not find language file $TESSDATA_PREFIX/$trainedDataName.traineddata"
+    return
+  fi
 
   local tessOutFile=$trainedDataName
 

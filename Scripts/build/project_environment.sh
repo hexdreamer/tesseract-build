@@ -60,9 +60,9 @@ _exec_and_log() {
   #
   # Running:
   #
-  #   _exec_and_log leptonica-1.79.0 '2_preconfig' ./autogen.sh
+  #   _exec_and_log leptonica-1.80.0 '2_preconfig' ./autogen.sh
   #
-  # will create the dir $LOGS/leptonica-1.79.0, then run `./autogen.sh` directing its 
+  # will create the dir $LOGS/leptonica-1.80.0, then run `./autogen.sh` directing its 
   # errors and outputs to 2_preconfig.err and 2_preconfig.out
 
   local pkgname=$1

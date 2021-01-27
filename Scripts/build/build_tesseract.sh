@@ -14,7 +14,7 @@ source $parentdir/project_environment.sh || {
 if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
   deleted=$(find $ROOT -name '*tess*' -prune -print -exec rm -rf {} \;)
   if [[ -n $deleted ]]; then
-    echo "$scriptname: deleting..."
+    echo "$scriptname: deleted:"
     echo $deleted
   else
     echo "$scriptname: clean"
@@ -22,6 +22,7 @@ if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
   exit 0
 fi
 
+# Check out this page for version updates: https://tesseract-ocr.github.io/tessdoc/
 name='tesseract-4.1.1'
 
 print "\n======== $name ========"
@@ -43,44 +44,71 @@ print 'done.'
 
 # --  Config / Make / Install  ------------------------------------------------
 
+# Special override till GNU config catches up with new Apple targets
+print -- "--**!!**-- Overriding \$SOURCES/$name/config/config.sub"
+echo "echo 'arm-apple-darwin64'" > $SOURCES/$name/config/config.sub
+
 # ios_arm64
 export ARCH='arm64'
-export TARGET='arm-apple-darwin64'
+export TARGET='arm64-apple-ios14.3'
 export PLATFORM='iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk'
-export PLATFORM_MIN_VERSION='-miphoneos-version-min=11.0'
+export PLATFORM_MIN_VERSION='-miphoneos-version-min=14.3'
 
 zsh $parentdir/config-make-install_tesseract.sh $name 'ios_arm64' || exit 1
 
-# ios_x86_64
-export ARCH='x86_64'
-export TARGET='x86_64-apple-darwin'
+# ios_arm64_sim
+export ARCH='arm64'
+export TARGET='arm64-apple-ios14.3-simulator'
 export PLATFORM='iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk'
-export PLATFORM_MIN_VERSION='-mios-simulator-version-min=11.0'
+export PLATFORM_MIN_VERSION='-miphoneos-version-min=14.3'
 
-zsh $parentdir/config-make-install_tesseract.sh $name 'ios_x86_64' || exit 1
+zsh $parentdir/config-make-install_tesseract.sh $name 'ios_arm64_sim' || exit 1
+
+# ios_x86_64_sim
+export ARCH='x86_64'
+export TARGET='x86_64-apple-ios14.3-simulator'
+export PLATFORM='iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk'
+export PLATFORM_MIN_VERSION='-mios-simulator-version-min=14.3'
+
+zsh $parentdir/config-make-install_tesseract.sh $name 'ios_x86_64_sim' || exit 1
 
 # macos_x86_64
 export ARCH='x86_64'
-export TARGET='x86_64-apple-darwin'
+export TARGET='x86_64-apple-macos10.13'
 export PLATFORM='MacOSX.platform/Developer/SDKs/MacOSX.sdk'
 export PLATFORM_MIN_VERSION='-mmacosx-version-min=10.13'
 
 zsh $parentdir/config-make-install_tesseract.sh $name 'macos_x86_64' || exit 1
 
+# macos_arm64
+export ARCH='arm64'
+export TARGET='arm64-apple-macos11.0'
+export PLATFORM='MacOSX.platform/Developer/SDKs/MacOSX.sdk'
+export PLATFORM_MIN_VERSION='-mmacosx-version-min=11.0'
+
+zsh $parentdir/config-make-install_tesseract.sh $name 'macos_arm64' || exit 1
+
 # --  Lipo libs  --------------------------------------------------------------
 
 xc mkdir -p $ROOT/lib
 
-print -n 'ios: lipo... '
-xl $name '6_lipo_ios' \
-  xcrun lipo $ROOT/ios_arm64/lib/libtesseract.a $ROOT/ios_x86_64/lib/libtesseract.a \
-  -create -output $ROOT/lib/libtesseract.a ||
+print -n 'lipo: ios... '
+xl $name '6_ios_lipo' \
+  xcrun lipo $ROOT/ios_arm64/lib/libtesseract.a \
+  -create -output $ROOT/lib/libtesseract-ios.a ||
   exit 1
 print 'done.'
 
-print -n 'macos: lipo... '
-xl $name '6_lipo_macos' \
-  xcrun lipo $ROOT/macos_x86_64/lib/libtesseract.a \
+print -n 'lipo: sim... '
+xl $name '6_sim_lipo' \
+  xcrun lipo $ROOT/ios_arm64_sim/lib/libtesseract.a $ROOT/ios_x86_64_sim/lib/libtesseract.a \
+  -create -output $ROOT/lib/libtesseract-sim.a ||
+  exit 1
+print 'done.'
+
+print -n 'lipo: macos... '
+xl $name '6_macos_lipo' \
+  xcrun lipo $ROOT/macos_x86_64/lib/libtesseract.a $ROOT/macos_arm64/lib/libtesseract.a \
   -create -output $ROOT/lib/libtesseract-macos.a ||
   exit 1
 print 'done.'
@@ -95,4 +123,12 @@ xc ditto $ROOT/ios_arm64/share/tessdata $ROOT/share/tessdata
 
 # --  Copy tesseract command-line program  ------------------------------------
 
-cp $ROOT/macos_x86_64/bin/tesseract $ROOT/bin/
+print -n 'tesseract command-line: copying... '
+cp $ROOT/macos_arm64/bin/tesseract $ROOT/bin/tesseract-arm64
+cp $ROOT/macos_x86_64/bin/tesseract $ROOT/bin/tesseract-x86_64
+
+print -n 'sym-linking to arm64 binary... '
+cd $ROOT/bin || exit 1
+ln -fs tesseract-arm64 tesseract
+
+print 'done.'

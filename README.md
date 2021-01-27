@@ -76,7 +76,7 @@ The final arrangement of the packages we settled on looks like:
 
 ### Starting the build
 
-For each of the packages above, the build process:
+For each of the packages above, the build process is:
 
 1. downloads a package's TGZ/ZIP to Downloads
 1. extracts that TGZ/ZIP to Sources
@@ -102,7 +102,7 @@ Any of the **build_PACKAGE-NAME.sh** scripts can be run by itself.  The top-leve
 
 **build_all.sh** is the build chain; running this one script will produce all the files that we will need for Xcode:
 
-```sh
+```none
  % ./Scripts/build/build_all.sh
 
 ...
@@ -113,29 +113,37 @@ Any of the **build_PACKAGE-NAME.sh** scripts can be run by itself.  The top-leve
 Downloading... done.
 Extracting... done.
 Preconfiguring... done.
+--**!!**-- Overriding $SOURCES/tesseract-4.1.1/config/config.sub
 ios_arm64: configuring... done, making... done, installing... done.
-ios_x86_64: configuring... done, making... done, installing... done.
+ios_arm64_sim: configuring... done, making... done, installing... done.
+ios_x86_64_sim: configuring... done, making... done, installing... done.
 macos_x86_64: configuring... done, making... done, installing... done.
-ios: lipo... done.
-macos: lipo... done.
+macos_arm64: configuring... done, making... done, installing... done.
+lipo: ios... done.
+lipo: sim... done.
+lipo: macos... done.
+tesseract command-line: copying... sym-linking to arm64 binary... done.
 ```
 
 After a while, we see that Tesseract was finally configured, made, and installed.  And then there was a final **lipo** step.
 
-The builds are targeted for two different processor *architectures*, **arm64** and **x86_64**.  There are also two different *platform* configurations, **ios** and **macos**.  This results in the following three files for every library, and each is needed for the following use-case:
+The builds are targeted for two different processor *architectures*, **arm64** and **x86_64**.  There are also three different *platform* configurations, **ios**, **macos**, and **ios_sim** (simulator).  This results in the following three files for every library, and each is needed for the following use-case:
 
-| lib name                               | use                                |
-|----------------------------------------|------------------------------------|
-| `Root/ios_arm64/lib/libtesseract.a`    | running on an iOS device           |
-| `Root/ios_x86_64/lib/libtesseract.a`   | running in iOS Simulator, on a Mac |
-| `Root/macos_x86_64/lib/libtesseract.a` | running on a Mac (AppKit)          |
+| lib name                                 | use                                       |
+|------------------------------------------|-------------------------------------------|
+| `Root/ios_arm64/lib/libtesseract.a`      | running on an iOS device                  |
+| `Root/ios_arm64_sim/lib/libtesseract.a`  | running in iOS Simulator, on an M1 Mac    |
+| `Root/ios_x86_64_sim/lib/libtesseract.a` | running in iOS Simulator, on an Intel Mac |
+| `Root/macos_arm64/lib/libtesseract.a`    | running on an M1 Mac (AppKit)             |
+| `Root/macos_x86_64/lib/libtesseract.a`   | running on an Intel Mac (AppKit)          |
 
-For iOS, we can use the lipo tool to stitch the files for the two different architectures (arm64 and x86_64) together, and then we can plug that one lib into Xcode.  But, lipo cannot cannot stitch the same architectures together, so the macos_x86_64 lib is left as a separate file.  This will finally leave us with a set of two binary files for each library, and installed to the common location **Root/lib**:
+For iOS, we can use the lipo tool to stitch the files for the two different architectures (arm64 and x86_64) together, and then we can plug that one lib into Xcode.  This will finally leave us with a set of three binary files for each library, and installed to the common location **Root/lib**:
 
-| lipo these architecture_platform libs                                        | into this final lib             |
-|------------------------------------------------------------------------------|---------------------------------|
-| `Root/ios_arm64/lib/libtesseract.a`<br/>`Root/ios_x86_64/lib/libtesseract.a` | `Root/lib/libtesseract.a`       |
-| `Root/macos_x86_64/lib/libtesseract.a`                                       | `Root/lib/libtesseract-macos.a` |
+| lipo these architecture_platform libs                                                  | into this final lib             |
+|----------------------------------------------------------------------------------------|---------------------------------|
+| `Root/ios_arm64/lib/libtesseract.a`                                                    | `Root/lib/libtesseract-ios.a`   |
+| `Root/ios_arm64_sim/lib/libtesseract.a` <br/> `Root/ios_x86_64_sim/lib/libtesseract.a` | `Root/lib/libtesseract-sim.a`   |
+| `Root/macos_x86_64/lib/libtesseract.a` <br/> `Root/macos_arm64/lib/libtesseract.a`     | `Root/lib/libtesseract-macos.a` |
 
 Now that Tesseract is built and installed, we can test it out and see some payoff for all this hard work.
 
@@ -366,3 +374,138 @@ Configuration can matter a lot for Tesseract.  You might need to dig in if you d
 - **Improving the quality of the output** <https://tesseract-ocr.github.io/tessdoc/ImproveQuality>
 
 The [Tesseract User Group](https://groups.google.com/g/tesseract-ocr) and its [Github Issues](https://github.com/tesseract-ocr/tesseract/issues) are also good resources.
+
+## Lessons Learned
+
+### Updating targets for M1/Apple Silicon
+One problem I ran into building for M1/Apple Silicon was that the GNU Auto tools were not up to date with the new platform names expressed in the **host triplet**, like `arm64-apple-ios14.3`.
+
+The first error I had to tackle came while configuring top-level libs:
+
+```none
+Invalid configuration `arm64-apple-ios14.3': machine `arm64-apple' not recognized
+configure: error: /bin/sh .././config.sub arm64-apple-ios14.3 failed
+```
+
+After searching around, I found a number of cases like this documented in StackOverflow or in GitHub issues.   A common solution was just echoing back the host triplet that was passed into **config.sub** by just re-writing config.sub itself before it was run by **./configure**:
+
+```sh
+echo 'echo $1' > ../config.sub
+```
+
+I added that re-write to the top-level build scripts, which did clear the configuration error for all the top-level libs, and the build chain was whole again... until it came to running `make` on Tesseract:
+
+```none
+ld: library not found for -lrt
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+make[2]: *** [tesseract] Error 1
+make[1]: *** [all-recursive] Error 1
+make: *** [all] Error 2
+```
+
+First question is: **What changed, *now*, that `make` fails trying to find a non-existent library?**
+Second question should have been: **How do I roll back and get it making again?**
+
+Maybe I could have stopped there and given those questions/concerns more thought, but I quickly (instantly?) convinced myself that:
+* I did not (could not?) understand the change
+* committing what I had and reverting would be too difficult, and what would it prove anyways?
+
+So digging into the error message was the clear path forward.
+
+* So I started digging:
+
+  * Where does `-lrt` come from?
+
+    ```none
+    tesseract-4.1.1 % grep -r -- '-lrt' *
+    autom4te.cache/output.0:        LIBS="$LIBS -lsocket -lnsl -lrt -lxnet"
+    autom4te.cache/output.1:        LIBS="$LIBS -lsocket -lnsl -lrt -lxnet"
+    autom4te.cache/output.3:        LIBS="$LIBS -lsocket -lnsl -lrt -lxnet"
+    autom4te.cache/output.2:        LIBS="$LIBS -lsocket -lnsl -lrt -lxnet"
+    configure:        LIBS="$LIBS -lsocket -lnsl -lrt -lxnet"
+    configure.ac:        LIBS="$LIBS -lsocket -lnsl -lrt -lxnet"
+    ios_arm64/src/api/Makefile:am__append_12 = -lrt
+    src/api/Makefile.am:tesseract_LDADD += -lrt
+    src/api/Makefile.in:@ADD_RT_TRUE@am__append_12 = -lrt
+    ```
+
+    * and digging...
+    
+      Commenting out `am__append_12` in **ios_arm64/src/api/Makefile** cleared the error, so, where did that come from?  Probably from either of **src/api/Makefile.(am|in)**.
+
+      * Okay, which Makefile is the source of truth for this option?
+
+        ```none
+        tesseract-4.1.1 % ll src/api/Makefile.*
+        -rw-r--r--  1 zyoung  staff   3.2K Dec 26  2019 src/api/Makefile.am
+        -rw-r--r--  1 zyoung  staff    46K Jan 12 12:23 src/api/Makefile.in
+        ```
+
+        * and digging...
+        
+          The timestamp shows me that **Makefile.in** is derived from **Makefile.am**, and just happens that looking at the very last 3 lines in Makefile.am:
+
+          ```none
+          tesseract-4.1.1 % tail -n3 src/api/Makefile.am
+          if ADD_RT
+          tesseract_LDADD += -lrt
+          endif
+          ```
+  
+          * and I did some more digging, trying to track down `ADD_RT`, which I stopped keeping track of, 'cause that's just what eventually happens when I find myself in over my head... but!
+
+I eventually found the environment flags `ADD_RT_FALSE` and `ADD_RT_TRUE` were the values that ultimately affected the exclusion or inclusion of `-lrt` and followed those till I hit what felt like pay dirt with this select statement in **./configure**:
+
+```sh
+...
+*darwin*)
+  OPENCL_LIBS=""
+  OPENCL_INC=""
+  if false; then
+    ADD_RT_TRUE=
+    ADD_RT_FALSE='#'
+  else
+    ADD_RT_TRUE='#'
+    ADD_RT_FALSE=
+  fi
+...
+```
+
+and I'm still not convinced I understand the logic of "if false, do thing I want you to do; otherwise do the thing I'm trying to rememdy/avoid"... but!
+
+I did understand that none of these lines would ever execute because [**darwin** was missing](https://images.app.goo.gl/GZgdn6E1dFSe5vhL7), and **Why was darwin missing, now?**
+
+Because *that's* the thing I had changed, but didn't figure out from before.  The targets used to be like:
+
+```sh
+export TARGET='arm-apple-darwin64'
+```
+
+before they were changed for Apple Silicon and the latest version of Xcode to:
+
+```sh
+export TARGET='arm64-apple-ios14.3'
+```
+
+so just passing the new target as a host triplet through config.sub:
+
+```sh
+echo 'echo $1' > ../config.sub
+```
+
+is wrong.  `darwin` has to be seen in the host triplet *and* I need to retain my target configuration, so:
+
+```sh
+print -- "--**!!**-- Overriding ../config.sub"
+echo 'echo arm-apple-darwin64' > ../config.sub
+
+ ...
+
+export TARGET='arm64-apple-ios14.3'
+```
+
+is the fix I needed.
+
+-ljpeg-ios -llept-ios -lpng16-ios -ltesseract-ios -ltiff-ios
+-ljpeg-macos -ltesseract-macos -lpng16-macos -ltiff-macos -llept-macos
+-ljpeg-sim -ltesseract-sim -lpng16-sim -ltiff-sim -llept-sim

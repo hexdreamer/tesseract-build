@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "hexdreamsCocoa",
+        "repositoryURL": "https://github.com/zacharysyoung/hexdreamsCocoa.git",
+        "state": {
+          "branch": "trunk",
+          "revision": "cea1619f80b635b61e04667693d78dffd11ac87a",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

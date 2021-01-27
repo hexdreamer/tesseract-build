@@ -1,6 +1,6 @@
 {
     "git.ignoreLimitWarning": true,
-    "python.pythonPath": "/Library/Frameworks/Python.framework/Versions/3.8/bin/python3",
+    "python.pythonPath": "/Library/Frameworks/Python.framework/Versions/3.9/bin/python3",
     "python.testing.unittestArgs": [
         "-v",
         "-s",
@@ -10,5 +10,6 @@
     ],
     "python.testing.pytestEnabled": false,
     "python.testing.nosetestsEnabled": false,
-    "python.testing.unittestEnabled": true
+    "python.testing.unittestEnabled": false,
+    "python.testing.promptToConfigure": false
 }

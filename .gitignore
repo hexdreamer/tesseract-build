@@ -1,5 +1,9 @@
+# tesseract-build ignores
 Downloads
 Logs
 Root/*
 Sources
 
+# macOS/Xcode
+.DS_Store
+**/xcuserdata/*

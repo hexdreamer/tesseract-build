@@ -19,15 +19,15 @@ dirname=$3 # jpeg-9d
 
 print -n "$os_arch: "
 
-# Verify libjpeg.a is installed; requires pkglib is installed
-pkg_lib=$ROOT/$os_arch/lib/libjpeg.a
+# Verify libjpeg.a is installed
+lib=$ROOT/$os_arch/lib/libjpeg.a
 if {
-  [ -f $pkg_lib ] &&
-    info=$(lipo -info $pkg_lib) &&
+  [ -f $lib ] &&
+    info=$(lipo -info $lib) &&
     [[ $info =~ 'Non-fat file' ]] &&
     [[ $info =~ $ARCH ]]
 }; then
-  print "skipped config/make/install, found valid single-$ARCH-arch $pkg_lib"
+  print "skipped config/make/install, found valid single-$ARCH-arch $lib"
   exit 0
 fi
 
@@ -78,4 +78,22 @@ print -n 'done, '
 
 print -n 'installing... '
 xl $name "4_install_$os_arch" make install || exit 1
-print 'done.'
+print -n 'done, '
+
+# Verify libjpeg.a is installed with the correct architecture
+lib=$ROOT/$os_arch/lib/libjpeg.a
+if [ -f $lib ]; then
+  if {
+    info=$(lipo -info $lib) &&
+      [[ $info =~ 'Non-fat file' ]] &&
+      [[ $info =~ $ARCH ]]
+  }; then
+    print "found valid single-arch lib for $ARCH."
+  else
+    echo "ERROR wanted a single-arch lib for $ARCH, got $info"
+    exit 1
+  fi
+else
+  echo "ERROR could not find $lib"
+  exit 1
+fi
