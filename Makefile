@@ -1,6 +1,6 @@
-.PHONY: clean build all
+.PHONY: clean build default
 
-all: clean build
+default: clean build
 
 clean:
 	./Scripts/build/build_all.sh clean-all

@@ -42,7 +42,6 @@ cflags=(
   $PLATFORM_MIN_VERSION
   "--target=$TARGET"
 
-  '-fembed-bitcode'
   '-no-cpp-precomp'
   '-O2'
   '-pipe'
@@ -58,7 +57,6 @@ config_flags=(
   PKG_CONFIG_PATH="$ROOT/$os_arch/lib/pkgconfig"
 
   "--host=$TARGET"
-  '--enable-shared=no'
   "--prefix=$ROOT/$os_arch"
 )
 
