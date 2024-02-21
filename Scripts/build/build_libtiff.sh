@@ -52,7 +52,7 @@ zsh $parentdir/config-make-install_libtiff.sh $name 'ios_arm64' || exit 1
 export ARCH='arm64'
 export TARGET='arm64-apple-ios14.3-simulator'
 export PLATFORM='iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk'
-export PLATFORM_MIN_VERSION='-miphoneos-version-min=14.3'
+export PLATFORM_MIN_VERSION='-mios-simulator-version-min=14.3'
 
 zsh $parentdir/config-make-install_libtiff.sh $name 'ios_arm64_sim' || exit 1
 
