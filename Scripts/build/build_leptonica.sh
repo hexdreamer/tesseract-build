@@ -22,7 +22,7 @@ if [[ -n $1 ]] && [[ $1 == 'clean' ]]; then
   exit 0
 fi
 
-name='leptonica-1.80.0'
+name='leptonica-1.82.0'
 print "\n======== $name ========"
 
 # --  Download / Extract  -----------------------------------------------------
